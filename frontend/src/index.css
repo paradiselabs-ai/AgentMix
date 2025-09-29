@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+/* Base app styles */
+:root {
+  --bg: #0b0f17;
+  --fg: #e5e7eb;
+  --muted: #9ca3af;
+  --brand: #6ea8fe;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+}

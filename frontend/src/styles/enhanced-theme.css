@@ -1,0 +1,20 @@
+/* Enhanced theme variables and minimal helpers */
+:root {
+  --color-bg: #0b0f17;
+  --color-surface: #111827;
+  --color-border: #1f2937;
+  --color-text: #e5e7eb;
+  --color-muted: #9ca3af;
+  --color-accent: #60a5fa;
+  --radius: 12px;
+}
+
+.app-surface {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.muted { color: var(--color-muted); }
+.accent { color: var(--color-accent); }
