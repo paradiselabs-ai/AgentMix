@@ -65,7 +65,7 @@ const EnhancedSidebar = ({ activeTab, onTabChange, agents = [], conversations = 
   ]
 
   return (
-    <aside className="fixed left-0 top-16 w-64 h-[calc(100vh-4rem)] transition-all duration-300 z-40" style={{ background: 'var(--surface)', borderRight: '1px solid var(--border)' }}>
+    <aside className="fixed left-0 top-16 w-64 h-[calc(100vh-4rem)] transition-all duration-300 z-40 bg-card border-r border-border">
       <div className="flex flex-col h-full">
 
         {/* Search - More Spacious */}

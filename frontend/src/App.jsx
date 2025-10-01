@@ -173,12 +173,12 @@ function App() {
 
   return (
     <ConversationProvider>
-      <div className="min-h-screen dark" style={{ background: 'var(--bg)' }}>
+      <div className="min-h-screen dark">
         {/* Logo Header - Above Sidebar */}
-        <div className="fixed top-0 left-0 z-50 w-64 h-16 flex items-center px-6" style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)' }}>
+        <div className="fixed top-0 left-0 z-50 w-64 h-16 flex items-center px-6 bg-card border-b border-r border-border">
           <div className="flex items-center gap-3">
             <span className="text-2xl">🤖</span>
-            <span className="text-xl font-bold" style={{ color: 'var(--brand)' }}>AgentMix</span>
+            <span className="text-xl font-bold text-primary">AgentMix</span>
           </div>
         </div>
 

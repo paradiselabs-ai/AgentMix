@@ -43,50 +43,15 @@
 
 :root {
   --radius: 0.625rem;
-  /* Perplexity-inspired light theme colors */
-  --background: #FCFCF9;
-  --foreground: #134252;
-  --card: #FFFFFD;
-  --card-foreground: #134252;
-  --popover: #FFFFFD;
-  --popover-foreground: #134252;
-  --primary: #21808D;
-  --primary-foreground: #FCFCF9;
-  --secondary: rgba(94, 82, 64, 0.12);
-  --secondary-foreground: #134252;
-  --muted: rgba(94, 82, 64, 0.12);
-  --muted-foreground: #626C71;
-  --accent: rgba(94, 82, 64, 0.12);
-  --accent-foreground: #134252;
-  --destructive: #C0152F;
-  --border: rgba(94, 82, 64, 0.2);
-  --input: rgba(94, 82, 64, 0.2);
-  --ring: #626C71;
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: #FCFCF9;
-  --sidebar-foreground: #134252;
-  --sidebar-primary: #21808D;
-  --sidebar-primary-foreground: #FCFCF9;
-  --sidebar-accent: rgba(94, 82, 64, 0.12);
-  --sidebar-accent-foreground: #134252;
-  --sidebar-border: rgba(94, 82, 64, 0.2);
-  --sidebar-ring: #626C71;
-}
-
-.dark {
-  /* Perplexity-inspired dark theme colors */
-  --background: #1F2121;
+  /* FORCE DARK THEME - Perplexity colors */
+  --background: #0F0F0F;
   --foreground: #F5F5F5;
-  --card: #262828;
+  --card: #1A1A1A;
   --card-foreground: #F5F5F5;
-  --popover: #262828;
+  --popover: #1A1A1A;
   --popover-foreground: #F5F5F5;
-  --primary: #32B8C6;
-  --primary-foreground: #134252;
+  --primary: #6366F1;
+  --primary-foreground: #FFFFFF;
   --secondary: rgba(119, 124, 124, 0.15);
   --secondary-foreground: #F5F5F5;
   --muted: rgba(119, 124, 124, 0.15);
@@ -94,7 +59,7 @@
   --accent: rgba(119, 124, 124, 0.15);
   --accent-foreground: #F5F5F5;
   --destructive: #FF5459;
-  --border: rgba(119, 124, 124, 0.3);
+  --border: rgba(255, 255, 255, 0.1);
   --input: rgba(119, 124, 124, 0.3);
   --ring: #A7A9A9;
   --chart-1: oklch(0.488 0.243 264.376);
@@ -102,13 +67,48 @@
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: #262828;
+  --sidebar: #1A1A1A;
   --sidebar-foreground: #F5F5F5;
-  --sidebar-primary: #32B8C6;
-  --sidebar-primary-foreground: #134252;
+  --sidebar-primary: #6366F1;
+  --sidebar-primary-foreground: #FFFFFF;
   --sidebar-accent: rgba(119, 124, 124, 0.15);
   --sidebar-accent-foreground: #F5F5F5;
-  --sidebar-border: rgba(119, 124, 124, 0.3);
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-ring: #A7A9A9;
+}
+
+.dark {
+  /* FORCE DARK THEME - Same as :root */
+  --background: #0F0F0F;
+  --foreground: #F5F5F5;
+  --card: #1A1A1A;
+  --card-foreground: #F5F5F5;
+  --popover: #1A1A1A;
+  --popover-foreground: #F5F5F5;
+  --primary: #6366F1;
+  --primary-foreground: #FFFFFF;
+  --secondary: rgba(119, 124, 124, 0.15);
+  --secondary-foreground: #F5F5F5;
+  --muted: rgba(119, 124, 124, 0.15);
+  --muted-foreground: rgba(167, 169, 169, 0.7);
+  --accent: rgba(119, 124, 124, 0.15);
+  --accent-foreground: #F5F5F5;
+  --destructive: #FF5459;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(119, 124, 124, 0.3);
+  --ring: #A7A9A9;
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: #1A1A1A;
+  --sidebar-foreground: #F5F5F5;
+  --sidebar-primary: #6366F1;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: rgba(119, 124, 124, 0.15);
+  --sidebar-accent-foreground: #F5F5F5;
+  --sidebar-border: rgba(255, 255, 255, 0.1);
   --sidebar-ring: #A7A9A9;
 }
 
