@@ -1,41 +1,69 @@
 import React, { useState } from 'react'
-import { Bot, Settings, Play, Pause, Trash2, Edit3, Activity, Clock } from 'lucide-react'
+import { Bot, Settings, Play, Pause, Trash2, Edit3, Activity, Clock, MessageSquare, Zap, Star } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Card, CardContent } from '@/components/ui/card'
 
 const EnhancedAgentCard = ({ 
   agent, 
   onEdit, 
   onDelete, 
   onToggleStatus, 
-  onConfigure,
+  onTest,
   className = '' 
 }) => {
   const [isHovered, setIsHovered] = useState(false)
+  const [isFavorite, setIsFavorite] = useState(false)
 
-  const getStatusColor = (status) => {
+  const getStatusConfig = (status) => {
     switch (status) {
       case 'active':
-        return 'bg-green-100 text-green-800 border-green-200'
-      case 'inactive':
-        return 'bg-gray-100 text-gray-800 border-gray-200'
+        return {
+          color: 'bg-green-500',
+          textColor: 'text-green-600',
+          bgColor: 'bg-green-50 border-green-200',
+          label: 'Active',
+          pulse: true
+        }
+      case 'processing':
+        return {
+          color: 'bg-brand-pink',
+          textColor: 'text-brand-pink',
+          bgColor: 'bg-pink-50 border-pink-200',
+          label: 'Processing',
+          pulse: true
+        }
       case 'error':
-        return 'bg-red-100 text-red-800 border-red-200'
+        return {
+          color: 'bg-red-500',
+          textColor: 'text-red-600',
+          bgColor: 'bg-red-50 border-red-200',
+          label: 'Error',
+          pulse: false
+        }
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-200'
+        return {
+          color: 'bg-gray-400',
+          textColor: 'text-gray-600',
+          bgColor: 'bg-gray-50 border-gray-200',
+          label: 'Inactive',
+          pulse: false
+        }
     }
   }
 
-  const getProviderColor = (provider) => {
+  const getProviderConfig = (provider) => {
     switch (provider?.toLowerCase()) {
       case 'openai':
-        return 'bg-green-50 text-green-700 border-green-200'
+        return { color: 'bg-green-500', textColor: 'text-green-700', name: 'OpenAI' }
       case 'anthropic':
-        return 'bg-orange-50 text-orange-700 border-orange-200'
+        return { color: 'bg-orange-500', textColor: 'text-orange-700', name: 'Anthropic' }
       case 'openrouter':
-        return 'bg-blue-50 text-blue-700 border-blue-200'
+        return { color: 'bg-blue-500', textColor: 'text-blue-700', name: 'OpenRouter' }
       case 'ollama':
-        return 'bg-purple-50 text-purple-700 border-purple-200'
+        return { color: 'bg-purple-500', textColor: 'text-purple-700', name: 'Ollama' }
       default:
-        return 'bg-gray-50 text-gray-700 border-gray-200'
+        return { color: 'bg-gray-500', textColor: 'text-gray-700', name: provider || 'Unknown' }
     }
   }
 
@@ -48,27 +76,25 @@ const EnhancedAgentCard = ({
       .slice(0, 2)
   }
 
+  const statusConfig = getStatusConfig(agent.status)
+  const providerConfig = getProviderConfig(agent.provider)
+
   return (
-    <div
-      className={`
-        relative group bg-white/80 backdrop-blur-md border border-white/30 
-        rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300
-        hover:-translate-y-1 ${className}
-      `}
+    <Card
+      className={`glass-card card-hover group border-white/30 overflow-hidden ${className}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      <div className="absolute inset-0 bg-gradient-to-br from-brand-purple/5 via-transparent to-brand-teal/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       
-      {/* Content */}
-      <div className="relative z-10">
+      <CardContent className="p-6 relative z-10">
         {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center space-x-3">
             {/* Agent Avatar */}
             <div className="relative">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-lg">
+              <div className="w-12 h-12 bg-gradient-to-br from-brand-purple to-brand-teal rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-lg animate-float-gentle">
                 {agent.avatar ? (
                   <img src={agent.avatar} alt={agent.name} className="w-full h-full rounded-xl object-cover" />
                 ) : (
@@ -76,114 +102,145 @@ const EnhancedAgentCard = ({
                 )}
               </div>
               {/* Status Indicator */}
-              <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${
-                agent.status === 'active' ? 'bg-green-500' : 
-                agent.status === 'error' ? 'bg-red-500' : 'bg-gray-400'
+              <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${statusConfig.color} ${
+                statusConfig.pulse ? 'animate-pulse' : ''
               }`} />
             </div>
             
             {/* Agent Info */}
-            <div>
-              <h3 className="font-semibold text-gray-900 text-lg">{agent.name}</h3>
-              <div className="flex items-center space-x-2 mt-1">
-                <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getProviderColor(agent.provider)}`}>
-                  {agent.provider}
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <h3 className="font-semibold text-foreground text-lg">{agent.name}</h3>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={`h-6 w-6 p-0 transition-colors ${isFavorite ? 'text-yellow-500' : 'text-gray-400 hover:text-yellow-500'}`}
+                  onClick={() => setIsFavorite(!isFavorite)}
+                >
+                  <Star className={`h-3 w-3 ${isFavorite ? 'fill-current' : ''}`} />
+                </Button>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className={`w-2 h-2 rounded-full ${providerConfig.color}`} />
+                <span className="text-sm text-muted-foreground font-medium">
+                  {providerConfig.name}
                 </span>
-                <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(agent.status)}`}>
-                  {agent.status}
-                </span>
+                <Badge className={`text-xs ${statusConfig.bgColor} ${statusConfig.textColor} border`}>
+                  {statusConfig.label}
+                </Badge>
               </div>
             </div>
           </div>
 
-          {/* Action Menu */}
-          <div className={`flex items-center space-x-1 transition-opacity duration-200 ${
-            isHovered ? 'opacity-100' : 'opacity-0'
-          }`}>
-            <button
+          {/* Favorite Star */}
+          <div className={`transition-opacity duration-200 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={() => onEdit?.(agent)}
-              className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-              title="Edit Agent"
+              className="h-8 w-8 p-0 hover:bg-white/50"
             >
               <Edit3 className="h-4 w-4" />
-            </button>
-            <button
-              onClick={() => onConfigure?.(agent)}
-              className="p-2 text-gray-400 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
-              title="Configure Agent"
-            >
-              <Settings className="h-4 w-4" />
-            </button>
-            <button
-              onClick={() => onDelete?.(agent)}
-              className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-              title="Delete Agent"
-            >
-              <Trash2 className="h-4 w-4" />
-            </button>
+            </Button>
           </div>
         </div>
 
         {/* Agent Details */}
-        <div className="space-y-3">
+        <div className="space-y-3 mb-4">
           {/* Model Info */}
           <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-600">Model:</span>
-            <span className="font-medium text-gray-900 bg-gray-100 px-2 py-1 rounded-lg">
+            <span className="text-muted-foreground">Model:</span>
+            <Badge variant="outline" className="bg-white/50 border-white/30">
               {agent.model || 'Not configured'}
-            </span>
+            </Badge>
           </div>
 
           {/* Description */}
           {agent.description && (
-            <p className="text-sm text-gray-600 line-clamp-2">
+            <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
               {agent.description}
             </p>
           )}
 
-          {/* Stats */}
-          <div className="flex items-center justify-between text-xs text-gray-500 pt-2 border-t border-gray-100">
-            <div className="flex items-center space-x-1">
-              <Activity className="h-3 w-3" />
-              <span>Active conversations: {agent.activeConversations || 0}</span>
+          {/* Performance Metrics */}
+          <div className="grid grid-cols-3 gap-3 pt-2 border-t border-white/20">
+            <div className="text-center">
+              <div className="text-lg font-bold text-foreground">{agent.messageCount || 0}</div>
+              <div className="text-xs text-muted-foreground">Messages</div>
             </div>
-            <div className="flex items-center space-x-1">
-              <Clock className="h-3 w-3" />
-              <span>Last used: {agent.lastUsed || 'Never'}</span>
+            <div className="text-center">
+              <div className="text-lg font-bold text-brand-teal">{agent.accuracy || '95'}%</div>
+              <div className="text-xs text-muted-foreground">Accuracy</div>
+            </div>
+            <div className="text-center">
+              <div className="text-lg font-bold text-brand-orange">{agent.responseTime || '1.2'}s</div>
+              <div className="text-xs text-muted-foreground">Response</div>
             </div>
           </div>
         </div>
 
-        {/* Action Button */}
-        <div className="mt-4 pt-4 border-t border-gray-100">
-          <button
+        {/* Action Buttons */}
+        <div className="flex items-center gap-2">
+          <Button
+            size="sm"
             onClick={() => onToggleStatus?.(agent)}
-            className={`w-full flex items-center justify-center space-x-2 px-4 py-2 rounded-xl font-medium transition-all duration-200 ${
+            className={`flex-1 transition-all duration-200 ${
               agent.status === 'active'
                 ? 'bg-red-50 text-red-700 hover:bg-red-100 border border-red-200'
                 : 'bg-green-50 text-green-700 hover:bg-green-100 border border-green-200'
             }`}
+            variant="outline"
           >
             {agent.status === 'active' ? (
               <>
-                <Pause className="h-4 w-4" />
-                <span>Deactivate</span>
+                <Pause className="h-3 w-3 mr-1" />
+                Pause
               </>
             ) : (
               <>
-                <Play className="h-4 w-4" />
-                <span>Activate</span>
+                <Play className="h-3 w-3 mr-1" />
+                Activate
               </>
             )}
-          </button>
+          </Button>
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => onTest?.(agent)}
+            className="bg-white/50 border-white/30 hover:bg-white/70"
+          >
+            <MessageSquare className="h-3 w-3 mr-1" />
+            Test
+          </Button>
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => onDelete?.(agent)}
+            className="bg-white/50 border-white/30 hover:bg-red-50 hover:text-red-600 hover:border-red-200"
+          >
+            <Trash2 className="h-3 w-3" />
+          </Button>
         </div>
-      </div>
+
+        {/* Last Activity */}
+        <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/20">
+          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+            <Clock className="h-3 w-3" />
+            <span>Last used: {agent.lastUsed || 'Never'}</span>
+          </div>
+          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+            <Activity className="h-3 w-3" />
+            <span>{agent.activeConversations || 0} active</span>
+          </div>
+        </div>
+      </CardContent>
 
       {/* Hover Effect Border */}
-      <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-blue-200 transition-colors duration-300" />
-    </div>
+      <div className="absolute inset-0 rounded-xl border-2 border-transparent group-hover:border-brand-purple/20 transition-colors duration-300" />
+    </Card>
   )
 }
 
 export default EnhancedAgentCard
-

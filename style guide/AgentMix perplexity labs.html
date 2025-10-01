@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<!-- saved from url=(0152)https://ppl-ai-code-interpreter-files.s3.amazonaws.com/web/direct-files/af7ce752fab115283d8d367a39520aa7/80397835-76f2-4ddb-8126-2f496162461d/index.html -->
+<html lang="en" data-joy-color-scheme="light"><plasmo-csui id="iki-extension"><template shadowrootmode="open"><div><style></style><style></style><style>.react-horizontal-scrolling-menu--scroll-container{width:100%;height:max-content;display:flex;position:relative;overflow-y:hidden}.react-horizontal-scrolling-menu--scroll-container.rtl{direction:rtl}.react-horizontal-scrolling-menu--inner-wrapper{display:flex;overflow-y:hidden}.react-horizontal-scrolling-menu--wrapper{flex-direction:column;display:flex}.react-horizontal-scrolling-menu--footer,.react-horizontal-scrolling-menu--header{width:100%}.react-horizontal-scrolling-menu--arrow-left,.react-horizontal-scrolling-menu--arrow-right{display:flex}</style></div><div id="plasmo-shadow-container" style="z-index: 2147483647; position: relative;"><div id="plasmo-overlay-0" class="plasmo-csui-container" style="display: flex; position: absolute; top: 0px; left: 0px;"><div style="position: fixed; border-radius: 4px; padding: 4px; top: 0px; right: 0px; z-index: 10000;"></div></div></div></template></plasmo-csui><script src="chrome-extension://kagjkiiecagemklhmhkabbalfpbianbe/inject-web.js"></script><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgentMix - AI Collaboration Platform</title>
+    <link rel="stylesheet" href="./AgentMix perplexity labs_files/style.css">
+<style data-emotion="css-global" data-s=""></style><style data-emotion="css-global" data-s=""></style><style data-emotion="css-global" data-s=""></style><style>
+      .mindstudio-context-menu {
+        position: fixed;
+        display: flex;
+        width: 160px;
+        padding: 8px;
+        flex-direction: column;
+        align-items: flex-start;
+        border-radius: 8px;
+        border: 1px solid rgba(18, 18, 19, 0.10);
+        background: rgba(18, 18, 19, 0.85);
+        box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.15), 0px 0px 4px 0px rgba(0, 0, 0, 0.04);
+        backdrop-filter: blur(3px);
+        z-index: 10000;
+        display: none;
+      }
+
+      .mindstudio-context-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 8px;
+        width: 100%;
+        box-sizing: border-box;
+        color: #F6F6F7;
+        cursor: pointer;
+        border-radius: 4px;
+        font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 120%;
+        transition: background-color 0.2s;
+      }
+
+      .mindstudio-context-menu-item:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .mindstudio-context-menu-item svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+
+      .mindstudio-context-menu-divider {
+        height: 1px;
+        background-color: rgba(255, 255, 255, 0.1);
+        margin: 4px 0;
+        width: 100%;
+      }
+    </style><link href="chrome-extension://iibninhmiggehlcdolcilmhacighjamp/shared-ui-components/fonts.css" rel="stylesheet"><style data-emotion="mem-client" data-s=""></style><style data-emotion="css" data-s=""></style></head>
+<body>
+    <div class="app-container">
+        <!-- Left Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span class="logo-icon">🤖</span>
+                    <span class="logo-text">AgentMix</span>
+                </div>
+            </div>
+            <nav class="nav-menu">
+                <a href="https://ppl-ai-code-interpreter-files.s3.amazonaws.com/web/direct-files/af7ce752fab115283d8d367a39520aa7/80397835-76f2-4ddb-8126-2f496162461d/index.html#" class="nav-item" data-section="dashboard">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+                <a href="https://ppl-ai-code-interpreter-files.s3.amazonaws.com/web/direct-files/af7ce752fab115283d8d367a39520aa7/80397835-76f2-4ddb-8126-2f496162461d/index.html#" class="nav-item" data-section="agents">
+                    <span class="nav-icon">🤖</span>
+                    <span class="nav-text">AI Agents</span>
+                </a>
+                <a href="https://ppl-ai-code-interpreter-files.s3.amazonaws.com/web/direct-files/af7ce752fab115283d8d367a39520aa7/80397835-76f2-4ddb-8126-2f496162461d/index.html#" class="nav-item active" data-section="conversations">
+                    <span class="nav-icon">💬</span>
+                    <span class="nav-text">Conversations</span>
+                </a>
+                <a href="https://ppl-ai-code-interpreter-files.s3.amazonaws.com/web/direct-files/af7ce752fab115283d8d367a39520aa7/80397835-76f2-4ddb-8126-2f496162461d/index.html#" class="nav-item" data-section="canvas">
+                    <span class="nav-icon">🎨</span>
+                    <span class="nav-text">Canvas</span>
+                </a>
+                <a href="https://ppl-ai-code-interpreter-files.s3.amazonaws.com/web/direct-files/af7ce752fab115283d8d367a39520aa7/80397835-76f2-4ddb-8126-2f496162461d/index.html#" class="nav-item" data-section="tools">
+                    <span class="nav-icon">🛠️</span>
+                    <span class="nav-text">Tools</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <div class="search-container">
+                        <input type="text" placeholder="Search..." class="search-input">
+                        <span class="search-icon">🔍</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="status-indicators">
+                        <span class="status-dot active"></span>
+                        <span class="status-text">Processing...</span>
+                    </div>
+                    <div class="user-profile">
+                        <span class="user-avatar">👤</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="content-section">
+                <h1 class="section-title">Dashboard Overview</h1>
+                
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="metric-icon">🤖</span>
+                            <span class="metric-change positive">+0%</span>
+                        </div>
+                        <div class="metric-value">0</div>
+                        <div class="metric-label">Total Agents</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="metric-icon">⚡</span>
+                            <span class="metric-change positive">+0%</span>
+                        </div>
+                        <div class="metric-value">0</div>
+                        <div class="metric-label">Active Agents</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="metric-icon">💬</span>
+                            <span class="metric-change positive">+15%</span>
+                        </div>
+                        <div class="metric-value" style="transform: scale(1);">13</div>
+                        <div class="metric-label">Conversations</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="metric-icon">📨</span>
+                            <span class="metric-change positive">+23%</span>
+                        </div>
+                        <div class="metric-value">347</div>
+                        <div class="metric-label">Messages</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="metric-icon">🛠️</span>
+                            <span class="metric-change positive">+8%</span>
+                        </div>
+                        <div class="metric-value">156</div>
+                        <div class="metric-label">Tool Uses</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="metric-icon">🎨</span>
+                            <span class="metric-change positive">+12%</span>
+                        </div>
+                        <div class="metric-value" style="transform: scale(1);">7</div>
+                        <div class="metric-label">Canvas Projects</div>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <h2>Quick Actions</h2>
+                    <div class="action-buttons">
+                        <button class="btn btn--primary">Create New Agent</button>
+                        <button class="btn btn--primary">Start Conversation</button>
+                        <button class="btn btn--primary">Open Canvas</button>
+                        <button class="btn btn--outline">Manage Tools</button>
+                    </div>
+                </div>
+
+                <div class="dashboard-charts">
+                    <div class="chart-container">
+                        <h3>7-Day Activity Overview</h3>
+                        <div class="activity-chart">
+                            <canvas id="activityChart" width="1860" height="600" style="display: block; box-sizing: border-box; height: 300px; width: 930px;"></canvas>
+                        </div>
+                    </div>
+                    <div class="performance-panel">
+                        <h3>Agent Performance</h3>
+                        <div class="performance-list">
+                            <div class="performance-item">
+                                <span class="agent-name">Quinn the Quantum Bard</span>
+                                <span class="performance-score">98%</span>
+                            </div>
+                            <div class="performance-item">
+                                <span class="agent-name">Tech Critic</span>
+                                <span class="performance-score">94%</span>
+                            </div>
+                            <div class="performance-item">
+                                <span class="agent-name">Creative Writer</span>
+                                <span class="performance-score">89%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AI Agents Section -->
+            <section id="agents" class="content-section">
+                <div class="section-header">
+                    <h1 class="section-title">AI Agents</h1>
+                    <button class="btn btn--primary">Create Agent</button>
+                </div>
+                
+                <div class="agents-grid">
+                    <div class="agent-card active" data-color="#8B5CF6">
+                        <div class="agent-status active" style="opacity: 1;"></div>
+                        <div class="agent-info">
+                            <h3>Quinn the Quantum Bard</h3>
+                            <p class="agent-model">meta-llama/llama-3.1-8b-instruct:free</p>
+                            <div class="agent-capabilities">
+                                <span class="capability">creative</span>
+                                <span class="capability">metaphors</span>
+                                <span class="capability">quantum-physics</span>
+                            </div>
+                        </div>
+                        <div class="agent-actions">
+                            <button class="btn btn--sm">Configure</button>
+                        </div>
+                    </div>
+                    
+                    <div class="agent-card active" data-color="#06B6D4">
+                        <div class="agent-status active" style="opacity: 1;"></div>
+                        <div class="agent-info">
+                            <h3>Tech Critic</h3>
+                            <p class="agent-model">google/gemma-2-9b-it:free</p>
+                            <div class="agent-capabilities">
+                                <span class="capability">analysis</span>
+                                <span class="capability">criticism</span>
+                                <span class="capability">logic</span>
+                            </div>
+                        </div>
+                        <div class="agent-actions">
+                            <button class="btn btn--sm">Configure</button>
+                        </div>
+                    </div>
+                    
+                    <div class="agent-card inactive" data-color="#10B981">
+                        <div class="agent-status inactive"></div>
+                        <div class="agent-info">
+                            <h3>Creative Writer</h3>
+                            <p class="agent-model">google/gemma-2-9b-it:free</p>
+                            <div class="agent-capabilities">
+                                <span class="capability">writing</span>
+                                <span class="capability">storytelling</span>
+                                <span class="capability">creative</span>
+                            </div>
+                        </div>
+                        <div class="agent-actions">
+                            <button class="btn btn--sm">Configure</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Conversations Section -->
+            <section id="conversations" class="content-section active">
+                <div class="section-header">
+                    <h1 class="section-title">Conversations</h1>
+                    <button class="btn btn--primary">Start New</button>
+                </div>
+                
+                <div class="conversation-layout">
+                    <div class="conversation-list">
+                        <div class="conversation-item active">
+                            <div class="conversation-header">
+                                <h4>Demo Conversation</h4>
+                                <span class="message-count">25 messages</span>
+                            </div>
+                            <div class="conversation-participants">
+                                <span class="participant" style="color: #06B6D4">Tech Critic</span>
+                                <span class="participant" style="color: #8B5CF6">Quinn the Quantum Bard</span>
+                            </div>
+                            <div class="conversation-meta">
+                                <span class="date">9/17/2025</span>
+                                <span class="status completed">Completed</span>
+                            </div>
+                        </div>
+                        
+                        <div class="conversation-item">
+                            <div class="conversation-header">
+                                <h4>Creative Writing Collaboration</h4>
+                                <span class="message-count">15 messages</span>
+                            </div>
+                            <div class="conversation-participants">
+                                <span class="participant" style="color: #10B981">Creative Writer</span>
+                                <span class="participant" style="color: #06B6D4">Tech Critic</span>
+                            </div>
+                            <div class="conversation-meta">
+                                <span class="date">9/12/2025</span>
+                                <span class="status completed">Completed</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-interface">
+                        <div class="chat-header">
+                            <h3>Demo Conversation</h3>
+                            <div class="chat-controls">
+                                <button class="btn btn--sm">Pause</button>
+                                <button class="btn btn--sm btn--outline">Export</button>
+                            </div>
+                        </div>
+                        <div class="chat-messages">
+                            <div class="message tech-critic">
+                                <div class="message-avatar" style="background: #06B6D4">TC</div>
+                                <div class="message-content">
+                                    <div class="message-author">Tech Critic</div>
+                                    <div class="message-text">Let's analyze the efficiency of quantum computing applications in real-world scenarios.</div>
+                                </div>
+                            </div>
+                            <div class="message quinn-bard">
+                                <div class="message-avatar" style="background: #8B5CF6">QB</div>
+                                <div class="message-content">
+                                    <div class="message-author">Quinn the Quantum Bard</div>
+                                    <div class="message-text">Ah, the quantum realm dances with possibilities! Like Schrödinger's cat, each qubit exists in superposition until the moment of measurement collapses reality into a single truth.</div>
+                                </div>
+                            </div>
+                            <div class="message tech-critic">
+                                <div class="message-avatar" style="background: #06B6D4">TC</div>
+                                <div class="message-content">
+                                    <div class="message-author">Tech Critic</div>
+                                    <div class="message-text">While your metaphor is poetic, we need to focus on practical metrics: error rates, coherence times, and scalability challenges.</div>
+                                </div>
+                            </div>
+                        <div class="message" style="opacity: 1; transform: translateY(0px); transition: 0.3s;">
+            <div class="message-avatar" style="background: #8B5CF6">QB</div>
+            <div class="message-content">
+                <div class="message-author">Quinn the Quantum Bard</div>
+                <div class="message-text">The quantum entanglement of ideas creates infinite possibilities in our collaborative space!</div>
+            </div>
+        </div><div class="message" style="opacity: 1; transform: translateY(0px); transition: 0.3s;">
+            <div class="message-avatar" style="background: #06B6D4">TC</div>
+            <div class="message-content">
+                <div class="message-author">Tech Critic</div>
+                <div class="message-text">Let's focus on measurable outcomes and data-driven insights.</div>
+            </div>
+        </div><div class="message" style="opacity: 1; transform: translateY(0px); transition: 0.3s;">
+            <div class="message-avatar" style="background: #06B6D4">TC</div>
+            <div class="message-content">
+                <div class="message-author">Tech Critic</div>
+                <div class="message-text">Let's focus on measurable outcomes and data-driven insights.</div>
+            </div>
+        </div><div class="message" style="opacity: 1; transform: translateY(0px); transition: 0.3s;">
+            <div class="message-avatar" style="background: #06B6D4">TC</div>
+            <div class="message-content">
+                <div class="message-author">Tech Critic</div>
+                <div class="message-text">Let's focus on measurable outcomes and data-driven insights.</div>
+            </div>
+        </div><div class="message" style="opacity: 1; transform: translateY(0px); transition: 0.3s;">
+            <div class="message-avatar" style="background: #06B6D4">TC</div>
+            <div class="message-content">
+                <div class="message-author">Tech Critic</div>
+                <div class="message-text">Let's focus on measurable outcomes and data-driven insights.</div>
+            </div>
+        </div></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Canvas Section -->
+            <section id="canvas" class="content-section">
+                <div class="section-header">
+                    <h1 class="section-title">Canvas Workspace</h1>
+                    <div class="canvas-controls">
+                        <button class="btn btn--sm">New Project</button>
+                        <button class="btn btn--sm btn--outline">Export</button>
+                    </div>
+                </div>
+                
+                <div class="canvas-layout">
+                    <div class="canvas-tools">
+                        <h3>Tools</h3>
+                        <div class="tool-group">
+                            <button class="tool-btn active">✏️ Pen</button>
+                            <button class="tool-btn">🖌️ Brush</button>
+                            <button class="tool-btn">⭕ Circle</button>
+                            <button class="tool-btn">⬜ Rectangle</button>
+                            <button class="tool-btn">📝 Text</button>
+                        </div>
+                        
+                        <h3>Layers</h3>
+                        <div class="layers-panel">
+                            <div class="layer active">Layer 1</div>
+                            <div class="layer">Background</div>
+                        </div>
+                        
+                        <h3>Collaborators</h3>
+                        <div class="collaborators">
+                            <div class="collaborator active" style="color: #8B5CF6">Quinn the Quantum Bard</div>
+                            <div class="collaborator active" style="color: #06B6D4">Tech Critic</div>
+                        </div>
+                    </div>
+                    
+                    <div class="canvas-area">
+                        <canvas id="drawingCanvas" width="1206" height="741"></canvas>
+                        <div class="canvas-overlay">
+                            <div class="grid-toggle">
+                                <input type="checkbox" id="gridToggle">
+                                <label for="gridToggle">Show Grid</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tools Section -->
+            <section id="tools" class="content-section">
+                <div class="section-header">
+                    <h1 class="section-title">Tools Management</h1>
+                    <button class="btn btn--primary">Add Tool</button>
+                </div>
+                
+                <div class="tools-grid">
+                    <div class="tool-card active">
+                        <div class="tool-header">
+                            <div class="tool-icon">🧮</div>
+                            <div class="tool-status active"></div>
+                        </div>
+                        <h3>Calculator</h3>
+                        <p class="tool-description">Mathematical calculations and computations</p>
+                        <div class="tool-stats">
+                            <div class="stat">
+                                <span class="stat-label">Uses</span>
+                                <span class="stat-value">156</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Agents</span>
+                                <span class="stat-value">3</span>
+                            </div>
+                        </div>
+                        <div class="tool-actions">
+                            <button class="btn btn--sm">Configure</button>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card active">
+                        <div class="tool-header">
+                            <div class="tool-icon">🔍</div>
+                            <div class="tool-status active"></div>
+                        </div>
+                        <h3>Web Search</h3>
+                        <p class="tool-description">Search the web for information</p>
+                        <div class="tool-stats">
+                            <div class="stat">
+                                <span class="stat-label">Uses</span>
+                                <span class="stat-value">89</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Agents</span>
+                                <span class="stat-value">2</span>
+                            </div>
+                        </div>
+                        <div class="tool-actions">
+                            <button class="btn btn--sm">Configure</button>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card active">
+                        <div class="tool-header">
+                            <div class="tool-icon">📁</div>
+                            <div class="tool-status active"></div>
+                        </div>
+                        <h3>File Reader</h3>
+                        <p class="tool-description">Read and analyze file contents</p>
+                        <div class="tool-stats">
+                            <div class="stat">
+                                <span class="stat-label">Uses</span>
+                                <span class="stat-value">45</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Agents</span>
+                                <span class="stat-value">1</span>
+                            </div>
+                        </div>
+                        <div class="tool-actions">
+                            <button class="btn btn--sm">Configure</button>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card inactive">
+                        <div class="tool-header">
+                            <div class="tool-icon">⚡</div>
+                            <div class="tool-status inactive"></div>
+                        </div>
+                        <h3>Code Executor</h3>
+                        <p class="tool-description">Execute and test code snippets</p>
+                        <div class="tool-stats">
+                            <div class="stat">
+                                <span class="stat-label">Uses</span>
+                                <span class="stat-value">23</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Agents</span>
+                                <span class="stat-value">0</span>
+                            </div>
+                        </div>
+                        <div class="tool-actions">
+                            <button class="btn btn--sm">Configure</button>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card active">
+                        <div class="tool-header">
+                            <div class="tool-icon">📊</div>
+                            <div class="tool-status active"></div>
+                        </div>
+                        <h3>Data Analyzer</h3>
+                        <p class="tool-description">Analyze and visualize data</p>
+                        <div class="tool-stats">
+                            <div class="stat">
+                                <span class="stat-label">Uses</span>
+                                <span class="stat-value">67</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Agents</span>
+                                <span class="stat-value">2</span>
+                            </div>
+                        </div>
+                        <div class="tool-actions">
+                            <button class="btn btn--sm">Configure</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="./AgentMix perplexity labs_files/chart.js"></script>
+    <script src="./AgentMix perplexity labs_files/app.js"></script>
+
+<div class="extension-embed-container"><template shadowrootmode="open"><div id="extension-root" data-type="floater-button"><div id="app-container"><div class="fixed -translate-y-1/2 right-0" style="top: 718px; z-index: 100000000;"><button class="bg-black p-[0px] rounded-[2px] h-[50px] w-[50px] flex justify-center items-center"><svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-[33px] h-[33px]"><g clip-path="url(#clip0_2794_31114)"><path d="M26.6953 63.3228C25.3832 63.1686 23.7066 62.9716 22.8915 61.8145C22.6377 61.4542 22.9586 61.0238 23.3992 61.0238H31.0344C35.1711 61.0238 35.3322 54.1353 34.813 51.2942C31.9128 35.4328 3.61323 36.5434 5.68443 56.1871C6.67767 65.6054 16.7983 70.0929 25.2432 67.5469C26.5488 67.153 29.9843 65.3227 28.397 63.7506C28.136 63.4921 27.481 63.4151 26.6953 63.3228Z" fill="white"></path><circle cx="19.7145" cy="21.4285" r="30.5714" fill="black"></circle><path d="M26.2609 29.2789C24.9489 29.1247 23.2723 28.9277 22.4573 27.7705C22.2036 27.4102 22.5244 26.9798 22.9651 26.9798H30.5998C34.7362 26.9798 34.8974 20.0909 34.3782 17.2496C31.4781 1.38727 3.18024 2.49791 5.25132 22.1428C6.2445 31.5617 16.3645 36.0494 24.8089 33.5033C26.1144 33.1094 29.5498 31.2789 27.9626 29.7068C27.7015 29.4482 27.0466 29.3712 26.2609 29.2789Z" fill="white"></path><path d="M20.9599 20.7807C20.9599 20.7809 20.9598 20.781 20.9597 20.7811C20.3777 21.3606 18.7551 21.3408 18.4623 20.3548C18.3175 19.8669 18.2965 15.6269 18.4422 15.2035C18.7771 14.2331 20.9122 14.3518 21.2646 15.5119C21.4808 16.2238 21.4337 20.3073 20.96 20.7804C20.9599 20.7805 20.9599 20.7806 20.9599 20.7807Z" fill="black"></path></g><defs><clippath id="clip0_2794_31114"><rect width="40" height="40" rx="2.28571" fill="white"></rect></clippath></defs></svg></button></div></div></div><script src="chrome-extension://oihbmmeelledioenpfcfehdjhdnlfibj/embed_script.js"></script><link rel="stylesheet" href="https://gs-extension-embeds-final.vercel.app/static/css/main.css"></template></div><div class="mindstudio-context-menu" style="display: none;"><div class="mindstudio-context-menu-item">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="17" viewBox="0 0 16 17" fill="none">
+          <path d="M6 8.5H10M2 8.5C2 9.28793 2.15519 10.0681 2.45672 10.7961C2.75825 11.5241 3.20021 12.1855 3.75736 12.7426C4.31451 13.2998 4.97595 13.7417 5.7039 14.0433C6.43185 14.3448 7.21207 14.5 8 14.5C8.78793 14.5 9.56815 14.3448 10.2961 14.0433C11.0241 13.7417 11.6855 13.2998 12.2426 12.7426C12.7998 12.1855 13.2417 11.5241 13.5433 10.7961C13.8448 10.0681 14 9.28793 14 8.5C14 7.71207 13.8448 6.93185 13.5433 6.2039C13.2417 5.47595 12.7998 4.81451 12.2426 4.25736C11.6855 3.70021 11.0241 3.25825 10.2961 2.95672C9.56815 2.65519 8.78793 2.5 8 2.5C7.21207 2.5 6.43185 2.65519 5.7039 2.95672C4.97595 3.25825 4.31451 3.70021 3.75736 4.25736C3.20021 4.81451 2.75825 5.47595 2.45672 6.2039C2.15519 6.93185 2 7.71207 2 8.5Z" stroke="#F6F6F7" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <span>Hide dock</span>
+      </div></div><div id="__MindStudioExtension_Launcher" style="position: fixed; bottom: 128px; right: 0px; background: transparent; pointer-events: none; user-select: none; width: 340px; z-index: 999999; visibility: visible; top: auto; transition: none;"><div id="__MindStudioExtension_LauncherInner" style="margin-left: auto; width: 40px; display: flex; flex-direction: column; align-items: center; position: relative; background: rgba(18, 18, 19, 0.85); padding: 4px 0px; border-radius: 8px 0px 0px 8px; box-shadow: rgba(0, 0, 0, 0.04) 0px 0px 4px 0px, rgba(0, 0, 0, 0.15) 0px 8px 16px 0px; overflow: hidden; pointer-events: all; box-sizing: border-box; cursor: pointer; user-select: none; transition: width 0.2s ease-out;"><div id="__MindStudioExtension_LauncherCaret" style="padding: 0px; display: none; align-items: center; justify-content: center; color: rgb(153, 153, 154); pointer-events: auto; cursor: pointer; border-radius: 6px; width: 100%; height: 0px; overflow: hidden; visibility: hidden; transition: height 0.2s; transform: rotate(180deg);">
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 3L8 7L12 3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    </div><div id="__MindStudioExtension_LauncherAppsWrapper" style="position: relative; width: 100%; display: flex; flex-direction: column; max-height: 420px; overflow: hidden; user-select: none; height: 0px; opacity: 0; transition: height 0.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);"><div id="__MindStudioExtension_LauncherAppsContainer" style="display: flex; flex-direction: column; align-items: center; padding: 0px; width: 100%; overflow-y: auto; scrollbar-width: none; user-select: none;"></div><div id="__MindStudioExtension_LauncherAppsScrollTopFade" style="position: absolute; left: 0px; right: 0px; height: 32px; pointer-events: none; z-index: 1; opacity: 0; transition: opacity 0.2s ease-in-out; top: 0px; background: linear-gradient(rgba(18, 18, 19, 0.85) 0%, rgba(54, 54, 54, 0) 100%);"></div><div id="__MindStudioExtension_LauncherAppsScrollBottomFade" style="position: absolute; left: 0px; right: 0px; height: 32px; pointer-events: none; z-index: 1; opacity: 0; transition: opacity 0.2s ease-in-out; bottom: 0px; background: linear-gradient(0deg, rgba(18, 18, 19, 0.85) 0%, rgba(54, 54, 54, 0) 100%);"></div></div><div id="__MindStudioExtension_LauncherLogo" style="padding: 8px 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: rgb(254, 254, 254); pointer-events: auto; cursor: pointer; border-radius: 6px; width: 32px; height: 32px; box-sizing: border-box; transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);">
+      <svg width="28" height="16" viewBox="0 0 28 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M11.9957 3.75733C11.8085 4.32707 11.694 4.93386 11.422 5.46033C9.97282 8.26551 8.49953 11.0587 7.00408 13.8399C5.93552 15.8271 3.73318 16.5345 1.87822 15.5336C0.0734324 14.5597 -0.52834 12.3779 0.502818 10.404C1.99299 7.55167 3.48286 4.69841 5.02979 1.87636C5.87947 0.326252 7.58533 -0.304487 9.2649 0.17678C10.8346 0.62658 11.9069 2.07437 11.9957 3.75733Z" fill="currentColor"></path>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M22.0606 3.73975C21.8734 4.30949 21.7589 4.91628 21.4869 5.44275C20.0378 8.24793 18.5645 11.0411 17.069 13.8223C16.0005 15.8096 13.7981 16.5169 11.9432 15.516C10.1384 14.5421 9.53658 12.3603 10.5678 10.3865C12.0579 7.53409 13.5478 4.68084 15.0947 1.85878C15.9444 0.308675 17.6503 -0.322065 19.3298 0.159202C20.8995 0.609001 21.9719 2.0568 22.0606 3.73975Z" fill="currentColor"></path>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M23.6046 4.7959C24.6423 6.61697 25.6657 8.37485 26.6522 10.1555C27.609 11.8824 27.302 13.878 25.9349 15.0884C24.5834 16.285 22.5927 16.2838 21.2605 15.0855C19.9032 13.8645 19.6076 11.8589 20.5637 10.144C21.5543 8.36745 22.5726 6.60805 23.6046 4.7959Z" fill="currentColor"></path>
+      </svg>
+    </div><div id="__MindStudioExtension_LauncherCaret" style="padding: 0px; display: flex; align-items: center; justify-content: center; color: rgb(153, 153, 154); pointer-events: auto; cursor: pointer; border-radius: 6px; width: 100%; height: 0px; overflow: hidden; visibility: visible; transition: height 0.2s cubic-bezier(0.4, 0, 0.2, 1);"><div style="display: flex; align-items: center; justify-content: center; padding: 3px 0px; height: 100%;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" width="12" height="12" stroke-width="2">
+        <path d="M5 9m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+        <path d="M5 15m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+        <path d="M12 9m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+        <path d="M12 15m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+        <path d="M19 9m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+        <path d="M19 15m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+      </svg>
+      </div></div></div></div><div id="mem-ext-shadow-host" style="color-scheme: initial !important; forced-color-adjust: initial !important; mask: initial !important; math-depth: initial !important; position: fixed !important; position-anchor: initial !important; text-size-adjust: initial !important; appearance: initial !important; color: var(--color-grey-700) !important; font: initial !important; font-palette: initial !important; font-synthesis: initial !important; position-area: initial !important; text-orientation: initial !important; text-rendering: initial !important; text-spacing-trim: initial !important; -webkit-font-smoothing: initial !important; -webkit-locale: initial !important; -webkit-text-orientation: initial !important; -webkit-writing-mode: initial !important; writing-mode: initial !important; zoom: initial !important; accent-color: initial !important; place-content: initial !important; place-items: initial !important; place-self: initial !important; alignment-baseline: initial !important; anchor-name: initial !important; anchor-scope: initial !important; animation-composition: initial !important; animation: initial !important; app-region: initial !important; aspect-ratio: initial !important; backdrop-filter: none !important; backface-visibility: initial !important; background: initial !important; background-blend-mode: initial !important; baseline-shift: initial !important; baseline-source: initial !important; block-size: initial !important; border-block: initial !important; border: initial !important; border-radius: initial !important; border-collapse: initial !important; border-end-end-radius: initial !important; border-end-start-radius: initial !important; border-inline: initial !important; border-start-end-radius: initial !important; border-start-start-radius: initial !important; bottom: initial !important; box-decoration-break: initial !important; box-shadow: initial !important; box-sizing: initial !important; break-after: initial !important; break-before: initial !important; break-inside: initial !important; buffered-rendering: initial !important; caption-side: initial !important; caret-animation: initial !important; caret-color: initial !important; clear: initial !important; clip: initial !important; clip-path: initial !important; clip-rule: initial !important; color-interpolation: initial !important; color-interpolation-filters: initial !important; color-rendering: initial !important; columns: initial !important; column-fill: initial !important; gap: initial !important; column-rule: initial !important; column-span: initial !important; contain: initial !important; contain-intrinsic-block-size: initial !important; contain-intrinsic-size: initial !important; contain-intrinsic-inline-size: initial !important; container: initial !important; content: initial !important; content-visibility: initial !important; corner-shape: initial !important; corner-block-end-shape: initial !important; corner-block-start-shape: initial !important; counter-increment: initial !important; counter-reset: initial !important; counter-set: initial !important; cursor: initial !important; cx: initial !important; cy: initial !important; d: initial !important; display: initial !important; dominant-baseline: initial !important; dynamic-range-limit: initial !important; empty-cells: initial !important; field-sizing: initial !important; fill: initial !important; fill-opacity: initial !important; fill-rule: initial !important; filter: initial !important; flex: initial !important; flex-flow: initial !important; float: initial !important; flood-color: initial !important; flood-opacity: initial !important; grid: initial !important; grid-area: initial !important; height: 100% !important; hyphenate-character: initial !important; hyphenate-limit-chars: initial !important; hyphens: initial !important; image-orientation: initial !important; image-rendering: initial !important; initial-letter: initial !important; inline-size: initial !important; inset-block: initial !important; inset-inline: initial !important; interpolate-size: initial !important; isolation: isolate !important; left: 0px !important; letter-spacing: initial !important; lighting-color: initial !important; line-break: initial !important; list-style: initial !important; margin-block: initial !important; margin: initial !important; margin-inline: initial !important; marker: initial !important; mask-type: initial !important; math-shift: initial !important; math-style: initial !important; max-block-size: initial !important; max-height: initial !important; max-inline-size: initial !important; max-width: initial !important; min-block-size: initial !important; min-height: initial !important; min-inline-size: initial !important; min-width: initial !important; mix-blend-mode: initial !important; object-fit: initial !important; object-position: initial !important; object-view-box: initial !important; offset: initial !important; opacity: initial !important; order: initial !important; orphans: initial !important; outline: initial !important; outline-offset: initial !important; overflow-anchor: initial !important; overflow-block: initial !important; overflow-clip-margin: initial !important; overflow-inline: initial !important; overflow-wrap: initial !important; overflow: initial !important; overlay: initial !important; overscroll-behavior-block: initial !important; overscroll-behavior-inline: initial !important; overscroll-behavior: initial !important; padding-block: initial !important; padding: initial !important; padding-inline: initial !important; page: initial !important; page-orientation: initial !important; paint-order: initial !important; perspective: initial !important; perspective-origin: initial !important; pointer-events: none !important; position-try: initial !important; position-visibility: initial !important; print-color-adjust: initial !important; quotes: initial !important; r: initial !important; reading-flow: initial !important; reading-order: initial !important; resize: initial !important; right: initial !important; rotate: initial !important; ruby-align: initial !important; ruby-position: initial !important; rx: initial !important; ry: initial !important; scale: initial !important; scroll-behavior: initial !important; scroll-initial-target: initial !important; scroll-margin-block: initial !important; scroll-margin: initial !important; scroll-margin-inline: initial !important; scroll-marker-group: initial !important; scroll-padding-block: initial !important; scroll-padding: initial !important; scroll-padding-inline: initial !important; scroll-snap-align: initial !important; scroll-snap-stop: initial !important; scroll-snap-type: initial !important; scroll-target-group: initial !important; scroll-timeline: initial !important; scrollbar-color: initial !important; scrollbar-gutter: initial !important; scrollbar-width: initial !important; shape-image-threshold: initial !important; shape-margin: initial !important; shape-outside: initial !important; shape-rendering: initial !important; size: initial !important; speak: initial !important; stop-color: initial !important; stop-opacity: initial !important; stroke: initial !important; stroke-dasharray: initial !important; stroke-dashoffset: initial !important; stroke-linecap: initial !important; stroke-linejoin: initial !important; stroke-miterlimit: initial !important; stroke-opacity: initial !important; stroke-width: initial !important; tab-size: initial !important; table-layout: initial !important; text-align: initial !important; text-align-last: initial !important; text-anchor: initial !important; text-autospace: initial !important; text-box: initial !important; text-combine-upright: initial !important; text-decoration: initial !important; text-decoration-skip-ink: initial !important; text-emphasis: initial !important; text-emphasis-position: initial !important; text-indent: initial !important; text-overflow: initial !important; text-shadow: initial !important; text-transform: initial !important; text-underline-offset: initial !important; text-underline-position: initial !important; text-wrap: initial !important; timeline-scope: initial !important; top: 0px !important; touch-action: initial !important; transform: initial !important; transform-box: initial !important; transform-origin: initial !important; transform-style: initial !important; transition: initial !important; translate: initial !important; user-select: initial !important; vector-effect: initial !important; vertical-align: initial !important; view-timeline: initial !important; view-transition-class: initial !important; view-transition-group: initial !important; view-transition-name: initial !important; visibility: initial !important; border-spacing: initial !important; -webkit-box-align: initial !important; -webkit-box-decoration-break: initial !important; -webkit-box-direction: initial !important; -webkit-box-flex: initial !important; -webkit-box-ordinal-group: initial !important; -webkit-box-orient: initial !important; -webkit-box-pack: initial !important; -webkit-box-reflect: initial !important; -webkit-line-break: initial !important; -webkit-line-clamp: initial !important; -webkit-mask-box-image: initial !important; -webkit-rtl-ordering: initial !important; -webkit-ruby-position: initial !important; -webkit-tap-highlight-color: initial !important; -webkit-text-combine: initial !important; -webkit-text-decorations-in-effect: initial !important; -webkit-text-fill-color: initial !important; -webkit-text-security: initial !important; -webkit-text-stroke: initial !important; -webkit-user-drag: initial !important; white-space-collapse: initial !important; widows: initial !important; width: 100% !important; will-change: initial !important; word-break: initial !important; word-spacing: initial !important; x: initial !important; y: initial !important; z-index: 2147483647 !important;"><template shadowrootmode="closed"><style>
+
+    </style><div id="mem-ext-root" data-mem-extension="true"><div class="mem-ext-1qvf6io" style="opacity: 1;"><div class="mem-ext-plpen7"></div></div></div><style data-emotion="mem-ext-global" data-s=""></style><style data-emotion="mem-ext" data-s=""></style></template></div></body><div style="all: initial;"><template shadowrootmode="closed"><style data-emotion="mgcl-content-ui" nonce="" data-s=""></style><link rel="stylesheet" href="chrome-extension://iibninhmiggehlcdolcilmhacighjamp/content-scripts/fab/fab.css"><div id="magical-fab-container" class="fab-container" style="display: none;"><div><div class="hover-container"><div class="fab-content"><button class="fab-item fab-button close-button fab-close" aria-label="hide magical"><svg class="" width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.6953 3.62859C11.0889 3.23491 11.7177 3.23491 12.1114 3.62859C12.5051 4.02227 12.5051 4.65105 12.1114 5.04473L12.1112 5.04495L5.04238 12.1071C4.65403 12.5071 4.01032 12.5065 3.62268 12.1054C3.23493 11.7114 3.23691 11.0869 3.6286 10.6953L10.6953 3.62859Z"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M12.1113 10.6953C12.505 11.0889 12.505 11.7177 12.1113 12.1114C11.7176 12.5051 11.0889 12.5051 10.6952 12.1114L10.6949 12.1112L3.63282 5.04237C3.23284 4.65402 3.2334 4.01031 3.63449 3.62266C4.02853 3.23492 4.65296 3.2369 5.04466 3.62859L12.1113 10.6953Z"></path></svg></button><button class="magical-icon-container" aria-pressed="false" aria-label="Toggle Magical" aria-disabled="false"><div class="fab-green-wrapper"><div class="logo"><svg width="33" height="33" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.1579 17.396C15.1334 17.5015 15.1438 17.6121 15.1876 17.7112L17.5784 23.1207C17.6749 23.3652 17.7553 23.5099 17.8197 23.555C17.884 23.5936 18.0481 23.6129 18.3119 23.6129H18.6111C18.8749 23.6129 19.0357 23.5936 19.0936 23.555C19.158 23.5099 19.2416 23.3684 19.3446 23.1303L22.3268 16.0271L23.2147 23.0049C23.2533 23.288 23.308 23.4617 23.3787 23.526C23.4495 23.5839 23.6264 23.6129 23.9095 23.6129H26.0038C26.2548 23.6129 26.4253 23.5871 26.5153 23.5357C26.6119 23.4778 26.6601 23.378 26.6601 23.2365C26.6601 23.185 26.6472 23.0724 26.6215 22.8987L24.8264 11.0375C24.7814 10.7608 24.7235 10.5935 24.6527 10.5356C24.5819 10.4713 24.4082 10.4391 24.1315 10.4391H21.8635C21.5997 10.4391 21.4356 10.4616 21.3713 10.5066C21.3134 10.5452 21.233 10.6868 21.13 10.9313L18.5049 17.4651L16.9327 13.7502C16.744 13.3042 16.0947 13.3602 15.9852 13.832L15.1579 17.396Z" fill="white"></path><path d="M12.731 10.0156C12.7621 9.87797 12.8844 9.78027 13.0255 9.78027H15.2065C15.4001 9.78027 15.5437 9.95993 15.501 10.1488L12.508 23.3808C12.4769 23.5184 12.3546 23.6161 12.2136 23.6161H10.0325C9.83888 23.6161 9.69532 23.4365 9.73803 23.2476L12.731 10.0156Z" fill="white"></path><path d="M8.94292 10.0156C8.97404 9.87797 9.0963 9.78027 9.23737 9.78027H11.4185C11.6121 9.78027 11.7556 9.95993 11.7129 10.1488L8.71993 23.3808C8.68881 23.5184 8.56655 23.6161 8.42548 23.6161H6.2444C6.0508 23.6161 5.90724 23.4365 5.94995 23.2476L8.94292 10.0156Z" fill="white"></path></svg></div><div class="time-saved-pill"><span class="time-saved-pill-icon"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_274_4284)"><path d="M13.999 26.248C22.1667 26.248 26.248 20.764 26.248 13.999C26.248 7.23407 22.1667 1.75 13.999 1.75C5.83138 1.75 1.75 7.23407 1.75 13.999C1.75 20.764 5.83138 26.248 13.999 26.248Z" fill="url(#paint0_radial_274_4284)"></path><path d="M13.999 26.248C22.1667 26.248 26.248 20.764 26.248 13.999C26.248 7.23407 22.1667 1.75 13.999 1.75C5.83138 1.75 1.75 7.23407 1.75 13.999C1.75 20.764 5.83138 26.248 13.999 26.248Z" fill="url(#paint1_radial_274_4284)"></path><path d="M13.999 26.248C22.1667 26.248 26.248 20.764 26.248 13.999C26.248 7.23407 22.1667 1.75 13.999 1.75C5.83138 1.75 1.75 7.23407 1.75 13.999C1.75 20.764 5.83138 26.248 13.999 26.248Z" fill="url(#paint2_radial_274_4284)" fill-opacity="0.6"></path><path d="M13.999 26.248C22.1667 26.248 26.248 20.764 26.248 13.999C26.248 7.23407 22.1667 1.75 13.999 1.75C5.83138 1.75 1.75 7.23407 1.75 13.999C1.75 20.764 5.83138 26.248 13.999 26.248Z" fill="url(#paint3_radial_274_4284)"></path><path d="M13.999 26.248C22.1667 26.248 26.248 20.764 26.248 13.999C26.248 7.23407 22.1667 1.75 13.999 1.75C5.83138 1.75 1.75 7.23407 1.75 13.999C1.75 20.764 5.83138 26.248 13.999 26.248Z" fill="url(#paint4_radial_274_4284)"></path><path d="M13.999 26.248C22.1667 26.248 26.248 20.764 26.248 13.999C26.248 7.23407 22.1667 1.75 13.999 1.75C5.83138 1.75 1.75 7.23407 1.75 13.999C1.75 20.764 5.83138 26.248 13.999 26.248Z" fill="url(#paint5_radial_274_4284)"></path><path d="M13.999 26.248C22.1667 26.248 26.248 20.764 26.248 13.999C26.248 7.23407 22.1667 1.75 13.999 1.75C5.83138 1.75 1.75 7.23407 1.75 13.999C1.75 20.764 5.83138 26.248 13.999 26.248Z" fill="url(#paint6_radial_274_4284)"></path><g filter="url(#filter0_f_274_4284)"><path d="M22.3125 15.75L16.625 10.9375L21.875 9.625L22.3125 15.75Z" fill="url(#paint7_linear_274_4284)"></path></g><g filter="url(#filter1_f_274_4284)"><path d="M11.8125 12.6875L6.125 12.25L10.0625 8.75L11.8125 12.6875Z" fill="url(#paint8_linear_274_4284)"></path></g><g filter="url(#filter2_f_274_4284)"><path d="M14.4375 5.25H16.1875C17.5875 6.65 17.3542 9.33333 17.0625 10.5L14.4375 11.375L15.75 8.3125L14.4375 5.25Z" fill="url(#paint9_radial_274_4284)"></path></g><g filter="url(#filter3_f_274_4284)"><path d="M2.625 7H4.375C5.775 8.4 5.54167 11.0833 5.25 12.25L2.625 14L3.9375 10.0625L2.625 7Z" fill="url(#paint10_radial_274_4284)"></path></g><path d="M7.43648 11.3021L4.94887 13.2369C4.8453 13.3175 4.69552 13.2356 4.7074 13.105L4.94357 10.5071C5.0242 9.6201 4.57406 8.76904 3.79551 8.33651L2.3754 7.54757C2.00718 7.343 2.04143 6.80269 2.43252 6.64625L4.33694 5.88448C5.04291 5.6021 5.5585 4.98226 5.70762 4.23667L6.05433 2.5031C6.13401 2.10472 6.64745 1.98826 6.8912 2.31327L7.88038 3.63217C8.34861 4.25648 9.1069 4.59359 9.88408 4.52293L12.6891 4.26794C12.8185 4.25617 12.9006 4.40335 12.8226 4.50732L11.4119 6.38831C10.9408 7.0165 10.8312 7.84487 11.1228 8.57394L12.284 11.4768L9.25911 10.8719C8.61791 10.7436 7.95263 10.9007 7.43648 11.3021Z" fill="url(#paint11_linear_274_4284)" stroke="url(#paint12_linear_274_4284)" stroke-width="0.5"></path><path d="M20.5635 11.3021L23.0511 13.2369C23.1547 13.3175 23.3045 13.2356 23.2926 13.105L23.0564 10.5071C22.9758 9.6201 23.4259 8.76904 24.2045 8.33651L25.6246 7.54757C25.9928 7.343 25.9586 6.80269 25.5675 6.64625L23.6631 5.88448C22.9571 5.6021 22.4415 4.98226 22.2924 4.23667L21.9457 2.5031C21.866 2.10472 21.3526 1.98826 21.1088 2.31327L20.1196 3.63217C19.6514 4.25648 18.8931 4.59359 18.1159 4.52293L15.3109 4.26794C15.1815 4.25617 15.0994 4.40335 15.1774 4.50732L16.5881 6.38831C17.0592 7.0165 17.1688 7.84487 16.8772 8.57394L15.716 11.4768L18.7409 10.8719C19.3821 10.7436 20.0474 10.9007 20.5635 11.3021Z" fill="url(#paint13_linear_274_4284)" stroke="url(#paint14_linear_274_4284)" stroke-width="0.5"></path><path d="M14 22.75C6.125 22.75 6.125 14.875 6.125 14.875H21.875C21.875 14.875 21.875 22.75 14 22.75Z" fill="url(#paint15_radial_274_4284)"></path><path d="M7 15.1875V14.875H21V15.1875C21 15.7398 20.5523 16.1875 20 16.1875H8C7.44772 16.1875 7 15.7398 7 15.1875Z" fill="url(#paint16_linear_274_4284)"></path></g><defs><filter id="filter0_f_274_4284" x="15.625" y="8.625" width="7.6875" height="8.125" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feflood flood-opacity="0" result="BackgroundImageFix"></feflood><feblend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feblend><fegaussianblur stdDeviation="0.5" result="effect1_foregroundBlur_274_4284"></fegaussianblur></filter><filter id="filter1_f_274_4284" x="5.125" y="7.75" width="7.6875" height="5.9375" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feflood flood-opacity="0" result="BackgroundImageFix"></feflood><feblend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feblend><fegaussianblur stdDeviation="0.5" result="effect1_foregroundBlur_274_4284"></fegaussianblur></filter><filter id="filter2_f_274_4284" x="13.4375" y="4.25" width="4.84631" height="8.125" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feflood flood-opacity="0" result="BackgroundImageFix"></feflood><feblend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feblend><fegaussianblur stdDeviation="0.5" result="effect1_foregroundBlur_274_4284"></fegaussianblur></filter><filter id="filter3_f_274_4284" x="1.625" y="6" width="4.84631" height="9" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feflood flood-opacity="0" result="BackgroundImageFix"></feflood><feblend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feblend><fegaussianblur stdDeviation="0.5" result="effect1_foregroundBlur_274_4284"></fegaussianblur></filter><radialgradient id="paint0_radial_274_4284" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(22.3125 7.875) rotate(131.878) scale(34.0801)"><stop stop-color="#FFF478"></stop><stop offset="0.474827" stop-color="#FFB02E"></stop><stop offset="1" stop-color="#F70A8D"></stop></radialgradient><radialgradient id="paint1_radial_274_4284" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(14 10.9375) rotate(101.31) scale(15.6157 20.0008)"><stop offset="0.787821" stop-color="#F59639" stop-opacity="0"></stop><stop offset="0.972509" stop-color="#FF7DCE"></stop></radialgradient><radialgradient id="paint2_radial_274_4284" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(15.75 12.25) rotate(135) scale(35.8857)"><stop offset="0.314853" stop-opacity="0"></stop><stop offset="1"></stop></radialgradient><radialgradient id="paint3_radial_274_4284" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(14 14.875) rotate(77.692) scale(24.6286)"><stop offset="0.507903" stop-color="#7D6133" stop-opacity="0"></stop><stop offset="1" stop-color="#715B32"></stop></radialgradient><radialgradient id="paint4_radial_274_4284" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(14.4375 14.4375) rotate(55.7131) scale(11.6493 8.44403)"><stop stop-color="#FFB849"></stop><stop offset="1" stop-color="#FFB847" stop-opacity="0"></stop></radialgradient><radialgradient id="paint5_radial_274_4284" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(17.9375 15.75) rotate(9.86581) scale(10.2135)"><stop stop-color="#FFA64B"></stop><stop offset="0.900412" stop-color="#FFAE46" stop-opacity="0"></stop></radialgradient><radialgradient id="paint6_radial_274_4284" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(15.3125 13.125) rotate(43.9708) scale(51.6713)"><stop offset="0.185425" stop-opacity="0"></stop><stop offset="1" stop-opacity="0.4"></stop></radialgradient><lineargradient id="paint7_linear_274_4284" x1="20.5625" y1="10.0625" x2="19.0874" y2="12.8338" gradientUnits="userSpaceOnUse"><stop offset="0.370082" stop-color="#EC812A"></stop><stop offset="1" stop-color="#FBA84C" stop-opacity="0"></stop></lineargradient><lineargradient id="paint8_linear_274_4284" x1="9.1875" y1="10.0625" x2="8.96911" y2="12.2717" gradientUnits="userSpaceOnUse"><stop stop-color="#C85F27"></stop><stop offset="1" stop-color="#C85F27" stop-opacity="0"></stop></lineargradient><radialgradient id="paint9_radial_274_4284" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(17.5 8.75) rotate(146.31) scale(4.73229)"><stop offset="0.116396" stop-color="#EC812A"></stop><stop offset="1" stop-color="#FBA84C" stop-opacity="0"></stop></radialgradient><radialgradient id="paint10_radial_274_4284" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(6.125 11.375) rotate(158.199) scale(4.71202)"><stop stop-color="#CC7521"></stop><stop offset="1" stop-color="#E6872B" stop-opacity="0"></stop></radialgradient><lineargradient id="paint11_linear_274_4284" x1="6.5625" y1="0.875" x2="8.75" y2="13.125" gradientUnits="userSpaceOnUse"><stop stop-color="#7912B2"></stop><stop offset="1" stop-color="#CF1DA1"></stop></lineargradient><lineargradient id="paint12_linear_274_4284" x1="13.125" y1="5.25" x2="7.4375" y2="7.4375" gradientUnits="userSpaceOnUse"><stop stop-color="#A82D9C"></stop><stop offset="1" stop-color="#BF33B1" stop-opacity="0"></stop></lineargradient><lineargradient id="paint13_linear_274_4284" x1="19.25" y1="2.1875" x2="19.6875" y2="12.6875" gradientUnits="userSpaceOnUse"><stop stop-color="#7912B2"></stop><stop offset="1" stop-color="#CF1DA1"></stop></lineargradient><lineargradient id="paint14_linear_274_4284" x1="25.8125" y1="5.25" x2="20.5625" y2="5.6875" gradientUnits="userSpaceOnUse"><stop stop-color="#B51AA6"></stop><stop offset="1" stop-color="#BF33B1" stop-opacity="0"></stop></lineargradient><radialgradient id="paint15_radial_274_4284" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(14 24.5) rotate(-90) scale(9.625 19.25)"><stop stop-color="#F70A8D"></stop><stop offset="1" stop-color="#89029C"></stop></radialgradient><lineargradient id="paint16_linear_274_4284" x1="14" y1="14.875" x2="14" y2="16.1875" gradientUnits="userSpaceOnUse"><stop stop-color="#D5A8FE"></stop><stop offset="1" stop-color="white"></stop></lineargradient><clippath id="clip0_274_4284"><rect width="28" height="28" fill="white"></rect></clippath></defs></svg></span></div></div><div class="arrow"><svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="17" cy="17" r="16.5" fill="#06AA00" stroke="white"></circle><path fill-rule="evenodd" clip-rule="evenodd" d="M13.7782 11.8284L6.70711 18.8995C6.31658 19.29 6.31658 19.9231 6.70711 20.3137L8.12132 21.7279C8.51184 22.1184 9.14501 22.1184 9.53553 21.7279L15.8995 15.3639C16.29 14.9734 16.9232 14.9734 17.3137 15.3639L23.6777 21.7279C24.0682 22.1184 24.7014 22.1184 25.0919 21.7279L26.5061 20.3137C26.8966 19.9231 26.8966 19.29 26.5061 18.8995L19.435 11.8284L17.3137 9.70707C16.9232 9.31655 16.29 9.31655 15.8995 9.70707L13.7782 11.8284Z" fill="white"></path></svg></div></button><div id="fab-grabber-col"><div class="mgcl-content-ui-n76aj6"><div class="fab-grabber-container"><div class="fab-grabber"><div class="horizontal-group"><div class="movable-dot"></div><div class="movable-dot"></div></div><div class="horizontal-group"><div class="movable-dot"></div><div class="movable-dot"></div></div><div class="horizontal-group"><div class="movable-dot"></div><div class="movable-dot"></div></div></div></div></div></div></div></div></div><div class="fab-right-rail-content"></div><div class="MuiStack-root mgcl-content-ui-lgpt3f"><div class="MuiStack-root mgcl-content-ui-1ov46kg"></div></div></div><iframe class="mgcl-content-ui-p6ewiq" title="Magical Dialog" data-testid="mgcl--modal-frame" data-magical-no-scripts="true" srcdoc="
+        &lt;!DOCTYPE html&gt;
+        &lt;html&gt;
+        &lt;head&gt;&lt;/head&gt;
+        &lt;body style=&quot;opacity: 0;padding: 0&quot;&gt;&lt;/body&gt;
+        &lt;/html&gt;
+        "></iframe><div hidden="" data-testid="placeholder-dialog-root"><div class="MuiBox-root mgcl-content-ui-jaccnz"></div><dialog class="placeholder-dialog"><iframe class="content-panel-frame placeholder-frame" id="placeholder-dialog" srcdoc="
+        &lt;!DOCTYPE html&gt;
+        &lt;html&gt;
+        &lt;head&gt;&lt;/head&gt;
+          &lt;body&gt;&lt;/body&gt;
+          &lt;/html&gt;
+          " style="height: 0px;"></iframe></dialog></div></template></div><div style="all: initial;"><template shadowrootmode="closed"></template></div></html>

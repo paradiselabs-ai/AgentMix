@@ -1,20 +1,113 @@
-/* Enhanced theme variables and minimal helpers */
 :root {
-  --color-bg: #0b0f17;
-  --color-surface: #111827;
-  --color-border: #1f2937;
-  --color-text: #e5e7eb;
-  --color-muted: #9ca3af;
-  --color-accent: #60a5fa;
-  --radius: 12px;
+  --bg: #0F0F0F;
+  --surface: #1A1A1A;
+  --fg: rgba(255, 255, 255, 0.95);
+  --muted: rgba(255, 255, 255, 0.5);
+  --brand: #6366F1;
+  --border: rgba(255, 255, 255, 0.1);
+  --radius: 8px;
+  
+  /* Backgrounds */
+  --bg-primary: var(--bg);
+  --bg-surface: var(--surface);
+  --bg-surface-dark: #262828;
+  
+  /* Text */
+  --text-primary: var(--fg);
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-muted: var(--muted);
+  
+  /* Interactive States */
+  --hover-bg: rgba(255, 255, 255, 0.05);
+  --active-bg: rgba(99, 102, 241, 0.15);
+  
+  /* Buttons */
+  --btn-primary-bg: var(--brand);
+  --btn-primary-hover: #7C7FF5;
+  --btn-secondary-bg: rgba(255, 255, 255, 0.1);
+  
+  /* Cards */
+  --card-bg: var(--surface);
+  --card-border: var(--border);
+  --card-hover-border: rgba(99, 102, 241, 0.3);
+  
+  /* Status Colors */
+  --success: #10B981;
+  --warning: #F59E0B;
+  --error: #EF4444;
+  --cyan: #32B8C6;
+  --orange: #E68161;
+  --purple: #9333EA;
 }
 
 .app-surface {
-  background: var(--color-surface);
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
 }
 
-.muted { color: var(--color-muted); }
-.accent { color: var(--color-accent); }
+.app-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  transition: all 0.2s ease;
+}
+
+.app-card:hover {
+  border-color: var(--card-hover-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+.btn-primary {
+  background: var(--btn-primary-bg);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: var(--btn-primary-hover);
+}
+
+.btn-secondary {
+  background: var(--btn-secondary-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background: var(--hover-bg);
+}
+
+.status-active {
+  color: var(--success);
+}
+
+.status-active::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--success);
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+  margin-right: 0.5rem;
+}
+
+.capability-tag {
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--brand);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius);
+  font-size: 11px;
+  display: inline-block;
+}

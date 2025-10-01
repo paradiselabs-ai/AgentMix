@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Bot, Activity, MessageSquare, Wrench, Palette } from 'lucide-react';
 import './App.css';
 
-// Import basic components
+// Import enhanced components
+import EnhancedHeader from './components/EnhancedHeader';
+import EnhancedSidebar from './components/EnhancedSidebar';
 import AgentForm from './components/AgentForm';
 import AgentList from './components/AgentList';
-import ConversationViewHITL from './components/ConversationViewHITL';
-import ToolsManager from './components/ToolsManager';
-import CollaborativeCanvas from './components/CollaborativeCanvas';
-import Dashboard from './components/Dashboard';
+import EnhancedConversationView from './components/EnhancedConversationView';
+import EnhancedToolsManager from './components/EnhancedToolsManager';
+import EnhancedCanvas from './components/EnhancedCanvas';
+import EnhancedDashboard from './components/EnhancedDashboard';
+import CommandPalette from './components/CommandPalette';
+import PWAInstallPrompt from './components/PWAInstallPrompt';
+import OfflineIndicator from './components/OfflineIndicator';
+import { ConversationProvider } from './contexts/ConversationContext';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -17,10 +22,22 @@ function App() {
   const [showAgentForm, setShowAgentForm] = useState(false);
   const [editingAgent, setEditingAgent] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showCommandPalette, setShowCommandPalette] = useState(false);
 
   useEffect(() => {
     fetchAgents();
     fetchConversations();
+
+    // Command palette keyboard shortcut
+    const handleKeyDown = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setShowCommandPalette(true);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   const fetchAgents = async () => {
@@ -61,19 +78,11 @@ function App() {
     setShowAgentForm(true);
   };
 
-  const tabs = [
-    { id: 'dashboard', label: 'Dashboard', icon: Activity },
-    { id: 'agents', label: 'AI Agents', icon: Bot },
-    { id: 'conversations', label: 'Conversations', icon: MessageSquare },
-    { id: 'tools', label: 'Tools', icon: Wrench },
-    { id: 'canvas', label: 'Canvas', icon: Palette }
-  ];
-
   const renderContent = () => {
     switch (activeTab) {
       case 'dashboard':
-        return <Dashboard agents={agents} conversations={conversations} />;
-      
+        return <EnhancedDashboard agents={agents} conversations={conversations} />;
+
       case 'agents':
         if (showAgentForm) {
           return (
@@ -116,7 +125,6 @@ function App() {
                 onClick={() => setShowAgentForm(true)}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
               >
-                <Bot className="h-4 w-4" />
                 Add Agent
               </button>
             </div>
@@ -128,104 +136,87 @@ function App() {
             />
           </div>
         );
-      
+
       case 'conversations':
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="text-2xl font-bold">Conversations</h2>
-              <p className="text-gray-600">Create and manage AI-to-AI conversations with human oversight</p>
+              <h2 className="text-display-md gradient-text">AI Conversations</h2>
+              <p className="text-body text-muted-foreground">Create and manage AI-to-AI conversations with human oversight</p>
             </div>
-            <ConversationViewHITL
-              agents={agents}
-            />
+            <EnhancedConversationView agents={agents} />
           </div>
         );
-      
+
       case 'tools':
         return (
           <div className="space-y-6">
-            <div>
-              <h2 className="text-2xl font-bold">Tools Manager</h2>
-              <p className="text-gray-600">Manage AI tools and assign them to agents</p>
-            </div>
-            <ToolsManager />
+            <EnhancedToolsManager agents={agents} />
           </div>
         );
-      
+
       case 'canvas':
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="text-2xl font-bold">Collaborative Canvas</h2>
-              <p className="text-gray-600">Create and collaborate with AI agents on visual content</p>
+              <h2 className="text-display-md gradient-text">Collaborative Canvas</h2>
+              <p className="text-body text-muted-foreground">Create and collaborate with AI agents on visual content</p>
             </div>
-            <CollaborativeCanvas />
+            <EnhancedCanvas />
           </div>
         );
-      
-      // projects tab temporarily removed for MVP
-      
+
       default:
-        return <Dashboard agents={agents} conversations={conversations} />;
+        return <EnhancedDashboard agents={agents} conversations={conversations} />;
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-3">
-              <div className="bg-blue-600 p-2 rounded-lg">
-                <Bot className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-gray-900">AgentMix</h1>
-                <p className="text-xs text-gray-500">AI Collaboration Platform</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="text-sm text-gray-600">
-                {agents.filter(a => a.status === 'active').length} Active Agents
-              </div>
-            </div>
+    <ConversationProvider>
+      <div className="min-h-screen dark" style={{ background: 'var(--bg)' }}>
+        {/* Logo Header - Above Sidebar */}
+        <div className="fixed top-0 left-0 z-50 w-64 h-16 flex items-center px-6" style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)' }}>
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">🤖</span>
+            <span className="text-xl font-bold" style={{ color: 'var(--brand)' }}>AgentMix</span>
           </div>
         </div>
-      </header>
 
-      {/* Navigation */}
-      <nav className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex space-x-8">
-            {tabs.map((tab) => {
-              const IconComponent = tab.icon;
-              const isActive = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 py-4 px-1 border-b-2 font-medium text-sm ${
-                    isActive
-                      ? 'border-blue-500 text-blue-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  }`}
-                >
-                  <IconComponent className="h-4 w-4" />
-                  {tab.label}
-                </button>
-              );
-            })}
+        {/* Main Header - Right of Logo */}
+        <EnhancedHeader
+          agents={agents}
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+        />
+
+        <EnhancedSidebar
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          agents={agents}
+          conversations={conversations}
+        />
+
+        <main className="ml-64 pt-16 transition-all duration-300 min-h-screen">
+          <div className="p-6 lg:p-8">
+            <div className="animate-slide-in-up">
+              {renderContent()}
+            </div>
           </div>
-        </div>
-      </nav>
+        </main>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {renderContent()}
-      </main>
-    </div>
+        <CommandPalette
+          isOpen={showCommandPalette}
+          onClose={() => setShowCommandPalette(false)}
+          onNavigate={(tab) => {
+            setActiveTab(tab);
+            setShowCommandPalette(false);
+          }}
+        />
+
+        <PWAInstallPrompt />
+        <OfflineIndicator />
+      </div>
+    </ConversationProvider>
   );
 }
 

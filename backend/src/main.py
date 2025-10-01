@@ -18,6 +18,7 @@ from src.routes.ai_agent import ai_agent_bp
 from src.routes.conversation import conversation_bp
 from src.routes.ai_chat import ai_chat_bp
 from src.routes.model_discovery import model_discovery_bp
+from src.routes.analytics import analytics_bp
 # from src.routes.tools import tools_bp
 
 # Import error handling
@@ -47,6 +48,7 @@ app.register_blueprint(ai_agent_bp, url_prefix='/api')
 app.register_blueprint(conversation_bp, url_prefix='/api')
 app.register_blueprint(ai_chat_bp, url_prefix='/api')
 app.register_blueprint(model_discovery_bp)
+app.register_blueprint(analytics_bp)
 # app.register_blueprint(tools_bp)
 
 # uncomment if you need to use database
