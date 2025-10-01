@@ -1,0 +1,140 @@
+/* Perplexity Design System - Base Styles */
+/* Verified colors from live Perplexity demo */
+
+:root {
+  /* Backgrounds */
+  --bg: #0F0F0F;                    /* Main background (rgb(15, 15, 15)) */
+  --surface: #1A1A1A;               /* Sidebar/Header/Cards (rgb(26, 26, 26)) */
+
+  /* Text Colors */
+  --fg: rgb(245, 245, 245);         /* Primary text (gray-200) */
+  --text-primary: rgb(245, 245, 245);
+  --text-secondary: rgba(167, 169, 169, 0.7); /* Secondary text */
+  --text-muted: rgba(255, 255, 255, 0.5);
+
+  /* Active/Selected Navigation States (INDIGO) */
+  --active-bg: rgba(99, 102, 241, 0.15);  /* Active nav background */
+  --active-color: rgb(99, 102, 241);       /* Active nav text (#6366F1) */
+  --active-border: rgba(99, 102, 241, 0.3); /* Active nav border */
+  --brand: #6366F1;                        /* Brand color (indigo) */
+
+  /* Primary Button/Link Color (TEAL) */
+  --primary: #32B8C6;               /* Teal-300 for buttons */
+  --primary-hover: #2DA6B2;         /* Teal-400 */
+
+  /* Status Colors */
+  --success: #10B981;               /* Green (for status dots) */
+  --error: #FF5459;                 /* Red-400 */
+  --warning: #E68161;               /* Orange-400 */
+  --orange: #E68161;
+
+  /* UI Elements */
+  --border: rgba(255, 255, 255, 0.1);      /* 10% white */
+  --hover-bg: rgba(255, 255, 255, 0.05);
+  --card-border: rgba(119, 124, 124, 0.2);
+  --btn-secondary-bg: rgba(119, 124, 124, 0.15);
+
+  /* Border Radius */
+  --radius: 8px;
+  --radius-sm: 6px;
+  --radius-lg: 12px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+}
+
+/* Base Resets */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.5rem; }
+h5 { font-size: 1.25rem; }
+h6 { font-size: 1rem; }
+
+p {
+  margin: 0 0 1rem 0;
+}
+
+/* Buttons Base */
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+/* Input Base */
+input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+}
+
+/* Links */
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--primary-hover);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--surface);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
