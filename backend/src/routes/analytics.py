@@ -333,3 +333,174 @@ def export_analytics():
     except Exception as e:
         raise DatabaseError(f"Failed to export analytics: {str(e)}")
 
+# Dashboard Data Endpoints
+@analytics_bp.route('/api/dashboard/stats', methods=['GET'])
+@handle_database_errors
+def get_dashboard_stats():
+    """Get enhanced dashboard statistics"""
+    try:
+        # Get comprehensive stats
+        total_agents = db.session.query(AIAgent).count()
+        active_agents = db.session.query(AIAgent).filter(AIAgent.status == 'active').count()
+        processing_agents = db.session.query(AIAgent).filter(AIAgent.status == 'processing').count()
+        
+        total_conversations = db.session.query(Conversation).count()
+        active_conversations = db.session.query(Conversation).filter(
+            Conversation.status == 'active'
+        ).count()
+        
+        total_messages = db.session.query(Message).count()
+        recent_messages = db.session.query(Message).filter(
+            Message.timestamp >= datetime.utcnow() - timedelta(hours=24)
+        ).count()
+        
+        # Tool execution stats (mock for now)
+        tool_executions = 156
+        canvas_projects = 8
+        
+        return jsonify({
+            'success': True,
+            'stats': {
+                'total_agents': total_agents,
+                'active_agents': active_agents,
+                'processing_agents': processing_agents,
+                'total_conversations': total_conversations,
+                'active_conversations': active_conversations,
+                'total_messages': total_messages,
+                'recent_messages': recent_messages,
+                'tool_executions': tool_executions,
+                'canvas_projects': canvas_projects
+            }
+        })
+    except Exception as e:
+        raise DatabaseError(f"Failed to get dashboard stats: {str(e)}")
+
+@analytics_bp.route('/api/dashboard/activity', methods=['GET'])
+@handle_database_errors
+def get_dashboard_activity():
+    """Get recent activity with more context"""
+    try:
+        # Get recent conversations
+        recent_conversations = db.session.query(Conversation).order_by(
+            Conversation.created_at.desc()
+        ).limit(10).all()
+        
+        # Get recent messages with agent info
+        recent_messages = db.session.query(Message).options(
+            db.joinedload(Message.agent)
+        ).order_by(Message.timestamp.desc()).limit(20).all()
+        
+        # Format activity data
+        activity = []
+        
+        for conv in recent_conversations:
+            activity.append({
+                'id': f'conv_{conv.id}',
+                'type': 'conversation_created',
+                'title': f'New conversation: {conv.name or "Untitled"}',
+                'description': f'Started with {len(conv.participants or [])} agents',
+                'timestamp': conv.created_at.isoformat(),
+                'metadata': {
+                    'conversation_id': conv.id,
+                    'agent_count': len(conv.participants or [])
+                }
+            })
+        
+        for msg in recent_messages:
+            activity.append({
+                'id': f'msg_{msg.id}',
+                'type': 'message_sent',
+                'title': f'Message from {msg.agent.name if msg.agent else "Unknown Agent"}',
+                'description': msg.content[:100] + '...' if len(msg.content) > 100 else msg.content,
+                'timestamp': msg.timestamp.isoformat(),
+                'metadata': {
+                    'message_id': msg.id,
+                    'agent_id': msg.agent_id,
+                    'conversation_id': msg.conversation_id
+                }
+            })
+        
+        # Sort by timestamp and limit
+        activity.sort(key=lambda x: x['timestamp'], reverse=True)
+        activity = activity[:30]  # Return top 30 items
+        
+        return jsonify({
+            'success': True,
+            'activity': activity
+        })
+    except Exception as e:
+        raise DatabaseError(f"Failed to get dashboard activity: {str(e)}")
+
+@analytics_bp.route('/api/dashboard/quick-actions', methods=['GET'])
+@handle_database_errors
+def get_dashboard_quick_actions():
+    """Get context-aware quick actions"""
+    try:
+        # Get context from query params or determine automatically
+        context = request.args.get('context', 'default')
+        
+        quick_actions = []
+        
+        if context == 'default':
+            quick_actions = [
+                {
+                    'id': 'create_agent',
+                    'title': 'Create New Agent',
+                    'description': 'Set up a new AI agent with custom capabilities',
+                    'icon': 'Bot',
+                    'color': 'brand-purple',
+                    'action': {'type': 'navigate', 'target': 'agents'},
+                    'priority': 'high'
+                },
+                {
+                    'id': 'start_conversation',
+                    'title': 'Start Conversation',
+                    'description': 'Begin a new AI-to-AI collaboration session',
+                    'icon': 'MessageSquare',
+                    'color': 'brand-teal',
+                    'action': {'type': 'navigate', 'target': 'conversations'},
+                    'priority': 'high'
+                },
+                {
+                    'id': 'open_canvas',
+                    'title': 'Open Canvas',
+                    'description': 'Launch the visual collaboration workspace',
+                    'icon': 'Palette',
+                    'color': 'brand-pink',
+                    'action': {'type': 'navigate', 'target': 'canvas'},
+                    'priority': 'medium'
+                },
+                {
+                    'id': 'view_analytics',
+                    'title': 'View Analytics',
+                    'description': 'Check detailed platform performance metrics',
+                    'icon': 'BarChart3',
+                    'color': 'brand-orange',
+                    'action': {'type': 'navigate', 'target': 'analytics'},
+                    'priority': 'low'
+                }
+            ]
+        
+        # Add context-specific actions based on recent activity
+        active_conversations = db.session.query(Conversation).filter(
+            Conversation.status == 'active'
+        ).count()
+        
+        if active_conversations > 0:
+            quick_actions.insert(0, {
+                'id': 'resume_conversation',
+                'title': 'Resume Active Conversation',
+                'description': f'Continue with {active_conversations} active conversation(s)',
+                'icon': 'Play',
+                'color': 'green',
+                'action': {'type': 'navigate', 'target': 'conversations'},
+                'priority': 'urgent'
+            })
+        
+        return jsonify({
+            'success': True,
+            'quick_actions': quick_actions,
+            'context': context
+        })
+    except Exception as e:
+        raise DatabaseError(f"Failed to get dashboard quick actions: {str(e)}")

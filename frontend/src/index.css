@@ -1,11 +1,20 @@
 @import "tailwindcss";
+@import "./mobile-responsive.css";
 
-/* Base app styles */
+/* Perplexity-Style Color Scheme */
 :root {
-  --bg: #0b0f17;
-  --fg: #e5e7eb;
-  --muted: #9ca3af;
-  --brand: #6ea8fe;
+  --bg: #0F0F0F; /* Main background */
+  --fg: rgba(255, 255, 255, 0.95); /* Primary text */
+  --muted: rgba(255, 255, 255, 0.5); /* Muted text */
+  --brand: #6366F1; /* Primary accent (indigo) */
+
+  /* Extended Perplexity palette */
+  --success: #10B981;
+  --warning: #F59E0B;
+  --error: #EF4444;
+  --surface: #1A1A1A; /* Headers/Sidebar/Cards - steely gray */
+  --surface-lighter: #262626;
+  --border: rgba(255, 255, 255, 0.1);
 }
 
 html, body, #root {

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
+import { Input } from '@/components/ui/input.jsx'
 import { 
   Bot, 
   Settings, 
@@ -12,13 +13,22 @@ import {
   Loader2,
   CheckCircle,
   XCircle,
-  Clock
+  Clock,
+  Search,
+  Filter,
+  Plus,
+  Grid,
+  List
 } from 'lucide-react'
 import AgentForm from './AgentForm.jsx'
+import EnhancedAgentCard from './EnhancedAgentCard.jsx'
 
 const AgentList = ({ agents, loading, onAgentUpdated, onAgentSelect }) => {
   const [editingAgent, setEditingAgent] = useState(null)
   const [testingAgent, setTestingAgent] = useState(null)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [filterStatus, setFilterStatus] = useState('all')
+  const [viewMode, setViewMode] = useState('grid') // 'grid' or 'list'
 
   const getStatusIcon = (status) => {
     switch (status) {
@@ -129,26 +139,43 @@ const AgentList = ({ agents, loading, onAgentUpdated, onAgentSelect }) => {
     )
   }
 
+  // Filter and search agents
+  const filteredAgents = agents.filter(agent => {
+    const matchesSearch = agent.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         agent.provider?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         agent.model?.toLowerCase().includes(searchQuery.toLowerCase())
+    
+    const matchesFilter = filterStatus === 'all' || agent.status === filterStatus
+    
+    return matchesSearch && matchesFilter
+  })
+
   if (agents.length === 0) {
     return (
-      <Card>
-        <CardContent className="flex flex-col items-center justify-center py-12">
-          <Bot className="h-12 w-12 text-muted-foreground mb-4" />
-          <h3 className="text-lg font-semibold mb-2">No AI Agents</h3>
-          <p className="text-muted-foreground text-center mb-4">
-            Get started by creating your first AI agent
+      <Card className="glass-card border-white/30">
+        <CardContent className="flex flex-col items-center justify-center py-16">
+          <div className="w-20 h-20 bg-gradient-to-br from-brand-purple to-brand-teal rounded-2xl flex items-center justify-center mb-6 animate-float-gentle">
+            <Bot className="h-10 w-10 text-white" />
+          </div>
+          <h3 className="text-display-sm text-foreground mb-2">No AI Agents Yet</h3>
+          <p className="text-body text-muted-foreground text-center mb-6 max-w-md">
+            Create your first AI agent to start collaborating with artificial intelligence
           </p>
+          <Button className="bg-brand-purple hover:bg-brand-purple/90 text-white">
+            <Plus className="h-4 w-4 mr-2" />
+            Create Your First Agent
+          </Button>
         </CardContent>
       </Card>
     )
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {editingAgent && (
-        <Card className="mb-6">
+        <Card className="glass-card border-white/30 mb-6">
           <CardHeader>
-            <CardTitle>Edit AI Agent</CardTitle>
+            <CardTitle className="text-display-sm gradient-text">Edit AI Agent</CardTitle>
             <CardDescription>
               Update the configuration for "{editingAgent.name}"
             </CardDescription>
@@ -163,98 +190,101 @@ const AgentList = ({ agents, loading, onAgentUpdated, onAgentSelect }) => {
         </Card>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {agents.map((agent) => (
-          <Card key={agent.id} className="hover:shadow-md transition-shadow">
-            <CardHeader className="pb-3">
-              <div className="flex items-start justify-between">
-                <div className="flex items-center space-x-2">
-                  <Bot className="h-5 w-5 text-primary" />
-                  <CardTitle className="text-lg">{agent.name}</CardTitle>
-                </div>
-                <div className="flex items-center space-x-1">
-                  {getStatusIcon(agent.status)}
-                  <Badge className={getStatusColor(agent.status)}>
-                    {agent.status}
-                  </Badge>
-                </div>
-              </div>
-              <CardDescription>
-                {agent.provider} • {agent.model}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="text-sm text-muted-foreground">
-                <p>Created: {new Date(agent.created_at).toLocaleDateString()}</p>
-                {agent.config?.system_message && (
-                  <p className="mt-1 truncate">
-                    System: {agent.config.system_message}
-                  </p>
-                )}
-              </div>
+      {/* Search and Filter Bar */}
+      <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
+        <div className="flex-1 flex items-center gap-4">
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search agents..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 glass-card border-white/30 focus:border-brand-purple/50"
+            />
+          </div>
+          
+          <select
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value)}
+            className="px-3 py-2 rounded-lg glass-card border-white/30 text-sm focus:outline-none focus:ring-2 focus:ring-brand-purple/50"
+          >
+            <option value="all">All Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+            <option value="error">Error</option>
+          </select>
+        </div>
 
-              <div className="flex flex-wrap gap-2">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => handleStatusToggle(agent)}
-                  className="flex items-center space-x-1"
-                >
-                  {agent.status === 'active' ? (
-                    <>
-                      <Pause className="h-3 w-3" />
-                      <span>Deactivate</span>
-                    </>
-                  ) : (
-                    <>
-                      <Play className="h-3 w-3" />
-                      <span>Activate</span>
-                    </>
-                  )}
-                </Button>
-
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => handleTestConnection(agent)}
-                  disabled={testingAgent === agent.id}
-                  className="flex items-center space-x-1"
-                >
-                  {testingAgent === agent.id ? (
-                    <Loader2 className="h-3 w-3 animate-spin" />
-                  ) : (
-                    <MessageSquare className="h-3 w-3" />
-                  )}
-                  <span>Test</span>
-                </Button>
-
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => setEditingAgent(agent)}
-                  className="flex items-center space-x-1"
-                >
-                  <Settings className="h-3 w-3" />
-                  <span>Edit</span>
-                </Button>
-
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => handleDeleteAgent(agent)}
-                  className="flex items-center space-x-1 text-destructive hover:text-destructive"
-                >
-                  <Trash2 className="h-3 w-3" />
-                  <span>Delete</span>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+        <div className="flex items-center gap-2">
+          <div className="flex items-center bg-white/50 rounded-lg p-1 border border-white/30">
+            <Button
+              variant={viewMode === 'grid' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setViewMode('grid')}
+              className="h-8 w-8 p-0"
+            >
+              <Grid className="h-4 w-4" />
+            </Button>
+            <Button
+              variant={viewMode === 'list' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setViewMode('list')}
+              className="h-8 w-8 p-0"
+            >
+              <List className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
       </div>
+
+      {/* Results Summary */}
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-muted-foreground">
+          Showing {filteredAgents.length} of {agents.length} agents
+          {searchQuery && ` matching "${searchQuery}"`}
+        </p>
+        <div className="flex items-center gap-2">
+          <Badge className="bg-green-100 text-green-800 border-green-200">
+            {agents.filter(a => a.status === 'active').length} Active
+          </Badge>
+          <Badge className="bg-gray-100 text-gray-800 border-gray-200">
+            {agents.filter(a => a.status === 'inactive').length} Inactive
+          </Badge>
+        </div>
+      </div>
+
+      {/* Agent Grid/List */}
+      {filteredAgents.length === 0 ? (
+        <Card className="glass-card border-white/30">
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            <Search className="h-12 w-12 text-muted-foreground mb-4" />
+            <h3 className="text-lg font-semibold mb-2">No agents found</h3>
+            <p className="text-muted-foreground text-center">
+              Try adjusting your search or filter criteria
+            </p>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className={`grid gap-6 ${
+          viewMode === 'grid' 
+            ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' 
+            : 'grid-cols-1'
+        }`}>
+          {filteredAgents.map((agent) => (
+            <EnhancedAgentCard
+              key={agent.id}
+              agent={agent}
+              onEdit={setEditingAgent}
+              onDelete={handleDeleteAgent}
+              onToggleStatus={handleStatusToggle}
+              onTest={handleTestConnection}
+              className={viewMode === 'list' ? 'max-w-none' : ''}
+            />
+          ))}
+        </div>
+      )}
     </div>
   )
 }
 
 export default AgentList
-

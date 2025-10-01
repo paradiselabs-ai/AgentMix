@@ -16,14 +16,16 @@ export default defineConfig({
     allowedHosts: ["5173-ikltwi6bh8jhnnk2y4c1u-43133c96.manusvm.computer", "all"],
     proxy: {
       '/api': {
-        target: 'http://localhost:5001',
+        target: 'http://localhost:5000',
         changeOrigin: true,
       },
       '/socket.io': {
-        target: 'http://localhost:5001',
+        target: 'http://localhost:5000',
         changeOrigin: true,
         ws: true,
       }
-    }
+    },
+    port: 5174,
+    strictPort: true // prevent fallback to other ports
   }
 })
