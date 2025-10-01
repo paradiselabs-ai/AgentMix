@@ -38,7 +38,7 @@ const EnhancedHeader = ({ agents = [], activeTab, onTabChange }) => {
   ]
 
   return (
-    <header className="fixed top-0 left-64 right-0 z-50" style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)' }}>
+    <header className="fixed top-0 left-64 right-0 z-50 bg-card border-b border-border">
       <div className="flex items-center justify-between h-14 px-6">
         {/* Left: Stats */}
         <div className="flex items-center gap-4">
