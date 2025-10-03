@@ -3,6 +3,7 @@ from datetime import datetime
 import json
 
 class AIAgent(db.Model):
+    __tablename__ = 'ai_agents'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     provider = db.Column(db.String(50), nullable=False)  # openai, anthropic, etc.

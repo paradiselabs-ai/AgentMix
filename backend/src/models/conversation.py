@@ -2,6 +2,7 @@ from src.models.user import db
 from datetime import datetime
 
 class Conversation(db.Model):
+    __tablename__ = 'conversations'
     id = db.Column(db.String(100), primary_key=True)  # UUID or custom ID
     name = db.Column(db.String(200), nullable=False)
     description = db.Column(db.Text, nullable=True)

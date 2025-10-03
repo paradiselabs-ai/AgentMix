@@ -354,9 +354,8 @@ def get_dashboard_stats():
             Message.timestamp >= datetime.utcnow() - timedelta(hours=24)
         ).count()
         
-        # Tool execution stats (mock for now)
-        tool_executions = 156
-        canvas_projects = 8
+        tool_executions = 0
+        canvas_projects = 0
         
         return jsonify({
             'success': True,

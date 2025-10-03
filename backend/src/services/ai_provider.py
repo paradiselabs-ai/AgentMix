@@ -138,10 +138,7 @@ class AIProviderService:
             }
     
     def _call_custom_api(self, model: str, api_key: str, messages: List[Dict], config: Dict) -> Dict[str, Any]:
-        """Call custom API endpoint"""
-        # This is a placeholder for custom API implementations
-        # Users can extend this to support other providers
-        
+        """Call custom API endpoint - extend this to support other providers"""
         api_url = config.get('api_url')
         if not api_url:
             return {

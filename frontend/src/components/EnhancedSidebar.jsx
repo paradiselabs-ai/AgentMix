@@ -44,7 +44,7 @@ const EnhancedSidebar = ({ activeTab, onTabChange, agents = [], conversations = 
       id: 'canvas',
       label: 'Canvas',
       emoji: '🎨',
-      badge: 'New'
+      badge: null
     },
     {
       id: 'tools',

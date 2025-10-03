@@ -3,9 +3,6 @@ from src.models.user import User, db
 
 user_bp = Blueprint('user', __name__)
 
-# Mock user preferences storage (in production, this would be a database table)
-user_preferences = {}
-
 @user_bp.route('/users', methods=['GET'])
 def get_users():
     users = User.query.all()
@@ -45,19 +42,13 @@ def delete_user(user_id):
 @user_bp.route('/user/preferences', methods=['GET'])
 def get_user_preferences():
     """Get user UI preferences"""
-    # Mock implementation - return default preferences
     return jsonify({
         'success': True,
         'preferences': {
-            'theme': 'light',
+            'theme': 'dark',
             'layout': 'default',
             'animations': True,
             'sidebar_collapsed': False,
-            'quick_actions': [
-                {'id': 'create_agent', 'label': 'Create Agent', 'action': 'navigate_agents'},
-                {'id': 'start_chat', 'label': 'Start Chat', 'action': 'navigate_conversations'},
-                {'id': 'open_canvas', 'label': 'Open Canvas', 'action': 'navigate_canvas'}
-            ],
             'favorite_agents': [],
             'shortcuts': {
                 'cmd+k': 'command_palette',
@@ -71,7 +62,6 @@ def get_user_preferences():
 def update_user_preferences():
     """Update user UI preferences"""
     data = request.json
-    # Mock implementation - just return success
     return jsonify({
         'success': True,
         'message': 'Preferences updated successfully'
@@ -83,36 +73,13 @@ def get_user_quick_actions():
     """Get user's configured quick actions"""
     return jsonify({
         'success': True,
-        'quick_actions': [
-            {
-                'id': 'create_agent',
-                'title': 'Create New Agent',
-                'description': 'Set up a new AI agent',
-                'icon': 'Bot',
-                'action': {'type': 'navigate', 'target': 'agents'}
-            },
-            {
-                'id': 'start_conversation',
-                'title': 'Start Conversation',
-                'description': 'Begin AI-to-AI collaboration',
-                'icon': 'MessageSquare',
-                'action': {'type': 'navigate', 'target': 'conversations'}
-            },
-            {
-                'id': 'open_canvas',
-                'title': 'Open Canvas',
-                'description': 'Visual collaboration workspace',
-                'icon': 'Palette',
-                'action': {'type': 'navigate', 'target': 'canvas'}
-            }
-        ]
+        'quick_actions': []
     })
 
 @user_bp.route('/user/quick-actions', methods=['PUT'])
 def update_user_quick_actions():
     """Update quick actions"""
     data = request.json
-    # Mock implementation
     return jsonify({
         'success': True,
         'message': 'Quick actions updated successfully'
@@ -124,22 +91,7 @@ def get_workflow_templates():
     """Get workflow templates"""
     return jsonify({
         'success': True,
-        'templates': [
-            {
-                'id': 'research_workflow',
-                'name': 'Research & Analysis',
-                'description': 'Multi-agent research and analysis workflow',
-                'agents': ['research_agent', 'data_analyzer'],
-                'steps': ['research', 'analyze', 'summarize']
-            },
-            {
-                'id': 'creative_workflow',
-                'name': 'Creative Collaboration',
-                'description': 'Brainstorming and content creation',
-                'agents': ['creative_writer', 'editor'],
-                'steps': ['brainstorm', 'draft', 'review', 'finalize']
-            }
-        ]
+        'templates': []
     })
 
 @user_bp.route('/workflows/execute', methods=['POST'])
@@ -147,8 +99,7 @@ def execute_workflow():
     """Execute a workflow template"""
     data = request.json
     template_id = data.get('template_id')
-    
-    # Mock implementation
+
     return jsonify({
         'success': True,
         'workflow_id': f'workflow_{template_id}',

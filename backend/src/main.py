@@ -12,14 +12,14 @@ from src.models.ai_agent import AIAgent
 from src.models.message import Message
 from src.models.conversation import Conversation
 # Import tool models after AIAgent to ensure proper foreign key resolution
-# from src.models.tool import Tool, AgentTool, ToolExecution
+from src.models.tool import Tool, AgentTool, ToolExecution
 from src.routes.user import user_bp
 from src.routes.ai_agent import ai_agent_bp
 from src.routes.conversation import conversation_bp
 from src.routes.ai_chat import ai_chat_bp
 from src.routes.model_discovery import model_discovery_bp
 from src.routes.analytics import analytics_bp
-# from src.routes.tools import tools_bp
+from src.routes.tools import tools_bp
 
 # Import error handling
 from src.utils.error_handler import handle_flask_errors, HealthChecker
@@ -49,7 +49,7 @@ app.register_blueprint(conversation_bp, url_prefix='/api')
 app.register_blueprint(ai_chat_bp, url_prefix='/api')
 app.register_blueprint(model_discovery_bp)
 app.register_blueprint(analytics_bp)
-# app.register_blueprint(tools_bp)
+# app.register_blueprint(tools_bp)  # TEMPORARILY DISABLED - causing startup issues
 
 # uncomment if you need to use database
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(os.path.dirname(__file__), 'database', 'app.db')}"
@@ -90,4 +90,4 @@ def serve(path):
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    socketio.run(app, host='0.0.0.0', port=port, debug=True)
+    socketio.run(app, host='0.0.0.0', port=port, debug=True, allow_unsafe_werkzeug=True)

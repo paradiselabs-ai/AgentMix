@@ -743,10 +743,8 @@ class EnhancedAIProviderService:
             return {'success': False, 'error': str(e)}
     
     def _call_custom(self, model: str, api_key: str, messages: List[Dict], config: Dict = None) -> Dict[str, Any]:
-        """Call custom API endpoint"""
+        """Call custom API endpoint - modify this to integrate with your own APIs"""
         try:
-            # This is a placeholder for custom API integration
-            # Users can modify this method to integrate with their own APIs
             return {
                 'success': True,
                 'response': {

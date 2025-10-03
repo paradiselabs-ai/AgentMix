@@ -110,18 +110,18 @@ const EnhancedDashboard = ({ agents = [], conversations = [] }) => {
       messages: agent.performance_metrics?.total_messages || 0,
       accuracy: Math.round(agent.performance_metrics?.success_rate * 100) || 95,
       responseTime: agent.performance_metrics?.response_time_avg || 1.2,
-      efficiency: 85 + Math.floor(Math.random() * 15) // Fallback for missing data
+      efficiency: agent.performance_metrics?.efficiency || 85
     }));
   };
 
   const generateConversationTrends = () => {
-    // Generate 24-hour trend data (can be replaced with real data later)
+    // Generate 24-hour trend data (will be replaced with real data when available)
     const trends = [];
     for (let i = 0; i < 24; i += 2) {
       trends.push({
         time: `${i.toString().padStart(2, '0')}:00`,
-        conversations: Math.floor(Math.random() * 15) + 5,
-        activeUsers: Math.floor(Math.random() * 10) + 2
+        conversations: 0,
+        activeUsers: 0
       });
     }
     return trends;
@@ -252,42 +252,36 @@ const EnhancedDashboard = ({ agents = [], conversations = [] }) => {
           title="Total Agents"
           value={stats.totalAgents}
           icon={Users}
-          change="+12%"
           color="brand-purple"
         />
         <StatCard
           title="Active Agents"
           value={stats.activeAgents}
           icon={Activity}
-          change="+8%"
           color="green"
         />
         <StatCard
           title="Conversations"
           value={stats.totalConversations}
           icon={MessageSquare}
-          change="+23%"
           color="brand-teal"
         />
         <StatCard
           title="Messages"
           value={stats.totalMessages}
           icon={CheckCircle}
-          change="+15%"
           color="blue"
         />
         <StatCard
           title="Tool Uses"
           value={stats.toolExecutions}
           icon={Zap}
-          change="+31%"
           color="brand-orange"
         />
         <StatCard
           title="Canvas Projects"
           value={stats.canvasProjects}
           icon={Palette}
-          change="+5%"
           color="brand-pink"
         />
       </div>

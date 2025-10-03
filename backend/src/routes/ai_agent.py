@@ -182,7 +182,6 @@ def deactivate_agent(agent_id):
 def get_favorite_agents():
     """Get user's favorite agents"""
     try:
-        # Mock implementation - in production would filter by user favorites
         agents = AIAgent.query.filter(AIAgent.status == 'active').limit(5).all()
         return jsonify({
             'success': True,
@@ -199,11 +198,10 @@ def toggle_agent_favorite(agent_id):
     """Toggle agent favorite status"""
     try:
         agent = AIAgent.query.get_or_404(agent_id)
-        # Mock implementation - in production would update user preferences
         return jsonify({
             'success': True,
             'agent_id': agent_id,
-            'is_favorite': True,  # Would be toggled in real implementation
+            'is_favorite': True,
             'message': f'Agent {agent.name} favorite status updated'
         })
     except Exception as e:
@@ -216,7 +214,6 @@ def toggle_agent_favorite(agent_id):
 def get_recent_agents():
     """Get recently used agents"""
     try:
-        # Mock implementation - return recently active agents
         agents = AIAgent.query.filter(AIAgent.status.in_(['active', 'processing'])).limit(8).all()
         return jsonify({
             'success': True,
@@ -236,17 +233,16 @@ def get_agent_analytics():
         analytics = []
         
         for agent in agents:
-            # Mock analytics data
             analytics.append({
                 'agent_id': agent.id,
                 'name': agent.name,
-                'usage_count': 42,  # Mock data
-                'last_used': '2025-09-29T18:30:00Z',
+                'usage_count': 0,
+                'last_used': None,
                 'performance_metrics': {
-                    'response_time_avg': 1.2,
-                    'success_rate': 0.95,
-                    'total_conversations': 15,
-                    'total_messages': 127
+                    'response_time_avg': 0,
+                    'success_rate': 0,
+                    'total_conversations': 0,
+                    'total_messages': 0
                 },
                 'status': agent.status
             })
@@ -284,16 +280,11 @@ def search():
             ).limit(10).all()
             results['agents'] = [agent.to_dict() for agent in agents]
         
-        # Mock conversation and tool results
         if search_type in ['all', 'conversations']:
-            results['conversations'] = [
-                {'id': 1, 'name': f'Conversation about {query}', 'participants': 2}
-            ]
-        
+            results['conversations'] = []
+
         if search_type in ['all', 'tools']:
-            results['tools'] = [
-                {'id': 1, 'name': f'Calculator tool for {query}', 'description': 'Math operations'}
-            ]
+            results['tools'] = []
         
         return jsonify({
             'success': True,

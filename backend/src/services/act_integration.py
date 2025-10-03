@@ -193,59 +193,6 @@ class AgentMixACTIntegration:
             logger.error(f"Failed to add coordinated task: {e}")
             return None
 
-    async def simulate_autonomous_todo_demo(self) -> str:
-        """Simulate the hackathon demo: autonomous todo app development."""
-        logger.info("🎭 Starting AgentMix + ACT Todo Demo")
-
-        try:
-            # Create coordinated project
-            project_id = await self.create_coordinated_project(
-                "Build Todo Application with Autonomous Agent Coordination",
-                required_agents=[
-                    {"role": "Backend Developer", "capabilities": ["python", "backend", "api"]},
-                    {"role": "Frontend Developer", "capabilities": ["react", "frontend", "javascript"]},
-                    {"role": "QA Engineer", "capabilities": ["testing", "qa"]}
-                ]
-            )
-
-            # Add coordinated tasks
-            backend_task = await self.add_coordinated_task(
-                project_id,
-                "Create Flask API for todo app with CRUD endpoints",
-                ["python", "backend", "api"],
-                priority="high"
-            )
-
-            frontend_task = await self.add_coordinated_task(
-                project_id,
-                "Create React frontend for todo app with real-time updates",
-                ["react", "frontend", "javascript"],
-                priority="high",
-                dependencies=[backend_task] if backend_task else []
-            )
-
-            qa_task = await self.add_coordinated_task(
-                project_id,
-                "Create comprehensive test suite for todo app",
-                ["testing", "qa"],
-                priority="medium",
-                dependencies=[frontend_task] if frontend_task else []
-            )
-
-            # Notify frontend about demo start
-            self.socketio.emit('act_demo_started', {
-                'projectId': project_id,
-                'message': 'Autonomous Todo App Demo Started',
-                'tasks': [backend_task, frontend_task, qa_task]
-            })
-
-            logger.info(f"🚀 Autonomous todo demo project created: {project_id}")
-            return project_id
-
-        except Exception as e:
-            logger.error(f"Demo creation failed: {e}")
-            raise
-
     def get_project_status(self, project_id: str) -> Optional[Dict]:
         """Get status of coordinated project."""
         return self.active_projects.get(project_id)
@@ -279,23 +226,6 @@ def init_act_integration(socketio, app=None):
 def get_act_integration():
     """Get current ACT integration instance."""
     return act_integration
-
-# Demo helper functions for hackathon
-async def start_hackathon_demo():
-    """Start the hackathon demo scenario."""
-    if act_integration:
-        # Connect to ACT
-        await act_integration.start_act_connection()
-
-        # Wait a moment for connection
-        await asyncio.sleep(1)
-
-        # Start autonomous demo
-        project_id = await act_integration.simulate_autonomous_todo_demo()
-
-        return project_id
-    else:
-        raise RuntimeError("ACT integration not initialized")
 
 # AgentMix conversation enhancement
 class ACTEnhancedOrchestrator:
