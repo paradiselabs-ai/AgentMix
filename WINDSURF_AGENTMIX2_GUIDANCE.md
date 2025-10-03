@@ -1,8 +1,3 @@
----
-description: Manual ACT to build agentmix
-auto_execution_mode: 3
----
-
 # WINDSURF AGENTMIX2 GUIDANCE
 
 **MISSION**: Clean up AgentMix, remove all placeholder data, verify full functionality, and prepare production-ready MVP for demo video.

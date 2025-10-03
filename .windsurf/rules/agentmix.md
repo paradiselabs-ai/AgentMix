@@ -1,6 +1,5 @@
 ---
-description: Manual ACT to build agentmix
-auto_execution_mode: 3
+trigger: always_on
 ---
 
 # WINDSURF AGENTMIX2 GUIDANCE

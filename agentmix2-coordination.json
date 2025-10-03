@@ -1,0 +1,353 @@
+{
+  "act_version": "2.0",
+  "project": {
+    "name": "AgentMix MVP - Production Ready",
+    "version": "1.0.0-rc1",
+    "description": "Clean up placeholder data, verify all functionality, and prepare AgentMix for production demo video",
+    "status": "active",
+    "priority": "critical",
+    "created_at": "2025-10-01T00:00:00-05:00",
+    "previous_session": "agentmix-coordination.json",
+    "previous_session_summary": "Phases 1-5 completed: WebSocket/CORS fixes, backend handlers, circular imports fixed, database relationships safe, HITL state synchronization with ConversationProvider. Frontend styling updated to Perplexity dark theme. All core infrastructure working."
+  },
+  "agents": {
+    "claude_code": {
+      "type": "claude_code_terminal",
+      "capabilities": [
+        "backend_implementation",
+        "database_cleanup",
+        "api_verification",
+        "python_debugging",
+        "dependency_management",
+        "data_removal"
+      ],
+      "status": "active",
+      "role": "backend_cleanup_and_verification",
+      "communication_style": "structured_updates"
+    },
+    "windsurf_cascade": {
+      "type": "windsurf_cascade",
+      "capabilities": [
+        "frontend_cleanup",
+        "ui_verification",
+        "component_testing",
+        "placeholder_removal",
+        "production_polish"
+      ],
+      "status": "ready",
+      "role": "frontend_cleanup_and_polish",
+      "communication_style": "code_updates"
+    }
+  },
+  "objectives": {
+    "primary": "Remove ALL fake/placeholder data and verify full functionality for production MVP",
+    "secondary": "Prepare for demo video recording showing working AgentMix features",
+    "tertiary": "Document remaining work needed for ACT integration"
+  },
+  "phases": {
+    "phase_1_placeholder_data_removal": {
+      "name": "Remove All Placeholder & Fake Data",
+      "status": "ready",
+      "priority": "critical",
+      "description": "Systematically remove all fake data, placeholders, and mock content from frontend and backend",
+      "owner": "both",
+      "estimated_hours": 3,
+      "tasks": {
+        "identify_placeholder_locations": {
+          "description": "Search and catalog all placeholder data locations in codebase",
+          "assigned_to": "claude_code",
+          "priority": "critical",
+          "status": "pending",
+          "files_to_search": [
+            "backend/src/**/*.py",
+            "frontend/src/components/**/*.jsx",
+            "frontend/src/styles/**/*.css"
+          ],
+          "search_terms": ["placeholder", "fake", "dummy", "mock", "test data", "TODO", "FIXME"]
+        },
+        "remove_backend_placeholders": {
+          "description": "Remove all placeholder data from backend routes, models, and services",
+          "assigned_to": "claude_code",
+          "priority": "critical",
+          "status": "pending",
+          "affected_areas": [
+            "Default agents in database",
+            "Test conversations",
+            "Mock API responses",
+            "Placeholder tool configurations"
+          ]
+        },
+        "remove_frontend_placeholders": {
+          "description": "Remove all placeholder content from React components",
+          "assigned_to": "windsurf_cascade",
+          "priority": "critical",
+          "status": "pending",
+          "affected_components": [
+            "EnhancedDashboard.jsx",
+            "EnhancedSidebar.jsx",
+            "EnhancedHeader.jsx",
+            "AgentList.jsx",
+            "ConversationView components",
+            "ToolsManager components"
+          ]
+        },
+        "verify_clean_state": {
+          "description": "Verify application starts with completely clean state (no data)",
+          "assigned_to": "both",
+          "priority": "critical",
+          "status": "pending",
+          "verification_steps": [
+            "Fresh database has zero agents, conversations, tools",
+            "Dashboard shows empty state with clear CTAs",
+            "No console errors or warnings"
+          ]
+        }
+      }
+    },
+    "phase_2_functionality_verification": {
+      "name": "Verify All Core Functionality",
+      "status": "pending",
+      "priority": "critical",
+      "description": "Test and confirm all features from previous session still work",
+      "owner": "both",
+      "estimated_hours": 4,
+      "dependencies": ["phase_1_placeholder_data_removal"],
+      "tasks": {
+        "verify_agent_crud": {
+          "description": "Test creating, editing, listing, and deleting agents",
+          "assigned_to": "claude_code",
+          "priority": "critical",
+          "status": "pending",
+          "test_cases": [
+            "Create new agent with valid API key",
+            "Edit existing agent configuration",
+            "Delete agent (with confirmation)",
+            "List all agents with correct status",
+            "Agent capabilities and model selection work"
+          ]
+        },
+        "verify_conversation_functionality": {
+          "description": "Test agent-to-agent real-time conversations",
+          "assigned_to": "windsurf_cascade",
+          "priority": "critical",
+          "status": "pending",
+          "test_cases": [
+            "Start new AI-to-AI conversation",
+            "Messages appear in real-time via WebSocket",
+            "Multiple agents can participate",
+            "Delete conversation works",
+            "Conversation history persists"
+          ]
+        },
+        "verify_hitl_controls": {
+          "description": "Test Human-in-the-Loop pause/resume/intervention",
+          "assigned_to": "windsurf_cascade",
+          "priority": "critical",
+          "status": "pending",
+          "test_cases": [
+            "Pause conversation works",
+            "Resume conversation works",
+            "Human can send messages during conversation",
+            "AI requests human input when needed",
+            "State synchronization across components"
+          ]
+        },
+        "verify_tools_functionality": {
+          "description": "Test tool creation, configuration, and usage",
+          "assigned_to": "claude_code",
+          "priority": "high",
+          "status": "pending",
+          "test_cases": [
+            "Add new tool to agent",
+            "Configure tool parameters",
+            "Tool appears in agent capabilities",
+            "Delete tool works",
+            "Tools work during conversations"
+          ]
+        },
+        "verify_canvas_functionality": {
+          "description": "Test collaborative canvas features",
+          "assigned_to": "windsurf_cascade",
+          "priority": "high",
+          "status": "pending",
+          "test_cases": [
+            "Canvas loads and renders",
+            "Agents can update canvas in real-time",
+            "Canvas persists changes",
+            "Canvas integrates with conversations"
+          ]
+        },
+        "verify_mcp_integration": {
+          "description": "Test MCP server connections to agents",
+          "assigned_to": "claude_code",
+          "priority": "medium",
+          "status": "pending",
+          "test_cases": [
+            "Connect MCP server to agent",
+            "MCP tools appear in agent capabilities",
+            "MCP tools work in conversations",
+            "Disconnect MCP server"
+          ]
+        }
+      }
+    },
+    "phase_3_production_polish": {
+      "name": "Production Polish & UX Improvements",
+      "status": "pending",
+      "priority": "high",
+      "description": "Polish UI, add loading states, error handling, and improve UX",
+      "owner": "windsurf_cascade",
+      "estimated_hours": 3,
+      "dependencies": ["phase_2_functionality_verification"],
+      "tasks": {
+        "improve_empty_states": {
+          "description": "Add helpful empty states with clear CTAs",
+          "assigned_to": "windsurf_cascade",
+          "priority": "high",
+          "status": "pending",
+          "areas": [
+            "Empty agent list with 'Create First Agent' CTA",
+            "Empty conversation list with helpful text",
+            "Empty tools list with setup guide",
+            "Dashboard with no data shows onboarding"
+          ]
+        },
+        "add_loading_states": {
+          "description": "Add loading indicators for async operations",
+          "assigned_to": "windsurf_cascade",
+          "priority": "high",
+          "status": "pending",
+          "areas": [
+            "Agent creation/deletion",
+            "Conversation loading",
+            "Message sending",
+            "Canvas updates"
+          ]
+        },
+        "improve_error_handling": {
+          "description": "Add user-friendly error messages and recovery options",
+          "assigned_to": "both",
+          "priority": "high",
+          "status": "pending",
+          "areas": [
+            "Invalid API keys",
+            "WebSocket connection failures",
+            "Database errors",
+            "Network timeouts"
+          ]
+        },
+        "optimize_performance": {
+          "description": "Optimize rendering and reduce unnecessary re-renders",
+          "assigned_to": "windsurf_cascade",
+          "priority": "medium",
+          "status": "pending",
+          "optimizations": [
+            "Memoize expensive components",
+            "Virtualize long lists",
+            "Debounce user inputs",
+            "Lazy load heavy components"
+          ]
+        }
+      }
+    },
+    "phase_4_demo_preparation": {
+      "name": "Demo Video Preparation",
+      "status": "pending",
+      "priority": "high",
+      "description": "Prepare AgentMix for demo video recording",
+      "owner": "both",
+      "estimated_hours": 2,
+      "dependencies": ["phase_3_production_polish"],
+      "tasks": {
+        "create_demo_script": {
+          "description": "Document step-by-step demo flow",
+          "assigned_to": "both",
+          "priority": "high",
+          "status": "pending",
+          "demo_flow": [
+            "1. Show empty state",
+            "2. Create first agent (with real API key)",
+            "3. Create second agent",
+            "4. Start AI-to-AI conversation",
+            "5. Demonstrate real-time messaging",
+            "6. Show HITL controls (pause/resume)",
+            "7. Human intervention in conversation",
+            "8. Show tools/canvas features",
+            "9. Demonstrate dashboard metrics"
+          ]
+        },
+        "prepare_demo_data": {
+          "description": "Create sample agents/conversations for demo (removable)",
+          "assigned_to": "claude_code",
+          "priority": "medium",
+          "status": "pending",
+          "note": "Demo data should be easily clearable, not hardcoded"
+        },
+        "test_demo_flow": {
+          "description": "Run through complete demo flow to ensure smooth execution",
+          "assigned_to": "both",
+          "priority": "critical",
+          "status": "pending",
+          "verification": [
+            "All features work in sequence",
+            "No errors during demo",
+            "Performance is smooth",
+            "UI looks polished"
+          ]
+        }
+      }
+    }
+  },
+  "coordination": {
+    "communication_protocol": {
+      "primary_channel": "agentmix2-coordination.json",
+      "update_frequency": "after_each_task_completion",
+      "status_format": "phase_task_status_updates",
+      "conflict_resolution": "collaborative_discussion"
+    },
+    "handoff_mechanism": {
+      "method": "status_file_updates",
+      "trigger_events": [
+        "task_completion",
+        "blocker_encountered",
+        "phase_completion",
+        "verification_needed"
+      ]
+    }
+  },
+  "current_status": {
+    "active_phase": "phase_1_placeholder_data_removal",
+    "next_phase": "phase_2_functionality_verification",
+    "completed_phases": [],
+    "blocked_tasks": [],
+    "critical_path": [
+      "identify_placeholder_locations",
+      "remove_backend_placeholders",
+      "remove_frontend_placeholders",
+      "verify_clean_state",
+      "verify_agent_crud",
+      "verify_conversation_functionality",
+      "test_demo_flow"
+    ],
+    "estimated_completion": "2025-10-02T00:00:00-05:00",
+    "demo_video_target": "2025-10-03T00:00:00-05:00"
+  },
+  "act_integration_notes": {
+    "status": "deferred",
+    "reason": "ACT needs additional development. Focus on working MVP first.",
+    "future_tasks": [
+      "Integrate ACT coordination server with AgentMix",
+      "Add ACT client to AgentMix agents",
+      "Enable autonomous agent coordination via ACT",
+      "Add ACT dashboard visualization to AgentMix UI"
+    ]
+  },
+  "communication_log": [
+    {
+      "timestamp": "2025-10-01T00:00:00-05:00",
+      "agent": "claude_code",
+      "message": "Created agentmix2-coordination.json. Ready to begin Phase 1: Placeholder Data Removal. Will start by identifying all placeholder locations in backend and frontend.",
+      "type": "coordination_setup"
+    }
+  ]
+}
