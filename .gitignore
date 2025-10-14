@@ -65,3 +65,5 @@ old-claude.md
 act-claude-conversation.txt
 agentmix-coordination.json
 Docs/
+agentmix2-coordination.json
+.coordination_backups/
