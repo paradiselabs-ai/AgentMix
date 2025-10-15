@@ -46,6 +46,14 @@ const EnhancedConversationView = ({ agents = [], onNavigateToAgents }) => {
   const [searchQuery, setSearchQuery] = useState('')
   const messagesEndRef = useRef(null)
 
+  // Loading states
+  const [loadingConversations, setLoadingConversations] = useState(true)
+  const [loadingMessages, setLoadingMessages] = useState(false)
+  const [sendingMessage, setSendingMessage] = useState(false)
+  const [creatingConversation, setCreatingConversation] = useState(false)
+  const [startingConversation, setStartingConversation] = useState(false)
+  const [stoppingConversation, setStoppingConversation] = useState(false)
+
   useEffect(() => {
     fetchConversations()
   }, [])
@@ -118,6 +126,7 @@ const EnhancedConversationView = ({ agents = [], onNavigateToAgents }) => {
 
   const fetchConversations = async () => {
     try {
+      setLoadingConversations(true)
       const response = await fetch('/api/conversations')
       const data = await response.json()
       if (data.success) {
@@ -125,11 +134,14 @@ const EnhancedConversationView = ({ agents = [], onNavigateToAgents }) => {
       }
     } catch (error) {
       console.error('Error fetching conversations:', error)
+    } finally {
+      setLoadingConversations(false)
     }
   }
 
   const fetchMessages = async (conversationId) => {
     try {
+      setLoadingMessages(true)
       const response = await fetch(`/api/conversations/${conversationId}/messages`)
       const data = await response.json()
       if (data.success) {
@@ -137,6 +149,8 @@ const EnhancedConversationView = ({ agents = [], onNavigateToAgents }) => {
       }
     } catch (error) {
       console.error('Error fetching messages:', error)
+    } finally {
+      setLoadingMessages(false)
     }
   }
 
@@ -147,6 +161,7 @@ const EnhancedConversationView = ({ agents = [], onNavigateToAgents }) => {
     }
 
     try {
+      setCreatingConversation(true)
       const response = await fetch('/api/conversations', {
         method: 'POST',
         headers: {
@@ -167,11 +182,14 @@ const EnhancedConversationView = ({ agents = [], onNavigateToAgents }) => {
         setConversationName('')
         setSelectedAgents([])
       } else {
-        alert('Error creating conversation: ' + data.error)
+        alert('❌ Failed to create conversation\n\n🔧 Troubleshooting:\n• Ensure conversation name is provided\n• Select at least 2 active agents\n• Check backend server is running\n• Verify agents have valid configurations\n\n💡 Tip: Test agents individually before creating conversations')
+        setCreatingConversation(false)
       }
     } catch (error) {
       console.error('Error creating conversation:', error)
       alert('Error creating conversation')
+    } finally {
+      setCreatingConversation(false)
     }
   }
 
@@ -179,6 +197,7 @@ const EnhancedConversationView = ({ agents = [], onNavigateToAgents }) => {
     if (!selectedConversation) return
 
     try {
+      setStartingConversation(true)
       const response = await fetch(`/api/conversations/${selectedConversation.id}/start`, {
         method: 'POST',
       })
@@ -188,11 +207,14 @@ const EnhancedConversationView = ({ agents = [], onNavigateToAgents }) => {
         setIsActive(true)
         fetchMessages(selectedConversation.id)
       } else {
-        alert('Error starting conversation: ' + data.error)
+        alert('❌ Failed to start conversation\n\n🔧 Troubleshooting:\n• Ensure all selected agents are active\n• Check agents have valid API keys\n• Verify backend server is running\n• Try refreshing the page\n\n💡 Tip: Test each agent individually first using the "Test" button')
+        setStartingConversation(false)
       }
     } catch (error) {
       console.error('Error starting conversation:', error)
       alert('Error starting conversation')
+    } finally {
+      setStartingConversation(false)
     }
   }
 
@@ -200,6 +222,7 @@ const EnhancedConversationView = ({ agents = [], onNavigateToAgents }) => {
     if (!selectedConversation) return
 
     try {
+      setStoppingConversation(true)
       const response = await fetch(`/api/conversations/${selectedConversation.id}/stop`, {
         method: 'POST',
       })
@@ -208,16 +231,23 @@ const EnhancedConversationView = ({ agents = [], onNavigateToAgents }) => {
       if (data.success) {
         setIsActive(false)
       } else {
-        alert('Error stopping conversation: ' + data.error)
+        alert('❌ Failed to stop conversation\n\n🔧 Troubleshooting:\n• Check backend server connection\n• Conversation may have already stopped\n• Try refreshing the page\n• Contact support if issue persists')
+        setStoppingConversation(false)
       }
     } catch (error) {
       console.error('Error stopping conversation:', error)
       alert('Error stopping conversation')
+    } finally {
+      setStoppingConversation(false)
     }
   }
 
   const sendMessage = async () => {
     if (!newMessage.trim() || !selectedConversation) return
+
+    const messageToSend = newMessage.trim()
+    setNewMessage('')
+    setSendingMessage(true)
 
     try {
       const response = await fetch(`/api/conversations/${selectedConversation.id}/messages`, {
@@ -227,7 +257,7 @@ const EnhancedConversationView = ({ agents = [], onNavigateToAgents }) => {
         },
         body: JSON.stringify({
           sender_id: 'human',
-          content: newMessage,
+          content: messageToSend,
           message_type: 'text'
         }),
       })
@@ -235,13 +265,17 @@ const EnhancedConversationView = ({ agents = [], onNavigateToAgents }) => {
       const data = await response.json()
       if (data.success) {
         setMessages([...messages, data.message])
-        setNewMessage('')
       } else {
-        alert('Error sending message: ' + data.error)
+        alert('❌ Failed to send message\n\n🔧 Troubleshooting:\n• Check conversation is still active\n• Verify backend server connection\n• Ensure message is not empty\n• Try refreshing the page\n\n💡 Tip: If conversation stopped unexpectedly, check agent API keys')
+        setNewMessage(messageToSend) // Restore message on error
+        setSendingMessage(false)
       }
     } catch (error) {
       console.error('Error sending message:', error)
       alert('Error sending message')
+      setNewMessage(messageToSend) // Restore message on error
+    } finally {
+      setSendingMessage(false)
     }
   }
 
@@ -484,11 +518,20 @@ const EnhancedConversationView = ({ agents = [], onNavigateToAgents }) => {
               <div className="flex gap-2 pt-2">
                 <Button
                   onClick={createConversation}
-                  disabled={!conversationName.trim() || selectedAgents.length < 2}
+                  disabled={!conversationName.trim() || selectedAgents.length < 2 || creatingConversation}
                   className="flex-1 bg-brand-purple hover:bg-brand-purple/90 text-white"
                 >
-                  <MessageSquare className="h-4 w-4 mr-2" />
-                  Create Conversation
+                  {creatingConversation ? (
+                    <>
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      Creating...
+                    </>
+                  ) : (
+                    <>
+                      <MessageSquare className="h-4 w-4 mr-2" />
+                      Create Conversation
+                    </>
+                  )}
                 </Button>
                 <Button
                   onClick={() => {
@@ -498,6 +541,7 @@ const EnhancedConversationView = ({ agents = [], onNavigateToAgents }) => {
                   }}
                   variant="outline"
                   className="glass-card border-white/30"
+                  disabled={creatingConversation}
                 >
                   Cancel
                 </Button>
@@ -558,9 +602,19 @@ const EnhancedConversationView = ({ agents = [], onNavigateToAgents }) => {
                       onClick={startConversation}
                       size="sm"
                       className="bg-green-600 hover:bg-green-700 text-white"
+                      disabled={startingConversation}
                     >
-                      <Play className="h-4 w-4 mr-2" />
-                      Start Conversation
+                      {startingConversation ? (
+                        <>
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          Starting...
+                        </>
+                      ) : (
+                        <>
+                          <Play className="h-4 w-4 mr-2" />
+                          Start Conversation
+                        </>
+                      )}
                     </Button>
                   ) : (
                     <>
@@ -568,15 +622,26 @@ const EnhancedConversationView = ({ agents = [], onNavigateToAgents }) => {
                         onClick={stopConversation}
                         size="sm"
                         className="bg-red-600 hover:bg-red-700 text-white"
+                        disabled={stoppingConversation}
                       >
-                        <Square className="h-4 w-4 mr-2" />
-                        Stop
+                        {stoppingConversation ? (
+                          <>
+                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                            Stopping...
+                          </>
+                        ) : (
+                          <>
+                            <Square className="h-4 w-4 mr-2" />
+                            Stop
+                          </>
+                        )}
                       </Button>
                       <Button
                         onClick={stopConversation}
                         size="sm"
                         variant="outline"
                         className="glass-card border-white/30"
+                        disabled={stoppingConversation}
                       >
                         <Pause className="h-4 w-4 mr-2" />
                         Pause
@@ -664,14 +729,22 @@ const EnhancedConversationView = ({ agents = [], onNavigateToAgents }) => {
                       }}
                       className="glass-card border-white/30 resize-none"
                       rows={2}
+                      disabled={sendingMessage}
                     />
                   </div>
                   <Button
                     onClick={sendMessage}
-                    disabled={!newMessage.trim()}
+                    disabled={!newMessage.trim() || sendingMessage}
                     className="bg-brand-purple hover:bg-brand-purple/90 text-white h-auto px-4 py-3"
                   >
-                    <Send className="h-4 w-4" />
+                    {sendingMessage ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                        Sending...
+                      </>
+                    ) : (
+                      <Send className="h-4 w-4" />
+                    )}
                   </Button>
                 </div>
               </CardContent>

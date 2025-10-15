@@ -121,8 +121,9 @@ def send_message(conversation_id):
         conversation = Conversation.query.get_or_404(conversation_id)
         
         # Validate sender exists and is part of conversation
+        # Allow 'human' sender for HITL (Human-in-the-Loop) intervention
         sender_id = data['sender_id']
-        if sender_id not in conversation.get_participants():
+        if sender_id != 'human' and sender_id not in conversation.get_participants():
             return jsonify({
                 'success': False,
                 'error': 'Sender is not a participant in this conversation'

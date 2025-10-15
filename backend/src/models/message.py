@@ -3,7 +3,7 @@ from datetime import datetime
 
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    sender_id = db.Column(db.Integer, db.ForeignKey('ai_agents.id'), nullable=False)
+    sender_id = db.Column(db.Integer, db.ForeignKey('ai_agents.id'), nullable=True)  # None for human/system messages
     receiver_id = db.Column(db.Integer, db.ForeignKey('ai_agents.id'), nullable=True)  # None for broadcast
     content = db.Column(db.Text, nullable=False)
     message_type = db.Column(db.String(50), default='text')  # text, system, tool_call, etc.

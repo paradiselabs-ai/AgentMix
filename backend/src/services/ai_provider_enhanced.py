@@ -429,7 +429,10 @@ class EnhancedAIProviderService:
             data = {
                 'model': model,
                 'messages': messages,
-                'max_tokens': config.get('max_tokens', 150) if config else 150
+                'max_tokens': config.get('max_tokens', 150) if config else 150,
+                'provider': {
+                    'data_collection': 'allow'  # Required for free models
+                }
             }
             
             response = requests.post(
@@ -775,7 +778,7 @@ class EnhancedAIProviderService:
             headers = {
                 'Authorization': f'Bearer {api_key}',
                 'Content-Type': 'application/json',
-                'HTTP-Referer': 'http://localhost:5174',  # Fixed port
+                'HTTP-Referer': 'http://localhost:5174',  # Required by OpenRouter
                 'X-Title': 'AgentMix'
             }
             
@@ -784,8 +787,15 @@ class EnhancedAIProviderService:
                 'messages': [
                     {'role': 'user', 'content': prompt}
                 ],
-                'max_tokens': max_tokens
+                'max_tokens': max_tokens,
+                'provider': {
+                    'data_collection': 'allow'  # Required for free models
+                }
             }
+            
+            print(f"[OpenRouter] Testing model: {model}")
+            print(f"[OpenRouter] API Key prefix: {api_key[:15]}...")
+            print(f"[OpenRouter] Request data: {data}")
             
             response = requests.post(
                 'https://openrouter.ai/api/v1/chat/completions',
@@ -793,6 +803,9 @@ class EnhancedAIProviderService:
                 json=data,
                 timeout=30
             )
+            
+            print(f"[OpenRouter] Response status: {response.status_code}")
+            print(f"[OpenRouter] Response body: {response.text[:500]}")
             
             if response.status_code == 200:
                 result = response.json()
@@ -806,7 +819,10 @@ class EnhancedAIProviderService:
                 try:
                     error_json = response.json()
                     if 'error' in error_json:
-                        error_detail = error_json['error'].get('message', error_detail)
+                        error_msg = error_json['error'].get('message', error_detail)
+                        error_code = error_json['error'].get('code', response.status_code)
+                        print(f"[OpenRouter] Error: {error_code} - {error_msg}")
+                        error_detail = error_msg
                 except:
                     pass
                 return f"API Error: {response.status_code} - {error_detail}"

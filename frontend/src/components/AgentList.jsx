@@ -95,7 +95,7 @@ const AgentList = ({ agents, loading, onAgentUpdated, onAgentSelect }) => {
         alert(`✅ ${agent.name} Test Successful!\n\nProvider: ${agent.provider}\nModel: ${agent.model}\n\nResponse: ${data.response}\n\nThis agent is ready to use in conversations!`)
         onAgentUpdated()
       } else {
-        alert(`❌ ${agent.name} Test Failed!\n\nProvider: ${agent.provider}\nModel: ${agent.model}\n\nError: ${data.error}\n\nPlease check:\n- API key is valid\n- Model name is correct for this provider\n- Provider service is available`)
+        alert(`❌ ${agent.name} Test Failed!\n\nProvider: ${agent.provider}\nModel: ${agent.model}\n\nError: ${data.error}\n\n🔧 Troubleshooting Steps:\n• Check API key is valid and has credits\n• Verify model name matches provider's available models\n• Ensure provider service is operational\n• For OpenRouter: Check https://openrouter.ai/models for available models\n• For other providers: Check their documentation\n\n💡 Tip: Try different models from the same provider first`)
       }
     } catch (error) {
       console.error('Error testing connection:', error)

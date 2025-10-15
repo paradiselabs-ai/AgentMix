@@ -121,7 +121,24 @@ def update_agent(agent_id):
 def delete_agent(agent_id):
     """Delete an AI agent"""
     try:
+        from src.models.message import Message
+        from src.models.conversation import Conversation
+        
         agent = AIAgent.query.get_or_404(agent_id)
+        
+        # First, delete or nullify messages where this agent is sender/receiver
+        Message.query.filter_by(sender_id=agent_id).delete()
+        Message.query.filter_by(receiver_id=agent_id).delete()
+        
+        # Remove agent from conversations (update participants JSON)
+        conversations = Conversation.query.all()
+        for conv in conversations:
+            participants = conv.get_participants()
+            if agent_id in participants:
+                participants.remove(agent_id)
+                conv.set_participants(participants)
+        
+        # Now delete the agent
         db.session.delete(agent)
         db.session.commit()
         
@@ -132,6 +149,8 @@ def delete_agent(agent_id):
         
     except Exception as e:
         db.session.rollback()
+        import traceback
+        traceback.print_exc()
         return jsonify({
             'success': False,
             'error': str(e)

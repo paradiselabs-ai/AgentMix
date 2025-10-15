@@ -32,6 +32,9 @@ const EnhancedDashboard = ({ agents = [], conversations = [] }) => {
     canvasProjects: 0
   });
 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const [activityData, setActivityData] = useState([]);
   const [agentPerformance, setAgentPerformance] = useState([]);
   const [conversationTrends, setConversationTrends] = useState([]);
@@ -45,6 +48,9 @@ const EnhancedDashboard = ({ agents = [], conversations = [] }) => {
 
   const fetchDashboardData = async () => {
     try {
+      setLoading(true);
+      setError(null);
+      
       // Fetch real dashboard stats
       const statsResponse = await fetch('/api/dashboard/stats');
       const statsData = await statsResponse.json();
@@ -78,8 +84,11 @@ const EnhancedDashboard = ({ agents = [], conversations = [] }) => {
 
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
+      setError('Failed to load dashboard data');
       // Fallback to basic data if API fails
       generateFallbackData();
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -236,281 +245,308 @@ const EnhancedDashboard = ({ agents = [], conversations = [] }) => {
 
   return (
     <div className="space-y-8">
-      {/* Hero Section */}
-      <div className="text-center space-y-4 py-8">
-        <h1 className="text-display-lg gradient-text animate-slide-in-up">
-          Welcome to AgentMix
-        </h1>
-        <p className="text-body-lg text-muted-foreground max-w-2xl mx-auto animate-slide-in-up" style={{animationDelay: '0.1s'}}>
-          Monitor your AI collaboration platform performance and manage your intelligent agents
-        </p>
-      </div>
-
-      {/* Empty State - Show when no agents or data */}
-      {stats.totalAgents === 0 && stats.totalConversations === 0 ? (
-        <Card className="glass-card border-white/30">
-          <CardContent className="flex flex-col items-center justify-center py-20">
-            <div className="w-24 h-24 bg-gradient-to-br from-brand-purple to-brand-teal rounded-3xl flex items-center justify-center mb-8 animate-float-gentle">
-              <Bot className="h-12 w-12 text-white" />
-            </div>
-            <h2 className="text-display-md text-foreground mb-3">Welcome to Your AI Collaboration Hub</h2>
-            <p className="text-body text-muted-foreground text-center mb-8 max-w-2xl">
-              AgentMix enables multiple AI agents to collaborate in real-time conversations with human oversight. 
-              Start by creating your first AI agent to begin building intelligent collaborative workflows.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button className="bg-brand-purple hover:bg-brand-purple/90 text-white px-8 py-3">
-                <Users className="h-5 w-5 mr-2" />
-                Create Your First Agent
-              </Button>
-              <Button variant="outline" className="px-8 py-3 border-white/30 hover:bg-white/10">
-                <Play className="h-5 w-5 mr-2" />
-                Watch Demo Video
-              </Button>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 w-full max-w-4xl">
-              <div className="text-center">
-                <div className="w-12 h-12 bg-brand-purple/10 rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <MessageSquare className="h-6 w-6 text-brand-purple" />
-                </div>
-                <h3 className="font-semibold text-foreground mb-1">Real-time Conversations</h3>
-                <p className="text-sm text-muted-foreground">AI agents communicate and collaborate instantly</p>
-              </div>
-              <div className="text-center">
-                <div className="w-12 h-12 bg-brand-teal/10 rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <Settings className="h-6 w-6 text-brand-teal" />
-                </div>
-                <h3 className="font-semibold text-foreground mb-1">Human-in-the-Loop</h3>
-                <p className="text-sm text-muted-foreground">Pause, resume, and intervene in AI conversations</p>
-              </div>
-              <div className="text-center">
-                <div className="w-12 h-12 bg-brand-pink/10 rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <Wrench className="h-6 w-6 text-brand-pink" />
-                </div>
-                <h3 className="font-semibold text-foreground mb-1">Tool Integration</h3>
-                <p className="text-sm text-muted-foreground">Extend agent capabilities with custom tools</p>
-              </div>
-            </div>
+      {/* Loading State */}
+      {loading ? (
+        <div className="flex items-center justify-center py-20">
+          <div className="text-center space-y-4">
+            <div className="w-16 h-16 border-4 border-brand-purple/30 border-t-brand-purple rounded-full animate-spin mx-auto"></div>
+            <p className="text-muted-foreground">Loading dashboard...</p>
+          </div>
+        </div>
+      ) : error ? (
+        <Card className="glass-card border-red-200/50 bg-red-50/10 dark:bg-red-900/10">
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
+            <h3 className="text-lg font-semibold text-foreground mb-2">Dashboard Error</h3>
+            <p className="text-muted-foreground text-center mb-4">{error}</p>
+            <Button 
+              onClick={fetchDashboardData}
+              variant="outline"
+              className="glass-card border-red-200/50"
+            >
+              Retry
+            </Button>
           </CardContent>
         </Card>
       ) : (
         <>
-          {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
-            <StatCard
-              title="Total Agents"
-              value={stats.totalAgents}
-              icon={Users}
-              color="brand-purple"
-            />
-            <StatCard
-              title="Active Agents"
-              value={stats.activeAgents}
-              icon={Activity}
-              color="green"
-            />
-            <StatCard
-              title="Conversations"
-              value={stats.totalConversations}
-              icon={MessageSquare}
-              color="brand-teal"
-            />
-            <StatCard
-              title="Messages"
-          value={stats.totalMessages}
-          icon={CheckCircle}
-          color="blue"
-        />
-        <StatCard
-          title="Tool Uses"
-          value={stats.toolExecutions}
-          icon={Zap}
-          color="brand-orange"
-        />
-        <StatCard
-          title="Canvas Projects"
-          value={stats.canvasProjects}
-          icon={Palette}
-          color="brand-pink"
-        />
-      </div>
+          {/* Hero Section */}
+          <div className="text-center space-y-4 py-8">
+            <h1 className="text-display-lg gradient-text animate-slide-in-up">
+              Welcome to AgentMix
+            </h1>
+            <p className="text-body-lg text-muted-foreground max-w-2xl mx-auto animate-slide-in-up" style={{animationDelay: '0.1s'}}>
+              Monitor your AI collaboration platform performance and manage your intelligent agents
+            </p>
+          </div>
 
-      {/* Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Activity Chart */}
-        <Card className="glass-card border-white/30">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Activity className="h-5 w-5 text-brand-purple" />
-              7-Day Activity Overview
-            </CardTitle>
-            <CardDescription>Messages, conversations, and tool usage trends</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <AreaChart data={activityData}>
-                <defs>
-                  <linearGradient id="colorMessages" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#7C3AED" stopOpacity={0.8}/>
-                    <stop offset="95%" stopColor="#7C3AED" stopOpacity={0.1}/>
-                  </linearGradient>
-                  <linearGradient id="colorConversations" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#0891B2" stopOpacity={0.8}/>
-                    <stop offset="95%" stopColor="#0891B2" stopOpacity={0.1}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis dataKey="date" stroke="#6b7280" />
-                <YAxis stroke="#6b7280" />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)', 
-                    border: 'none',
-                    borderRadius: '12px',
-                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-                    backdropFilter: 'blur(20px)'
-                  }} 
-                />
-                <Area 
-                  type="monotone" 
-                  dataKey="messages" 
-                  stroke="#7C3AED" 
-                  fillOpacity={1} 
-                  fill="url(#colorMessages)" 
-                  strokeWidth={2}
-                />
-                <Area 
-                  type="monotone" 
-                  dataKey="conversations" 
-                  stroke="#0891B2" 
-                  fillOpacity={1} 
-                  fill="url(#colorConversations)" 
-                  strokeWidth={2}
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        {/* Agent Performance */}
-        <Card className="glass-card border-white/30">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Bot className="h-5 w-5 text-brand-teal" />
-              Agent Performance
-            </CardTitle>
-            <CardDescription>Message count and efficiency metrics</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={agentPerformance} layout="horizontal">
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis type="number" stroke="#6b7280" />
-                <YAxis dataKey="name" type="category" stroke="#6b7280" width={100} />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)', 
-                    border: 'none',
-                    borderRadius: '12px',
-                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-                    backdropFilter: 'blur(20px)'
-                  }} 
-                />
-                <Bar dataKey="messages" fill="#0891B2" radius={[0, 4, 4, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        {/* Conversation Trends */}
-        <Card className="glass-card border-white/30">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <MessageSquare className="h-5 w-5 text-brand-pink" />
-              Conversation Trends
-            </CardTitle>
-            <CardDescription>24-hour conversation activity pattern</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={conversationTrends}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis dataKey="time" stroke="#6b7280" />
-                <YAxis stroke="#6b7280" />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)', 
-                    border: 'none',
-                    borderRadius: '12px',
-                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-                    backdropFilter: 'blur(20px)'
-                  }} 
-                />
-                <Line 
-                  type="monotone" 
-                  dataKey="conversations" 
-                  stroke="#EC4899" 
-                  strokeWidth={3}
-                  dot={{ fill: '#EC4899', strokeWidth: 2, r: 6 }}
-                  activeDot={{ r: 8, stroke: '#EC4899', strokeWidth: 2 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        {/* Agent Status Distribution */}
-        <Card className="glass-card border-white/30">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Activity className="h-5 w-5 text-brand-orange" />
-              Agent Status Distribution
-            </CardTitle>
-            <CardDescription>Current status of all agents</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={agentStatusData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={120}
-                  paddingAngle={5}
-                  dataKey="value"
-                >
-                  {agentStatusData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)', 
-                    border: 'none',
-                    borderRadius: '12px',
-                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-                    backdropFilter: 'blur(20px)'
-                  }} 
-                />
-              </PieChart>
-            </ResponsiveContainer>
-            <div className="flex justify-center space-x-4 mt-4">
-              {agentStatusData.map((entry, index) => (
-                <div key={index} className="flex items-center gap-2">
-                  <div 
-                    className="w-3 h-3 rounded-full" 
-                    style={{ backgroundColor: entry.color }}
-                  />
-                  <span className="text-sm text-muted-foreground">
-                    {entry.name}: {entry.value}
-                  </span>
+          {/* Empty State - Show when no agents or data */}
+          {stats.totalAgents === 0 && stats.totalConversations === 0 ? (
+            <Card className="glass-card border-white/30">
+              <CardContent className="flex flex-col items-center justify-center py-20">
+                <div className="w-24 h-24 bg-gradient-to-br from-brand-purple to-brand-teal rounded-3xl flex items-center justify-center mb-8 animate-float-gentle">
+                  <Bot className="h-12 w-12 text-white" />
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+                <h2 className="text-display-md text-foreground mb-3">Welcome to Your AI Collaboration Hub</h2>
+                <p className="text-body text-muted-foreground text-center mb-8 max-w-2xl">
+                  AgentMix enables multiple AI agents to collaborate in real-time conversations with human oversight. 
+                  Start by creating your first AI agent to begin building intelligent collaborative workflows.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Button className="bg-brand-purple hover:bg-brand-purple/90 text-white px-8 py-3">
+                    <Users className="h-5 w-5 mr-2" />
+                    Create Your First Agent
+                  </Button>
+                  <Button variant="outline" className="px-8 py-3 border-white/30 hover:bg-white/10">
+                    <Play className="h-5 w-5 mr-2" />
+                    Watch Demo Video
+                  </Button>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 w-full max-w-4xl">
+                  <div className="text-center">
+                    <div className="w-12 h-12 bg-brand-purple/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+                      <MessageSquare className="h-6 w-6 text-brand-purple" />
+                    </div>
+                    <h3 className="font-semibold text-foreground mb-1">Real-time Conversations</h3>
+                    <p className="text-sm text-muted-foreground">AI agents communicate and collaborate instantly</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="w-12 h-12 bg-brand-teal/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+                      <Settings className="h-6 w-6 text-brand-teal" />
+                    </div>
+                    <h3 className="font-semibold text-foreground mb-1">Human-in-the-Loop</h3>
+                    <p className="text-sm text-muted-foreground">Pause, resume, and intervene in AI conversations</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="w-12 h-12 bg-brand-pink/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+                      <Wrench className="h-6 w-6 text-brand-pink" />
+                    </div>
+                    <h3 className="font-semibold text-foreground mb-1">Tool Integration</h3>
+                    <p className="text-sm text-muted-foreground">Extend agent capabilities with custom tools</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ) : (
+            <>
+              {/* Stats Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
+                <StatCard
+                  title="Total Agents"
+                  value={stats.totalAgents}
+                  icon={Users}
+                  color="brand-purple"
+                />
+                <StatCard
+                  title="Active Agents"
+                  value={stats.activeAgents}
+                  icon={Activity}
+                  color="green"
+                />
+                <StatCard
+                  title="Conversations"
+                  value={stats.totalConversations}
+                  icon={MessageSquare}
+                  color="brand-teal"
+                />
+                <StatCard
+                  title="Messages"
+                  value={stats.totalMessages}
+                  icon={CheckCircle}
+                  color="blue"
+                />
+                <StatCard
+                  title="Tool Uses"
+                  value={stats.toolExecutions}
+                  icon={Zap}
+                  color="brand-orange"
+                />
+                <StatCard
+                  title="Canvas Projects"
+                  value={stats.canvasProjects}
+                  icon={Palette}
+                  color="brand-pink"
+                />
+              </div>
+
+              {/* Charts Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Activity Chart */}
+                <Card className="glass-card border-white/30">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Activity className="h-5 w-5 text-brand-purple" />
+                      7-Day Activity Overview
+                    </CardTitle>
+                    <CardDescription>Messages, conversations, and tool usage trends</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ResponsiveContainer width="100%" height={300}>
+                      <AreaChart data={activityData}>
+                        <defs>
+                          <linearGradient id="colorMessages" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#7C3AED" stopOpacity={0.8}/>
+                            <stop offset="95%" stopColor="#7C3AED" stopOpacity={0.1}/>
+                          </linearGradient>
+                          <linearGradient id="colorConversations" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#0891B2" stopOpacity={0.8}/>
+                            <stop offset="95%" stopColor="#0891B2" stopOpacity={0.1}/>
+                          </linearGradient>
+                        </defs>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                        <XAxis dataKey="date" stroke="#6b7280" />
+                        <YAxis stroke="#6b7280" />
+                        <Tooltip 
+                          contentStyle={{ 
+                            backgroundColor: 'rgba(255, 255, 255, 0.9)', 
+                            border: 'none',
+                            borderRadius: '12px',
+                            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                            backdropFilter: 'blur(20px)'
+                          }} 
+                        />
+                        <Area 
+                          type="monotone" 
+                          dataKey="messages" 
+                          stroke="#7C3AED" 
+                          fillOpacity={1} 
+                          fill="url(#colorMessages)" 
+                          strokeWidth={2}
+                        />
+                        <Area 
+                          type="monotone" 
+                          dataKey="conversations" 
+                          stroke="#0891B2" 
+                          fillOpacity={1} 
+                          fill="url(#colorConversations)" 
+                          strokeWidth={2}
+                        />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </CardContent>
+                </Card>
+
+                {/* Agent Performance */}
+                <Card className="glass-card border-white/30">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Bot className="h-5 w-5 text-brand-teal" />
+                      Agent Performance
+                    </CardTitle>
+                    <CardDescription>Message count and efficiency metrics</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ResponsiveContainer width="100%" height={300}>
+                      <BarChart data={agentPerformance} layout="horizontal">
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                        <XAxis type="number" stroke="#6b7280" />
+                        <YAxis dataKey="name" type="category" stroke="#6b7280" width={100} />
+                        <Tooltip 
+                          contentStyle={{ 
+                            backgroundColor: 'rgba(255, 255, 255, 0.9)', 
+                            border: 'none',
+                            borderRadius: '12px',
+                            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                            backdropFilter: 'blur(20px)'
+                          }} 
+                        />
+                        <Bar dataKey="messages" fill="#0891B2" radius={[0, 4, 4, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </CardContent>
+                </Card>
+
+                {/* Conversation Trends */}
+                <Card className="glass-card border-white/30">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <MessageSquare className="h-5 w-5 text-brand-pink" />
+                      Conversation Trends
+                    </CardTitle>
+                    <CardDescription>24-hour conversation activity pattern</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ResponsiveContainer width="100%" height={300}>
+                      <LineChart data={conversationTrends}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                        <XAxis dataKey="time" stroke="#6b7280" />
+                        <YAxis stroke="#6b7280" />
+                        <Tooltip 
+                          contentStyle={{ 
+                            backgroundColor: 'rgba(255, 255, 255, 0.9)', 
+                            border: 'none',
+                            borderRadius: '12px',
+                            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                            backdropFilter: 'blur(20px)'
+                          }} 
+                        />
+                        <Line 
+                          type="monotone" 
+                          dataKey="conversations" 
+                          stroke="#EC4899" 
+                          strokeWidth={3}
+                          dot={{ fill: '#EC4899', strokeWidth: 2, r: 6 }}
+                          activeDot={{ r: 8, stroke: '#EC4899', strokeWidth: 2 }}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </CardContent>
+                </Card>
+
+                {/* Agent Status Distribution */}
+                <Card className="glass-card border-white/30">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Activity className="h-5 w-5 text-brand-orange" />
+                      Agent Status Distribution
+                    </CardTitle>
+                    <CardDescription>Current status of all agents</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ResponsiveContainer width="100%" height={300}>
+                      <PieChart>
+                        <Pie
+                          data={agentStatusData}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={60}
+                          outerRadius={120}
+                          paddingAngle={5}
+                          dataKey="value"
+                        >
+                          {agentStatusData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                          ))}
+                        </Pie>
+                        <Tooltip 
+                          contentStyle={{ 
+                            backgroundColor: 'rgba(255, 255, 255, 0.9)', 
+                            border: 'none',
+                            borderRadius: '12px',
+                            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                            backdropFilter: 'blur(20px)'
+                          }} 
+                        />
+                      </PieChart>
+                    </ResponsiveContainer>
+                    <div className="flex justify-center space-x-4 mt-4">
+                      {agentStatusData.map((entry, index) => (
+                        <div key={index} className="flex items-center gap-2">
+                          <div 
+                            className="w-3 h-3 rounded-full" 
+                            style={{ backgroundColor: entry.color }}
+                          />
+                          <span className="text-sm text-muted-foreground">
+                            {entry.name}: {entry.value}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </>
+          )}
         </>
       )}
 
