@@ -67,3 +67,33 @@ agentmix-coordination.json
 Docs/
 agentmix2-coordination.json
 .coordination_backups/
+FAILING.txt
+
+# Test scripts with API keys (CRITICAL - contains secrets!)
+test_*.py
+test*.py
+
+# Documentation files (non-production)
+*.md
+!README.md
+PERPLEXITY_DESIGN_APPLIED.md
+BACKEND_FIXED.md
+MIGRATION_STRATEGY.md
+FIXES_COMPLETED.md
+FINAL_FIXES.md
+OPENROUTER_TROUBLESHOOTING.md
+HONEST_STATUS_ASSESSMENT.md
+WINDSURF_AGENTMIX2_GUIDANCE.md
+
+# Style guide and assets (non-production)
+style guide/
+"style guide/"
+
+# Backup files
+*.backup
+*.bak
+app.db.backup
+index.html.backup
+
+# Session/temp files
+agentmix.log
