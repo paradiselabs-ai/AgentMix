@@ -31,8 +31,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { useConversation } from '../contexts/ConversationContext'
 
-const EnhancedConversationView = ({ agents = [] }) => {
+const EnhancedConversationView = ({ agents = [], onNavigateToAgents }) => {
+  const { socket } = useConversation()
   const [conversations, setConversations] = useState([])
   const [selectedConversation, setSelectedConversation] = useState(null)
   const [messages, setMessages] = useState([])
@@ -54,12 +56,64 @@ const EnhancedConversationView = ({ agents = [] }) => {
     }
   }, [selectedConversation])
 
+  // WebSocket real-time message updates
   useEffect(() => {
-    scrollToBottom()
-  }, [messages])
+    if (!socket || !selectedConversation) return
+
+    const handleNewMessage = (data) => {
+      console.log('New message received:', data)
+      if (data.conversation_id === selectedConversation.id) {
+        setMessages(prev => {
+          // Avoid duplicates
+          const exists = prev.find(msg => msg.id === data.message?.id)
+          if (exists) return prev
+          return [...prev, data.message]
+        })
+      }
+    }
+
+    const handleConversationStatus = (data) => {
+      console.log('Conversation status:', data)
+      if (data.conversation_id === selectedConversation.id) {
+        setIsActive(data.status === 'active')
+      }
+    }
+
+    socket.on('new_message', handleNewMessage)
+    socket.on('conversation_status', handleConversationStatus)
+    socket.on('conversation_started', handleConversationStatus)
+    socket.on('conversation_stopped', handleConversationStatus)
+
+    // Join conversation room
+    socket.emit('join_conversation', { conversation_id: selectedConversation.id })
+
+    return () => {
+      socket.off('new_message', handleNewMessage)
+      socket.off('conversation_status', handleConversationStatus)
+      socket.off('conversation_started', handleConversationStatus)
+      socket.off('conversation_stopped', handleConversationStatus)
+      socket.emit('leave_conversation', { conversation_id: selectedConversation.id })
+    }
+  }, [socket, selectedConversation])
+
+  const [autoScroll, setAutoScroll] = useState(true)
+  const messagesContainerRef = useRef(null)
+
+  useEffect(() => {
+    if (autoScroll) {
+      scrollToBottom()
+    }
+  }, [messages, autoScroll])
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  // Detect if user is scrolling up (disable auto-scroll)
+  const handleScroll = (e) => {
+    const element = e.target
+    const isAtBottom = element.scrollHeight - element.scrollTop <= element.clientHeight + 100
+    setAutoScroll(isAtBottom)
   }
 
   const fetchConversations = async () => {
@@ -215,12 +269,14 @@ const EnhancedConversationView = ({ agents = [] }) => {
               </div>
             )}
           </div>
-          <div className={`p-3 rounded-2xl glass-card border-white/30 ${
+          <div className={`p-3 rounded-2xl ${
             isHuman 
-              ? 'bg-brand-purple/10 border-brand-purple/20' 
-              : 'bg-white/80 border-white/40'
+              ? 'bg-brand-purple/20 border border-brand-purple/30' 
+              : 'bg-gray-800/90 border border-gray-700/50'
           }`}>
-            <p className="text-sm text-foreground leading-relaxed">{message.content}</p>
+            <p className={`text-sm leading-relaxed ${
+              isHuman ? 'text-white' : 'text-gray-100'
+            }`}>{message.content}</p>
           </div>
         </div>
       </div>
@@ -301,56 +357,146 @@ const EnhancedConversationView = ({ agents = [] }) => {
         {isCreating && (
           <Card className="glass-card border-white/30">
             <CardHeader>
-              <CardTitle className="text-lg">New Conversation</CardTitle>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Plus className="h-5 w-5" />
+                New Conversation
+              </CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Select at least 2 AI agents to start a collaborative conversation
+              </p>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <Input
-                placeholder="Conversation name"
-                value={conversationName}
-                onChange={(e) => setConversationName(e.target.value)}
-                className="glass-card border-white/30"
-              />
-              
+            <CardContent className="space-y-6">
               <div>
                 <label className="text-sm font-medium text-foreground mb-2 block">
-                  Select Agents (min 2)
+                  Conversation Name *
                 </label>
-                <div className="space-y-2 max-h-32 overflow-y-auto">
-                  {agents.filter(a => a.status === 'active').map(agent => (
-                    <label key={agent.id} className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={selectedAgents.includes(agent.id)}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setSelectedAgents([...selectedAgents, agent.id])
-                          } else {
+                <Input
+                  placeholder="e.g., Product Strategy Discussion"
+                  value={conversationName}
+                  onChange={(e) => setConversationName(e.target.value)}
+                  className="glass-card border-white/30 text-foreground"
+                />
+              </div>
+              
+              <div>
+                <label className="text-sm font-medium text-foreground mb-3 block">
+                  Select Agents ({selectedAgents.length} selected, minimum 2 required)
+                </label>
+                
+                {agents.length === 0 ? (
+                  <Card className="glass-card border-dashed border-white/30 bg-white/5">
+                    <CardContent className="flex flex-col items-center justify-center py-8">
+                      <Bot className="h-12 w-12 text-muted-foreground mb-4" />
+                      <h3 className="font-semibold text-foreground mb-2">No Agents Available</h3>
+                      <p className="text-sm text-muted-foreground text-center mb-4">
+                        You need to create AI agents before you can start conversations
+                      </p>
+                      <Button 
+                        variant="outline" 
+                        className="glass-card border-white/30"
+                        onClick={onNavigateToAgents}
+                      >
+                        <Plus className="h-4 w-4 mr-2" />
+                        Create Your First Agent
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ) : agents.filter(a => a.status === 'active').length === 0 ? (
+                  <Card className="glass-card border-dashed border-white/30 bg-white/5">
+                    <CardContent className="flex flex-col items-center justify-center py-8">
+                      <Bot className="h-12 w-12 text-muted-foreground mb-4" />
+                      <h3 className="font-semibold text-foreground mb-2">No Active Agents</h3>
+                      <p className="text-sm text-muted-foreground text-center mb-4">
+                        You have {agents.length} agent{agents.length !== 1 ? 's' : ''}, but none are active. 
+                        Configure your agents with valid API keys to make them active.
+                      </p>
+                      <Button 
+                        variant="outline" 
+                        className="glass-card border-white/30"
+                        onClick={onNavigateToAgents}
+                      >
+                        <Settings className="h-4 w-4 mr-2" />
+                        Configure Agents
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <div className="space-y-3 max-h-64 overflow-y-auto">
+                    {agents.filter(a => a.status === 'active').map(agent => (
+                      <Card 
+                        key={agent.id}
+                        className={`glass-card border-white/30 cursor-pointer transition-all duration-200 ${
+                          selectedAgents.includes(agent.id) 
+                            ? 'ring-2 ring-brand-purple/50 bg-brand-purple/5' 
+                            : 'hover:bg-white/5'
+                        }`}
+                        onClick={() => {
+                          if (selectedAgents.includes(agent.id)) {
                             setSelectedAgents(selectedAgents.filter(id => id !== agent.id))
+                          } else {
+                            setSelectedAgents([...selectedAgents, agent.id])
                           }
                         }}
-                        className="rounded border-gray-300"
-                      />
-                      <span className="text-sm text-foreground">{agent.name}</span>
-                      <Badge className="bg-green-100 text-green-800 border-green-200 text-xs">
-                        {agent.provider}
-                      </Badge>
-                    </label>
-                  ))}
-                </div>
+                      >
+                        <CardContent className="p-4">
+                          <div className="flex items-start gap-3">
+                            <div className={`w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors mt-0.5 ${
+                              selectedAgents.includes(agent.id)
+                                ? 'bg-brand-purple border-brand-purple'
+                                : 'border-gray-300 hover:border-brand-purple/50'
+                            }`}>
+                              {selectedAgents.includes(agent.id) && (
+                                <CheckCircle className="h-3 w-3 text-white" />
+                              )}
+                            </div>
+                            
+                            <div className="flex-1 min-w-0">
+                              <div className="mb-2">
+                                <h4 className="font-medium text-foreground mb-1.5 break-words">{agent.name}</h4>
+                                <div className="flex flex-wrap gap-1.5">
+                                  <Badge className="bg-green-100 text-green-800 border-green-200 text-xs whitespace-nowrap">
+                                    {agent.provider}
+                                  </Badge>
+                                  <Badge className="bg-blue-100 text-blue-800 border-blue-200 text-xs truncate max-w-[200px]" title={agent.model}>
+                                    {agent.model}
+                                  </Badge>
+                                </div>
+                              </div>
+                              <p className="text-xs text-muted-foreground">
+                                Active agent ready for conversation
+                              </p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                )}
+                
+                {selectedAgents.length > 0 && selectedAgents.length < 2 && (
+                  <div className="flex items-center gap-2 text-sm text-yellow-600 bg-yellow-50 dark:bg-yellow-900/20 p-3 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                    <AlertCircle className="h-4 w-4" />
+                    <span>Please select at least 2 agents for a conversation</span>
+                  </div>
+                )}
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex gap-2 pt-2">
                 <Button
                   onClick={createConversation}
+                  disabled={!conversationName.trim() || selectedAgents.length < 2}
                   className="flex-1 bg-brand-purple hover:bg-brand-purple/90 text-white"
-                  size="sm"
                 >
-                  Create
+                  <MessageSquare className="h-4 w-4 mr-2" />
+                  Create Conversation
                 </Button>
                 <Button
-                  onClick={() => setIsCreating(false)}
+                  onClick={() => {
+                    setIsCreating(false)
+                    setConversationName('')
+                    setSelectedAgents([])
+                  }}
                   variant="outline"
-                  size="sm"
                   className="glass-card border-white/30"
                 >
                   Cancel
@@ -384,14 +530,14 @@ const EnhancedConversationView = ({ agents = [] }) => {
       <div className="lg:col-span-2 flex flex-col">
         {selectedConversation ? (
           <>
-            {/* Chat Header */}
-            <Card className="glass-card border-white/30 mb-4">
+            {/* Chat Header - FIXED POSITION */}
+            <Card className="glass-card border-white/30 mb-4 sticky top-0 z-10 shadow-lg">
               <CardContent className="p-4">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between mb-3">
                   <div>
                     <h3 className="font-semibold text-foreground">{selectedConversation.name}</h3>
                     <p className="text-sm text-muted-foreground">
-                      {selectedConversation.participants?.length || 0} participants
+                      {selectedConversation.participants?.length || 0} participants • {messages.length} messages
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
@@ -400,46 +546,86 @@ const EnhancedConversationView = ({ agents = [] }) => {
                         ? 'bg-green-100 text-green-800 border-green-200 animate-pulse' 
                         : 'bg-gray-100 text-gray-800 border-gray-200'
                     }`}>
-                      {isActive ? 'Active' : 'Inactive'}
+                      {isActive ? '🟢 Active' : '⚫ Inactive'}
                     </Badge>
-                    
-                    {!isActive ? (
+                  </div>
+                </div>
+                
+                {/* HITL Controls */}
+                <div className="flex items-center gap-2 pt-3 border-t border-white/10">
+                  {!isActive ? (
+                    <Button
+                      onClick={startConversation}
+                      size="sm"
+                      className="bg-green-600 hover:bg-green-700 text-white"
+                    >
+                      <Play className="h-4 w-4 mr-2" />
+                      Start Conversation
+                    </Button>
+                  ) : (
+                    <>
                       <Button
-                        onClick={startConversation}
+                        onClick={stopConversation}
                         size="sm"
-                        className="bg-green-600 hover:bg-green-700 text-white"
+                        className="bg-red-600 hover:bg-red-700 text-white"
                       >
-                        <Play className="h-4 w-4 mr-1" />
-                        Start
+                        <Square className="h-4 w-4 mr-2" />
+                        Stop
                       </Button>
-                    ) : (
                       <Button
                         onClick={stopConversation}
                         size="sm"
                         variant="outline"
                         className="glass-card border-white/30"
                       >
-                        <Pause className="h-4 w-4 mr-1" />
+                        <Pause className="h-4 w-4 mr-2" />
                         Pause
                       </Button>
-                    )}
-
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="glass-card border-white/30"
-                    >
-                      <Settings className="h-4 w-4" />
-                    </Button>
-                  </div>
+                    </>
+                  )}
+                  
+                  <Button
+                    onClick={() => setAutoScroll(!autoScroll)}
+                    size="sm"
+                    variant="outline"
+                    className={`glass-card border-white/30 ${
+                      autoScroll ? 'bg-brand-purple/10' : ''
+                    }`}
+                    title={autoScroll ? 'Auto-scroll enabled' : 'Auto-scroll disabled'}
+                  >
+                    {autoScroll ? '📍' : '🔓'} {autoScroll ? 'Auto-scroll' : 'Manual'}
+                  </Button>
+                  
+                  <Button
+                    onClick={scrollToBottom}
+                    size="sm"
+                    variant="outline"
+                    className="glass-card border-white/30"
+                  >
+                    ⬇️ Jump to Bottom
+                  </Button>
+                  
+                  <div className="flex-1" />
+                  
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="glass-card border-white/30"
+                  >
+                    <Settings className="h-4 w-4" />
+                  </Button>
                 </div>
               </CardContent>
             </Card>
 
             {/* Messages Area */}
-            <Card className="glass-card border-white/30 flex-1 flex flex-col">
-              <CardContent className="flex-1 flex flex-col p-4">
-                <div className="flex-1 overflow-y-auto space-y-4 mb-4">
+            <Card className="glass-card border-white/30 flex-1 flex flex-col overflow-hidden">
+              <CardContent className="flex-1 flex flex-col p-4 overflow-hidden">
+                <div 
+                  ref={messagesContainerRef}
+                  onScroll={handleScroll}
+                  className="flex-1 overflow-y-auto space-y-4 mb-4"
+                >
                   {messages.length === 0 ? (
                     <div className="flex flex-col items-center justify-center h-full text-center">
                       <div className="w-16 h-16 bg-gradient-to-br from-brand-purple to-brand-teal rounded-2xl flex items-center justify-center mb-4 animate-float-gentle">

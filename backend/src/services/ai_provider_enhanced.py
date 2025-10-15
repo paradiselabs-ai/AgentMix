@@ -10,108 +10,50 @@ class EnhancedAIProviderService:
         self.providers = {
             'openai': {
                 'name': 'OpenAI',
-                'models': ['gpt-4', 'gpt-4-turbo', 'gpt-3.5-turbo', 'gpt-4o', 'gpt-4o-mini'],
+                'models': [],  # Models populated dynamically via API discovery
                 'base_url': 'https://api.openai.com/v1',
                 'requires_key': True,
                 'cost': 'paid'
             },
             'anthropic': {
                 'name': 'Anthropic',
-                'models': ['claude-3-5-sonnet-20241022', 'claude-3-haiku-20240307', 'claude-3-opus-20240229'],
+                'models': [],  # Models populated dynamically via API discovery
                 'base_url': 'https://api.anthropic.com/v1',
                 'requires_key': True,
                 'cost': 'paid'
             },
             'openrouter': {
                 'name': 'OpenRouter',
-                'models': [
-                    'meta-llama/llama-3.1-8b-instruct:free',
-                    'meta-llama/llama-3.1-70b-instruct:free',
-                    'google/gemma-2-9b-it:free',
-                    'mistralai/mistral-7b-instruct:free',
-                    'huggingfaceh4/zephyr-7b-beta:free',
-                    'openchat/openchat-7b:free',
-                    'gryphe/mythomist-7b:free',
-                    'undi95/toppy-m-7b:free',
-                    'microsoft/wizardlm-2-8x22b',
-                    'openai/gpt-3.5-turbo',
-                    'anthropic/claude-3-haiku',
-                    'google/gemini-pro'
-                ],
+                'models': [],  # Models populated dynamically via API discovery
                 'base_url': 'https://openrouter.ai/api/v1',
                 'requires_key': True,
                 'cost': 'freemium',
-                'free_models': [
-                    'meta-llama/llama-3.1-8b-instruct:free',
-                    'meta-llama/llama-3.1-70b-instruct:free',
-                    'google/gemma-2-9b-it:free',
-                    'mistralai/mistral-7b-instruct:free',
-                    'huggingfaceh4/zephyr-7b-beta:free',
-                    'openchat/openchat-7b:free',
-                    'gryphe/mythomist-7b:free',
-                    'undi95/toppy-m-7b:free'
-                ]
+                'free_models': []  # Populated dynamically
             },
             'together': {
                 'name': 'Together AI',
-                'models': [
-                    'meta-llama/Llama-3-8b-chat-hf',
-                    'meta-llama/Llama-3-70b-chat-hf',
-                    'mistralai/Mistral-7B-Instruct-v0.1',
-                    'mistralai/Mixtral-8x7B-Instruct-v0.1',
-                    'NousResearch/Nous-Hermes-2-Mixtral-8x7B-DPO',
-                    'teknium/OpenHermes-2.5-Mistral-7B',
-                    'togethercomputer/RedPajama-INCITE-Chat-3B-v1'
-                ],
+                'models': [],  # Models populated dynamically via API discovery
                 'base_url': 'https://api.together.xyz/v1',
                 'requires_key': True,
                 'cost': 'affordable'
             },
             'groq': {
                 'name': 'Groq',
-                'models': [
-                    'llama-3.1-70b-versatile',
-                    'llama-3.1-8b-instant',
-                    'mixtral-8x7b-32768',
-                    'gemma-7b-it',
-                    'gemma2-9b-it'
-                ],
+                'models': [],  # Models populated dynamically via API discovery
                 'base_url': 'https://api.groq.com/openai/v1',
                 'requires_key': True,
                 'cost': 'affordable'
             },
             'huggingface': {
                 'name': 'Hugging Face',
-                'models': [
-                    'microsoft/DialoGPT-medium',
-                    'facebook/blenderbot-400M-distill',
-                    'microsoft/DialoGPT-large',
-                    'facebook/blenderbot-1B-distill'
-                ],
+                'models': [],  # Models populated dynamically via API discovery
                 'base_url': 'https://api-inference.huggingface.co/models',
                 'requires_key': True,
                 'cost': 'free'
             },
             'ollama': {
                 'name': 'Ollama (Local)',
-                'models': [
-                    'llama3.1:8b',
-                    'llama3.1:70b',
-                    'llama3.2:3b',
-                    'llama3.2:1b',
-                    'mistral:7b',
-                    'mixtral:8x7b',
-                    'codellama:7b',
-                    'codellama:13b',
-                    'phi3:mini',
-                    'phi3:medium',
-                    'gemma2:9b',
-                    'gemma2:27b',
-                    'qwen2:7b',
-                    'deepseek-coder:6.7b',
-                    'nomic-embed-text',
-                    'all-minilm'
-                ],
+                'models': [],  # Models discovered from local Ollama instance
                 'base_url': 'http://localhost:11434/api',
                 'requires_key': False,
                 'cost': 'free',
@@ -120,17 +62,7 @@ class EnhancedAIProviderService:
             },
             'lmstudio': {
                 'name': 'LM Studio (Local)',
-                'models': [
-                    'local-model',
-                    'llama-3.1-8b-instruct',
-                    'llama-3.1-70b-instruct',
-                    'mistral-7b-instruct',
-                    'mixtral-8x7b-instruct',
-                    'codellama-7b-instruct',
-                    'phi-3-mini-instruct',
-                    'gemma-2-9b-instruct',
-                    'qwen2-7b-instruct'
-                ],
+                'models': [],  # Models discovered from local LM Studio instance
                 'base_url': 'http://localhost:1234/v1',
                 'requires_key': False,
                 'cost': 'free',
@@ -139,7 +71,7 @@ class EnhancedAIProviderService:
             },
             'custom': {
                 'name': 'Custom API',
-                'models': ['custom-model'],
+                'models': [],  # Models must be manually configured
                 'base_url': 'https://api.example.com/v1',
                 'requires_key': True,
                 'cost': 'variable'
@@ -490,21 +422,21 @@ class EnhancedAIProviderService:
             headers = {
                 'Authorization': f'Bearer {api_key}',
                 'Content-Type': 'application/json',
-                'HTTP-Referer': 'https://agentmix.ai',
+                'HTTP-Referer': 'http://localhost:5174',  # Fixed to match actual frontend port
                 'X-Title': 'AgentMix'
             }
             
             data = {
                 'model': model,
                 'messages': messages,
-                'max_tokens': config.get('max_tokens', 150) if config else 150,
-                'temperature': config.get('temperature', 0.7) if config else 0.7
+                'max_tokens': config.get('max_tokens', 150) if config else 150
             }
             
             response = requests.post(
                 'https://openrouter.ai/api/v1/chat/completions',
                 headers=headers,
-                json=data
+                json=data,
+                timeout=30
             )
             
             if response.status_code == 200:
@@ -518,9 +450,19 @@ class EnhancedAIProviderService:
                     }
                 }
             else:
-                return {'success': False, 'error': f'API Error: {response.status_code} - {response.text}'}
+                # Better error handling
+                error_detail = response.text
+                try:
+                    error_json = response.json()
+                    if 'error' in error_json:
+                        error_detail = error_json['error'].get('message', error_detail)
+                except:
+                    pass
+                return {'success': False, 'error': f'API Error: {response.status_code} - {error_detail}'}
                 
         except Exception as e:
+            import traceback
+            traceback.print_exc()
             return {'success': False, 'error': str(e)}
     
     def _call_together(self, model: str, api_key: str, messages: List[Dict], config: Dict = None) -> Dict[str, Any]:
@@ -833,7 +775,7 @@ class EnhancedAIProviderService:
             headers = {
                 'Authorization': f'Bearer {api_key}',
                 'Content-Type': 'application/json',
-                'HTTP-Referer': 'http://localhost:5173',
+                'HTTP-Referer': 'http://localhost:5174',  # Fixed port
                 'X-Title': 'AgentMix'
             }
             
@@ -842,8 +784,7 @@ class EnhancedAIProviderService:
                 'messages': [
                     {'role': 'user', 'content': prompt}
                 ],
-                'max_tokens': max_tokens,
-                'temperature': 0.7
+                'max_tokens': max_tokens
             }
             
             response = requests.post(
@@ -860,9 +801,19 @@ class EnhancedAIProviderService:
                 else:
                     return "No response generated"
             else:
-                return f"API Error: {response.status_code} - {response.text}"
+                # Return detailed error for debugging
+                error_detail = response.text
+                try:
+                    error_json = response.json()
+                    if 'error' in error_json:
+                        error_detail = error_json['error'].get('message', error_detail)
+                except:
+                    pass
+                return f"API Error: {response.status_code} - {error_detail}"
                 
         except Exception as e:
+            import traceback
+            traceback.print_exc()
             return f"Error: {str(e)}"
     
     def _generate_openai_response(self, model: str, api_key: str, prompt: str, max_tokens: int) -> str:

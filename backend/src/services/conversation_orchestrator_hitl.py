@@ -197,25 +197,28 @@ class ConversationOrchestratorHITL:
     def stop_conversation(self, conversation_id: str) -> bool:
         """Stop an AI-to-AI conversation"""
         try:
+            # Mark as stopped even if not in active_conversations (handles error cases)
             if conversation_id in self.active_conversations:
                 self.active_conversations[conversation_id]['running'] = False
-                
-                # Update conversation status in database
-                conversation = Conversation.query.get(conversation_id)
-                if conversation:
-                    conversation.status = 'completed'
-                    db.session.commit()
-                
-                # Emit status update
-                self.socketio.emit('conversation_status', {
-                    'conversation_id': conversation_id,
-                    'status': 'completed'
-                })
-                
-                return True
-            return False
+                del self.active_conversations[conversation_id]
+            
+            # Always update database status
+            conversation = Conversation.query.get(conversation_id)
+            if conversation:
+                conversation.status = 'completed'
+                db.session.commit()
+            
+            # Emit status update
+            self.socketio.emit('conversation_status', {
+                'conversation_id': conversation_id,
+                'status': 'completed'
+            })
+            
+            return True
         except Exception as e:
             print(f"Error stopping conversation: {e}")
+            import traceback
+            traceback.print_exc()
             return False
     
     def _run_conversation(self, conversation_id: str):
@@ -281,6 +284,11 @@ class ConversationOrchestratorHITL:
                         next_speaker,
                         conv_data['message_count']
                     )
+                    
+                    # Check if response generation failed (returns None on error)
+                    if response is None:
+                        print(f"Response generation failed for {next_speaker.name}, stopping conversation")
+                        break
                     
                     if response:
                         # Check if AI is requesting human input
@@ -382,31 +390,60 @@ class ConversationOrchestratorHITL:
                     max_tokens=150
                 )
                 
-                if response and response.strip():
+                # Check if response is an error message
+                if response and not response.startswith('Error:') and not response.startswith('API Error:'):
                     return response.strip()
                 else:
-                    # Fallback to demo response if API fails
-                    demo_responses = [
-                        "I think we should focus on the user experience first.",
-                        "That's an interesting point. Let me build on that idea.",
-                        "Could we explore the technical implications of this approach?",
-                        "Based on the conversation so far, I suggest we prioritize the core features.",
-                        "I agree with the previous points, and I'd like to add scalability considerations."
-                    ]
-                    return random.choice(demo_responses)
+                    # Log the error and stop the conversation
+                    error_msg = response if response else "No response from AI provider"
+                    print(f"AI API error for {agent.name}: {error_msg}")
+                    
+                    # Send system message about the error
+                    self._send_system_message(
+                        conversation_id,
+                        f"⚠️ Conversation paused: {agent.name} encountered an API error. Please check the agent's configuration and API key."
+                    )
+                    
+                    # Pause the conversation
+                    conv_data = self.active_conversations.get(conversation_id)
+                    if conv_data:
+                        conv_data['paused'] = True
+                        conv_data['running'] = False
+                    
+                    # Emit pause event
+                    self.socketio.emit('conversation_paused', {
+                        'conversation_id': conversation_id,
+                        'reason': f'API error for {agent.name}',
+                        'status': 'paused'
+                    })
+                    
+                    return None  # Return None to signal error
                     
             except Exception as e:
                 print(f"Error generating AI response: {e}")
-                import random
-                # Fallback to demo response
-                demo_responses = [
-                    "I think we should focus on the user experience first.",
-                    "That's an interesting point. Let me build on that idea.",
-                    "Could we explore the technical implications of this approach?",
-                    "Based on the conversation so far, I suggest we prioritize the core features.",
-                    "I agree with the previous points, and I'd like to add scalability considerations."
-                ]
-                return random.choice(demo_responses)
+                import traceback
+                traceback.print_exc()
+                
+                # Send system message about the error
+                self._send_system_message(
+                    conversation_id,
+                    f"⚠️ Conversation paused: {agent.name} encountered an unexpected error. Please check the logs."
+                )
+                
+                # Pause the conversation
+                conv_data = self.active_conversations.get(conversation_id)
+                if conv_data:
+                    conv_data['paused'] = True
+                    conv_data['running'] = False
+                
+                # Emit pause event
+                self.socketio.emit('conversation_paused', {
+                    'conversation_id': conversation_id,
+                    'reason': f'Unexpected error for {agent.name}',
+                    'status': 'paused'
+                })
+                
+                return None  # Return None to signal error
                 
         except Exception as e:
             print(f"Error generating agent response: {e}")

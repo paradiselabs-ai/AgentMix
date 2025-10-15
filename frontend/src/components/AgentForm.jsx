@@ -83,12 +83,11 @@ const AgentForm = ({ onSuccess, onCancel, agent = null }) => {
             message: `✓ API key valid. Discovered ${data.total_count} models.` 
           })
         } else {
-          // Fallback to static models if discovery fails
-          const selectedProvider = providers.find(p => p.id === provider)
-          setAvailableModels(selectedProvider?.models || [])
+          // No models discovered - this is now an error since we removed hardcoded fallbacks
+          setAvailableModels([])
           setKeyValidation({ 
-            status: 'warning', 
-            message: '✓ API key valid. Using default models (discovery failed).' 
+            status: 'error', 
+            message: '✗ API key valid but no models could be discovered. Please check your API key permissions.' 
           })
         }
       } else {
@@ -96,8 +95,7 @@ const AgentForm = ({ onSuccess, onCancel, agent = null }) => {
           status: 'error', 
           message: `✗ ${data.error || 'Invalid API key'}` 
         })
-        const selectedProvider = providers.find(p => p.id === provider)
-        setAvailableModels(selectedProvider?.models || [])
+        setAvailableModels([])
       }
     } catch (error) {
       console.error('Error discovering models:', error)
@@ -105,8 +103,7 @@ const AgentForm = ({ onSuccess, onCancel, agent = null }) => {
         status: 'error', 
         message: '✗ Error validating API key' 
       })
-      const selectedProvider = providers.find(p => p.id === provider)
-      setAvailableModels(selectedProvider?.models || [])
+      setAvailableModels([])
     } finally {
       setDiscoveringModels(false)
     }
@@ -121,9 +118,8 @@ const AgentForm = ({ onSuccess, onCancel, agent = null }) => {
     if (['ollama', 'lmstudio'].includes(provider)) {
       discoverModels(provider, '')
     } else {
-      // Set default models for other providers
-      const selectedProvider = providers.find(p => p.id === provider)
-      setAvailableModels(selectedProvider?.models || [])
+      // No default models shown - user must provide API key first
+      setAvailableModels([])
     }
   }
 
@@ -188,7 +184,7 @@ const AgentForm = ({ onSuccess, onCancel, agent = null }) => {
   }
 
   const selectedProvider = providers.find(p => p.id === formData.provider)
-  const modelsToShow = availableModels.length > 0 ? availableModels : (selectedProvider?.models || [])
+  const modelsToShow = availableModels.length > 0 ? availableModels : []
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -202,6 +198,7 @@ const AgentForm = ({ onSuccess, onCancel, agent = null }) => {
               value={formData.name}
               onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
               placeholder="Enter agent name"
+              className="text-foreground"
               required
             />
           </div>
@@ -239,6 +236,7 @@ const AgentForm = ({ onSuccess, onCancel, agent = null }) => {
                   onChange={(e) => handleApiKeyChange(e.target.value)}
                   onBlur={handleApiKeyBlur}
                   placeholder="Enter API key"
+                  className="text-foreground"
                   required
                 />
                 {keyValidation.status && (
@@ -282,15 +280,16 @@ const AgentForm = ({ onSuccess, onCancel, agent = null }) => {
               disabled={!selectedProvider || discoveringModels}
             >
               <SelectTrigger>
-                <SelectValue placeholder={discoveringModels ? "Discovering models..." : "Select model"} />
+                <SelectValue placeholder={
+                  discoveringModels ? "Discovering models..." : 
+                  availableModels.length > 0 ? "Select model" :
+                  selectedProvider?.requires_key ? "Enter API key to discover models" : "Discover models first"
+                } />
               </SelectTrigger>
               <SelectContent>
                 {modelsToShow.map((model) => (
                   <SelectItem key={model} value={model}>
                     {model}
-                    {selectedProvider?.free_models?.includes(model) && (
-                      <span className="ml-2 text-green-600 text-xs">(Free)</span>
-                    )}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -318,6 +317,7 @@ const AgentForm = ({ onSuccess, onCancel, agent = null }) => {
                   value={formData.config[field.name] || field.default || ''}
                   onChange={(e) => handleConfigChange(field.name, e.target.value)}
                   placeholder={`Enter ${field.name}`}
+                  className="text-foreground"
                   required={field.required}
                 />
               )}
@@ -327,6 +327,7 @@ const AgentForm = ({ onSuccess, onCancel, agent = null }) => {
                   value={formData.config[field.name] || field.default || ''}
                   onChange={(e) => handleConfigChange(field.name, e.target.value)}
                   placeholder="Enter system message"
+                  className="text-foreground"
                   rows={3}
                 />
               )}
@@ -337,9 +338,10 @@ const AgentForm = ({ onSuccess, onCancel, agent = null }) => {
                   step={field.type === 'float' ? '0.1' : '1'}
                   min={field.min}
                   max={field.max}
-                  value={formData.config[field.name] || field.default || ''}
-                  onChange={(e) => handleConfigChange(field.name, parseFloat(e.target.value))}
+                  value={formData.config[field.name] ?? field.default ?? ''}
+                  onChange={(e) => handleConfigChange(field.name, field.type === 'int' ? parseInt(e.target.value) : parseFloat(e.target.value))}
                   placeholder={`Enter ${field.name}`}
+                  className="text-foreground"
                 />
               )}
             </div>

@@ -246,28 +246,77 @@ const EnhancedDashboard = ({ agents = [], conversations = [] }) => {
         </p>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
-        <StatCard
-          title="Total Agents"
-          value={stats.totalAgents}
-          icon={Users}
-          color="brand-purple"
-        />
-        <StatCard
-          title="Active Agents"
-          value={stats.activeAgents}
-          icon={Activity}
-          color="green"
-        />
-        <StatCard
-          title="Conversations"
-          value={stats.totalConversations}
-          icon={MessageSquare}
-          color="brand-teal"
-        />
-        <StatCard
-          title="Messages"
+      {/* Empty State - Show when no agents or data */}
+      {stats.totalAgents === 0 && stats.totalConversations === 0 ? (
+        <Card className="glass-card border-white/30">
+          <CardContent className="flex flex-col items-center justify-center py-20">
+            <div className="w-24 h-24 bg-gradient-to-br from-brand-purple to-brand-teal rounded-3xl flex items-center justify-center mb-8 animate-float-gentle">
+              <Bot className="h-12 w-12 text-white" />
+            </div>
+            <h2 className="text-display-md text-foreground mb-3">Welcome to Your AI Collaboration Hub</h2>
+            <p className="text-body text-muted-foreground text-center mb-8 max-w-2xl">
+              AgentMix enables multiple AI agents to collaborate in real-time conversations with human oversight. 
+              Start by creating your first AI agent to begin building intelligent collaborative workflows.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button className="bg-brand-purple hover:bg-brand-purple/90 text-white px-8 py-3">
+                <Users className="h-5 w-5 mr-2" />
+                Create Your First Agent
+              </Button>
+              <Button variant="outline" className="px-8 py-3 border-white/30 hover:bg-white/10">
+                <Play className="h-5 w-5 mr-2" />
+                Watch Demo Video
+              </Button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 w-full max-w-4xl">
+              <div className="text-center">
+                <div className="w-12 h-12 bg-brand-purple/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <MessageSquare className="h-6 w-6 text-brand-purple" />
+                </div>
+                <h3 className="font-semibold text-foreground mb-1">Real-time Conversations</h3>
+                <p className="text-sm text-muted-foreground">AI agents communicate and collaborate instantly</p>
+              </div>
+              <div className="text-center">
+                <div className="w-12 h-12 bg-brand-teal/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <Settings className="h-6 w-6 text-brand-teal" />
+                </div>
+                <h3 className="font-semibold text-foreground mb-1">Human-in-the-Loop</h3>
+                <p className="text-sm text-muted-foreground">Pause, resume, and intervene in AI conversations</p>
+              </div>
+              <div className="text-center">
+                <div className="w-12 h-12 bg-brand-pink/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <Wrench className="h-6 w-6 text-brand-pink" />
+                </div>
+                <h3 className="font-semibold text-foreground mb-1">Tool Integration</h3>
+                <p className="text-sm text-muted-foreground">Extend agent capabilities with custom tools</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      ) : (
+        <>
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
+            <StatCard
+              title="Total Agents"
+              value={stats.totalAgents}
+              icon={Users}
+              color="brand-purple"
+            />
+            <StatCard
+              title="Active Agents"
+              value={stats.activeAgents}
+              icon={Activity}
+              color="green"
+            />
+            <StatCard
+              title="Conversations"
+              value={stats.totalConversations}
+              icon={MessageSquare}
+              color="brand-teal"
+            />
+            <StatCard
+              title="Messages"
           value={stats.totalMessages}
           icon={CheckCircle}
           color="blue"
@@ -462,6 +511,8 @@ const EnhancedDashboard = ({ agents = [], conversations = [] }) => {
           </CardContent>
         </Card>
       </div>
+        </>
+      )}
 
     </div>
   );

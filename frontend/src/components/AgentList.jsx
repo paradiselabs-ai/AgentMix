@@ -89,15 +89,18 @@ const AgentList = ({ agents, loading, onAgentUpdated, onAgentSelect }) => {
       })
 
       const data = await response.json()
+      setTestingAgent(null)
+      
       if (data.success) {
-        alert('Connection successful! Response: ' + data.response)
+        alert(`✅ ${agent.name} Test Successful!\n\nProvider: ${agent.provider}\nModel: ${agent.model}\n\nResponse: ${data.response}\n\nThis agent is ready to use in conversations!`)
         onAgentUpdated()
       } else {
-        alert('Connection failed: ' + data.error)
+        alert(`❌ ${agent.name} Test Failed!\n\nProvider: ${agent.provider}\nModel: ${agent.model}\n\nError: ${data.error}\n\nPlease check:\n- API key is valid\n- Model name is correct for this provider\n- Provider service is available`)
       }
     } catch (error) {
       console.error('Error testing connection:', error)
-      alert('Error testing connection')
+      setTestingAgent(null)
+      alert(`❌ ${agent.name} Test Error!\n\nCould not connect to test endpoint.\n\nError: ${error.message}`)
     } finally {
       setTestingAgent(null)
     }
@@ -278,6 +281,7 @@ const AgentList = ({ agents, loading, onAgentUpdated, onAgentSelect }) => {
               onDelete={handleDeleteAgent}
               onToggleStatus={handleStatusToggle}
               onTest={handleTestConnection}
+              isTesting={testingAgent === agent.id}
               className={viewMode === 'list' ? 'max-w-none' : ''}
             />
           ))}

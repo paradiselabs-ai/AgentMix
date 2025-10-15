@@ -69,24 +69,24 @@ def test_agent_connection(agent_id):
     try:
         agent = AIAgent.query.get_or_404(agent_id)
         
-        # Simple test message
-        test_messages = [
-            {
-                'role': 'user',
-                'content': 'Hello, please respond with "Connection successful"'
-            }
-        ]
+        # Use enhanced AI provider service for better provider support
+        from src.services.ai_provider_enhanced import EnhancedAIProviderService
+        ai_service = EnhancedAIProviderService()
+        
+        # Simple test prompt
+        test_prompt = 'Hello, please respond with "Connection successful" to confirm you are working.'
         
         # Call AI provider with minimal config
-        result = ai_provider_service.call_ai(
+        response = ai_service.generate_response(
             provider=agent.provider,
             model=agent.model,
             api_key=agent.api_key,
-            messages=test_messages,
-            config={'max_tokens': 50}
+            prompt=test_prompt,
+            max_tokens=50
         )
         
-        if result['success']:
+        # Check if response is valid (not an error message)
+        if response and not response.startswith('Error:') and not response.startswith('API Error:'):
             # Update agent status
             agent.status = 'active'
             db.session.commit()
@@ -94,7 +94,7 @@ def test_agent_connection(agent_id):
             return jsonify({
                 'success': True,
                 'message': 'Agent connection successful',
-                'response': result['response']['content']
+                'response': response
             })
         else:
             # Update agent status
@@ -103,10 +103,12 @@ def test_agent_connection(agent_id):
             
             return jsonify({
                 'success': False,
-                'error': result['error']
+                'error': response if response else 'No response from AI provider'
             }), 500
             
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         return jsonify({
             'success': False,
             'error': str(e)

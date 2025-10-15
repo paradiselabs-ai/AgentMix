@@ -144,7 +144,10 @@ function App() {
               <h2 className="text-display-md gradient-text">AI Conversations</h2>
               <p className="text-body text-muted-foreground">Create and manage AI-to-AI conversations with human oversight</p>
             </div>
-            <EnhancedConversationView agents={agents} />
+            <EnhancedConversationView 
+              agents={agents} 
+              onNavigateToAgents={() => setActiveTab('agents')} 
+            />
           </div>
         );
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Bot, Settings, Play, Pause, Trash2, Edit3, Activity, Clock, MessageSquare, Zap, Star } from 'lucide-react'
+import { Bot, Settings, Play, Pause, Trash2, Edit3, Activity, Clock, MessageSquare, Zap, Star, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
@@ -10,6 +10,7 @@ const EnhancedAgentCard = ({
   onDelete, 
   onToggleStatus, 
   onTest,
+  isTesting = false,
   className = '' 
 }) => {
   const [isHovered, setIsHovered] = useState(false)
@@ -208,10 +209,20 @@ const EnhancedAgentCard = ({
             variant="outline"
             size="sm"
             onClick={() => onTest?.(agent)}
+            disabled={isTesting}
             className="bg-white/50 border-white/30 hover:bg-white/70"
           >
-            <MessageSquare className="h-3 w-3 mr-1" />
-            Test
+            {isTesting ? (
+              <>
+                <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+                Testing...
+              </>
+            ) : (
+              <>
+                <MessageSquare className="h-3 w-3 mr-1" />
+                Test
+              </>
+            )}
           </Button>
 
           <Button
