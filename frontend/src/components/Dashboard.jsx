@@ -22,7 +22,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
-const EnhancedDashboard = ({ agents = [], conversations = [] }) => {
+const Dashboard = ({ agents = [], conversations = [] }) => {
   const [stats, setStats] = useState({
     totalAgents: 0,
     activeAgents: 0,
@@ -38,12 +38,12 @@ const EnhancedDashboard = ({ agents = [], conversations = [] }) => {
   const [activityData, setActivityData] = useState([]);
   const [agentPerformance, setAgentPerformance] = useState([]);
   const [conversationTrends, setConversationTrends] = useState([]);
-  const [realtimeMetrics, setRealtimeMetrics] = useState([]);
 
   useEffect(() => {
     fetchDashboardData();
     const interval = setInterval(fetchDashboardData, 30000); // Update every 30 seconds
     return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [agents, conversations]);
 
   const fetchDashboardData = async () => {
@@ -191,6 +191,7 @@ const EnhancedDashboard = ({ agents = [], conversations = [] }) => {
     setAgentPerformance(performance);
   };
 
+  // eslint-disable-next-line no-unused-vars
   const StatCard = ({ title, value, icon: Icon, change, color = 'brand-purple', trend = 'up', onClick }) => {
     const colorClasses = {
       'brand-purple': 'text-brand-purple bg-brand-purple/10 border-brand-purple/20',
@@ -226,6 +227,7 @@ const EnhancedDashboard = ({ agents = [], conversations = [] }) => {
     );
   };
 
+  // eslint-disable-next-line no-unused-vars
   const QuickActionCard = ({ title, description, icon: Icon, color, onClick, badge }) => (
     <Card className="glass-card card-hover cursor-pointer group border-white/30" onClick={onClick}>
       <CardContent className="p-6">
@@ -252,10 +254,6 @@ const EnhancedDashboard = ({ agents = [], conversations = [] }) => {
     { name: 'Active', value: stats.activeAgents, color: '#10B981' },
     { name: 'Idle', value: Math.max(0, stats.totalAgents - stats.activeAgents - (stats.processingAgents || 0)), color: '#6B7280' },
     { name: 'Processing', value: stats.processingAgents || 0, color: '#EC4899' }
-  ];
-
-  const quickActions = [
-    // Remove duplicate quick actions - sidebar already has these
   ];
 
   return (
@@ -569,4 +567,4 @@ const EnhancedDashboard = ({ agents = [], conversations = [] }) => {
   );
 };
 
-export default EnhancedDashboard;
+export default Dashboard;

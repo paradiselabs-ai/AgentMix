@@ -5,17 +5,8 @@ import { Badge } from '@/components/ui/badge.jsx'
 import { Input } from '@/components/ui/input.jsx'
 import { 
   Bot, 
-  Settings, 
-  Play, 
-  Pause, 
-  Trash2, 
-  MessageSquare, 
   Loader2,
-  CheckCircle,
-  XCircle,
-  Clock,
   Search,
-  Filter,
   Plus,
   Grid,
   List
@@ -23,38 +14,12 @@ import {
 import AgentForm from './AgentForm.jsx'
 import AgentCard from './AgentCard.jsx'
 
-const AgentList = ({ agents, loading, onAgentUpdated, onAgentSelect }) => {
+const AgentList = ({ agents, loading, onAgentUpdated }) => {
   const [editingAgent, setEditingAgent] = useState(null)
   const [testingAgent, setTestingAgent] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [filterStatus, setFilterStatus] = useState('all')
   const [viewMode, setViewMode] = useState('grid') // 'grid' or 'list'
-
-  const getStatusIcon = (status) => {
-    switch (status) {
-      case 'active':
-        return <CheckCircle className="h-4 w-4 text-green-500" />
-      case 'inactive':
-        return <Clock className="h-4 w-4 text-yellow-500" />
-      case 'error':
-        return <XCircle className="h-4 w-4 text-red-500" />
-      default:
-        return <Clock className="h-4 w-4 text-gray-500" />
-    }
-  }
-
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'active':
-        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
-      case 'inactive':
-        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300'
-      case 'error':
-        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
-      default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300'
-    }
-  }
 
   const handleStatusToggle = async (agent) => {
     const newStatus = agent.status === 'active' ? 'inactive' : 'active'

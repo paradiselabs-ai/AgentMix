@@ -61,6 +61,7 @@ const ConversationViewHITL = ({ agents }) => {
 
   useEffect(() => {
     fetchConversations()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Subscribe to real-time events via context socket

@@ -48,12 +48,12 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 
-const EnhancedToolsManager = ({ agents = [] }) => {
+const ToolsManager = ({ agents = [] }) => {
   const [tools, setTools] = useState([])
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [isCreating, setIsCreating] = useState(false)
-  const [editingTool, setEditingTool] = useState(null)
+  const [_editingTool, setEditingTool] = useState(null)
   const [newTool, setNewTool] = useState({
     name: '',
     description: '',
@@ -73,10 +73,6 @@ const EnhancedToolsManager = ({ agents = [] }) => {
     { id: 'communication', label: 'Communication', icon: Mail },
     { id: 'media', label: 'Media & Content', icon: Image },
     { id: 'utility', label: 'Utilities', icon: Settings }
-  ]
-
-  const builtInTools = [
-    // Built-in tools will be loaded from API
   ]
 
   useEffect(() => {
@@ -516,4 +512,4 @@ const EnhancedToolsManager = ({ agents = [] }) => {
   )
 }
 
-export default EnhancedToolsManager
+export default ToolsManager

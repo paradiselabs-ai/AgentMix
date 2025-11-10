@@ -4,13 +4,13 @@ import { Wifi, WifiOff, AlertCircle, CheckCircle } from 'lucide-react'
 const OfflineIndicator = () => {
   const [isOnline, setIsOnline] = useState(navigator.onLine)
   const [showIndicator, setShowIndicator] = useState(false)
-  const [justCameOnline, setJustCameOnline] = useState(false)
+  const [_justCameOnline, setJustCameOnline] = useState(false)
 
   useEffect(() => {
     const handleOnline = () => {
       setIsOnline(true)
-      setJustCameOnline(true)
       setShowIndicator(true)
+      setJustCameOnline(true)
       
       // Hide the "back online" indicator after 3 seconds
       setTimeout(() => {

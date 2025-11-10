@@ -11,11 +11,11 @@ const CollaborativeCanvas = () => {
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [agents, setAgents] = useState([]);
   const [selectedAgents, setSelectedAgents] = useState([]);
-  const [canvasData, setCanvasData] = useState(null);
 
   useEffect(() => {
     fetchAgents();
     initializeCanvas();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchAgents = async () => {
@@ -203,7 +203,7 @@ const CollaborativeCanvas = () => {
     }
 
     const canvas = canvasRef.current;
-    const imageData = canvas.toDataURL();
+    canvas.toDataURL(); // Generate image data for potential future use
     
     // In a real implementation, this would send the canvas to the selected agents
     // For demo purposes, we'll just show a success message

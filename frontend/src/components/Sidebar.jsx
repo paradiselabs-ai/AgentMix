@@ -17,8 +17,8 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 
-const EnhancedSidebar = ({ activeTab, onTabChange, agents = [], conversations = [] }) => {
-  const [isCollapsed, setIsCollapsed] = useState(false)
+const Sidebar = ({ activeTab, onTabChange, agents = [], conversations = [] }) => {
+  const [isCollapsed] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
 
   const navigationItems = [
@@ -205,4 +205,4 @@ const EnhancedSidebar = ({ activeTab, onTabChange, agents = [], conversations = 
   )
 }
 
-export default EnhancedSidebar
+export default Sidebar

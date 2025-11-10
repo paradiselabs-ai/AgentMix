@@ -1,3 +1,4 @@
+/* eslint-env serviceworker */
 // AgentMix Service Worker
 const CACHE_NAME = 'agentmix-v1.0.0'
 const STATIC_CACHE = 'agentmix-static-v1.0.0'

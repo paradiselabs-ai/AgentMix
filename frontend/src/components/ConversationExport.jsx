@@ -55,7 +55,7 @@ const ConversationExport = ({ conversation, messages, onClose }) => {
     text += `Created: ${formatDate(conversation.created_at)}\n`
     text += `Total Messages: ${messages.length}\n\n`
 
-    messages.forEach((message, index) => {
+    messages.forEach((message) => {
       text += `[${formatDate(message.timestamp)}] ${message.agent_name || 'Unknown'}:\n`
       text += `${message.content}\n\n`
     })

@@ -11,6 +11,7 @@ const ToastNotification = ({ type = 'info', title, message, duration = 5000, onC
     }, duration)
 
     return () => clearTimeout(timer)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [duration])
 
   const handleClose = () => {

@@ -47,8 +47,8 @@ const ConversationView = ({ agents = [], onNavigateToAgents }) => {
   const messagesEndRef = useRef(null)
 
   // Loading states
-  const [loadingConversations, setLoadingConversations] = useState(true)
-  const [loadingMessages, setLoadingMessages] = useState(false)
+  const [_loadingConversations, setLoadingConversations] = useState(true)
+  const [_loadingMessages, setLoadingMessages] = useState(false)
   const [sendingMessage, setSendingMessage] = useState(false)
   const [creatingConversation, setCreatingConversation] = useState(false)
   const [startingConversation, setStartingConversation] = useState(false)

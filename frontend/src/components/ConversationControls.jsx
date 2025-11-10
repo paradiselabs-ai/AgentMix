@@ -156,7 +156,7 @@ const ConversationControls = ({ conversation, onStatusChange }) => {
       </div>
 
       <div className="flex space-x-2">
-        {!isActive && !waitingForHuman ? (
+        {!isConversationActive(conversation.id) && !waitingForHuman ? (
           <Button
             size="sm"
             onClick={handleStartConversation}
@@ -170,7 +170,7 @@ const ConversationControls = ({ conversation, onStatusChange }) => {
             )}
             <span>{isStarting ? 'Starting...' : 'Start AI Chat'}</span>
           </Button>
-        ) : isActive ? (
+        ) : isConversationActive(conversation.id) ? (
           <>
             <Button
               size="sm"

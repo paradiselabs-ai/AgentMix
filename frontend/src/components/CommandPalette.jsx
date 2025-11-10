@@ -318,7 +318,7 @@ const CommandPalette = ({ isOpen, onClose, onNavigate }) => {
                   
                   {categoryCommands.map((command) => {
                     const isSelected = commandIndex === selectedIndex
-                    const currentIndex = commandIndex++
+                    commandIndex++
                     const IconComponent = command.icon
                     
                     return (

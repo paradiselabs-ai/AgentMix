@@ -46,7 +46,6 @@ const NotificationSystem = () => {
   }, []);
 
   const addNotification = () => {
-    const types = ['success', 'info', 'warning', 'error'];
     const messages = [
       { type: 'success', title: 'Task Completed', message: 'AI agent has completed the assigned task successfully.' },
       { type: 'info', title: 'New Message', message: 'You have a new message in the conversation.' },

@@ -17,7 +17,7 @@ const AgentForm = ({ onSuccess, onCancel, agent = null }) => {
   })
   const [providers, setProviders] = useState([])
   const [availableModels, setAvailableModels] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [_loading, setLoading] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [discoveringModels, setDiscoveringModels] = useState(false)
   const [keyValidation, setKeyValidation] = useState({ status: null, message: '' })

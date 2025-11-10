@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { 
   Bot, 
   Search, 
@@ -22,8 +22,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
-const EnhancedHeader = ({ agents = [], activeTab, onTabChange }) => {
-  const [notifications, setNotifications] = useState([
+const Header = ({ agents = [] }) => {
+  const [notifications] = useState([
     // Remove fake notifications - will be populated with real data
   ])
 
@@ -138,4 +138,4 @@ const EnhancedHeader = ({ agents = [], activeTab, onTabChange }) => {
   )
 }
 
-export default EnhancedHeader
+export default Header

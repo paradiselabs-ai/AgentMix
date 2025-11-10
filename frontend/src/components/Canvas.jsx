@@ -49,7 +49,7 @@ const Canvas = () => {
     { id: 3, name: 'Details', visible: true, locked: false }
   ])
   const [activeLayer, setActiveLayer] = useState(2)
-  const [collaborators, setCollaborators] = useState([
+  const [collaborators] = useState([
     // Remove fake collaborators - will be populated with real data when collaboration is active
   ])
 
@@ -85,6 +85,7 @@ const Canvas = () => {
 
     // Draw collaborator cursors
     drawCollaboratorCursors(ctx)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showGrid, collaborators])
 
   const drawGrid = (ctx) => {

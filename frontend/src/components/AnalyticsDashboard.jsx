@@ -7,10 +7,6 @@ const AnalyticsDashboard = () => {
   const [loading, setLoading] = useState(true)
   const [timeRange, setTimeRange] = useState(7)
 
-  useEffect(() => {
-    fetchAnalytics()
-  }, [timeRange])
-
   const fetchAnalytics = async () => {
     try {
       setLoading(true)
@@ -33,6 +29,11 @@ const AnalyticsDashboard = () => {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    fetchAnalytics()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timeRange])
 
   const COLORS = ['#3b82f6', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444']
 
@@ -64,6 +65,7 @@ const AnalyticsDashboard = () => {
 
   const { overview, daily_activity, provider_distribution, agent_performance } = analytics
 
+  // eslint-disable-next-line no-unused-vars
   const StatCard = ({ title, value, change, icon: Icon, color = 'blue' }) => {
     const colorClasses = {
       blue: 'bg-blue-50 text-blue-600 border-blue-200',
