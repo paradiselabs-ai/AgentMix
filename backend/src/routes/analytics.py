@@ -44,7 +44,7 @@ def get_dashboard_analytics():
             AIAgent.provider,
             AIAgent.status,
             func.count(Message.id).label('message_count')
-        ).outerjoin(Message, AIAgent.id == Message.agent_id).group_by(AIAgent.id).all()
+        ).outerjoin(Message, AIAgent.id == Message.sender_id).group_by(AIAgent.id).all()
         
         # Conversation trends (daily message counts)
         daily_stats = db.session.query(
@@ -60,7 +60,7 @@ def get_dashboard_analytics():
             AIAgent.provider,
             func.count(AIAgent.id).label('agent_count'),
             func.count(Message.id).label('message_count')
-        ).outerjoin(Message, AIAgent.id == Message.agent_id).group_by(AIAgent.provider).all()
+        ).outerjoin(Message, AIAgent.id == Message.sender_id).group_by(AIAgent.provider).all()
         
         return jsonify({
             'success': True,
@@ -130,7 +130,7 @@ def get_conversation_analytics(conversation_id):
             AIAgent.provider,
             func.count(Message.id).label('message_count'),
             func.avg(func.length(Message.content)).label('avg_length')
-        ).join(Message, AIAgent.id == Message.agent_id).filter(
+        ).join(Message, AIAgent.id == Message.sender_id).filter(
             Message.conversation_id == conversation_id
         ).group_by(AIAgent.id).all()
         
@@ -204,7 +204,7 @@ def get_agent_analytics(agent_id):
             func.avg(func.length(Message.content)).label('avg_message_length'),
             func.count(func.distinct(Message.conversation_id)).label('conversations_participated')
         ).filter(
-            Message.agent_id == agent_id,
+            Message.sender_id == agent_id,
             Message.timestamp >= start_date
         ).first()
         
@@ -213,7 +213,7 @@ def get_agent_analytics(agent_id):
             func.date(Message.timestamp).label('date'),
             func.count(Message.id).label('message_count')
         ).filter(
-            Message.agent_id == agent_id,
+            Message.sender_id == agent_id,
             Message.timestamp >= start_date
         ).group_by(func.date(Message.timestamp)).order_by('date').all()
         
@@ -225,7 +225,7 @@ def get_agent_analytics(agent_id):
             func.count(Message.id).label('message_count'),
             func.max(Message.timestamp).label('last_activity')
         ).join(Message, Conversation.id == Message.conversation_id).filter(
-            Message.agent_id == agent_id,
+            Message.sender_id == agent_id,
             Message.timestamp >= start_date
         ).group_by(Conversation.id).order_by(desc('last_activity')).limit(10).all()
         
@@ -386,7 +386,7 @@ def get_dashboard_activity():
         
         # Get recent messages with agent info
         recent_messages = db.session.query(Message).options(
-            db.joinedload(Message.agent)
+            db.joinedload(Message.sender)
         ).order_by(Message.timestamp.desc()).limit(20).all()
         
         # Format activity data
@@ -409,12 +409,12 @@ def get_dashboard_activity():
             activity.append({
                 'id': f'msg_{msg.id}',
                 'type': 'message_sent',
-                'title': f'Message from {msg.agent.name if msg.agent else "Unknown Agent"}',
+                'title': f'Message from {msg.sender.name if msg.sender else "Unknown Agent"}',
                 'description': msg.content[:100] + '...' if len(msg.content) > 100 else msg.content,
                 'timestamp': msg.timestamp.isoformat(),
                 'metadata': {
                     'message_id': msg.id,
-                    'agent_id': msg.agent_id,
+                    'agent_id': msg.sender_id,
                     'conversation_id': msg.conversation_id
                 }
             })

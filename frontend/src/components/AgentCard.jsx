@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 
-const EnhancedAgentCard = ({ 
+const AgentCard = ({ 
   agent, 
   onEdit, 
   onDelete, 
@@ -254,4 +254,4 @@ const EnhancedAgentCard = ({
   )
 }
 
-export default EnhancedAgentCard
+export default AgentCard

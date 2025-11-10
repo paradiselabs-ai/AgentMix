@@ -15,12 +15,20 @@ const AnalyticsDashboard = () => {
     try {
       setLoading(true)
       const response = await fetch(`/api/analytics/dashboard?days=${timeRange}`)
+      if (!response.ok) {
+        console.warn('Analytics endpoint unavailable or returned error:', response.status)
+        setAnalytics(null)
+        return
+      }
       const data = await response.json()
       if (data.success) {
         setAnalytics(data.data)
+      } else {
+        setAnalytics(null)
       }
     } catch (error) {
       console.error('Failed to fetch analytics:', error)
+      setAnalytics(null)
     } finally {
       setLoading(false)
     }

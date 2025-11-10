@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
-// Import enhanced components
-import EnhancedHeader from './components/EnhancedHeader';
-import EnhancedSidebar from './components/EnhancedSidebar';
+// Import components
+import Header from './components/Header';
+import Sidebar from './components/Sidebar';
 import AgentForm from './components/AgentForm';
 import AgentList from './components/AgentList';
-import EnhancedConversationView from './components/EnhancedConversationView';
-import EnhancedToolsManager from './components/EnhancedToolsManager';
-import EnhancedCanvas from './components/EnhancedCanvas';
-import EnhancedDashboard from './components/EnhancedDashboard';
+import ConversationView from './components/ConversationView';
+import ToolsManager from './components/ToolsManager';
+import Canvas from './components/Canvas';
+import Dashboard from './components/Dashboard';
 import CommandPalette from './components/CommandPalette';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import OfflineIndicator from './components/OfflineIndicator';
@@ -44,12 +44,20 @@ function App() {
     try {
       setLoading(true);
       const response = await fetch('/api/agents');
+      if (!response.ok) {
+        console.warn('Agents endpoint returned error:', response.status);
+        setAgents([]);
+        return;
+      }
       const data = await response.json();
       if (data.success) {
-        setAgents(data.agents);
+        setAgents(data.agents || []);
+      } else {
+        setAgents([]);
       }
     } catch (error) {
       console.error('Error fetching agents:', error);
+      setAgents([]);
     } finally {
       setLoading(false);
     }
@@ -58,12 +66,20 @@ function App() {
   const fetchConversations = async () => {
     try {
       const response = await fetch('/api/conversations');
+      if (!response.ok) {
+        console.warn('Conversations endpoint returned error:', response.status);
+        setConversations([]);
+        return;
+      }
       const data = await response.json();
       if (data.success) {
-        setConversations(data.conversations);
+        setConversations(data.conversations || []);
+      } else {
+        setConversations([]);
       }
     } catch (error) {
       console.error('Error fetching conversations:', error);
+      setConversations([]);
     }
   };
 
@@ -81,7 +97,7 @@ function App() {
   const renderContent = () => {
     switch (activeTab) {
       case 'dashboard':
-        return <EnhancedDashboard agents={agents} conversations={conversations} />;
+        return <Dashboard agents={agents} conversations={conversations} />;
 
       case 'agents':
         if (showAgentForm) {
@@ -144,7 +160,7 @@ function App() {
               <h2 className="text-display-md gradient-text">AI Conversations</h2>
               <p className="text-body text-muted-foreground">Create and manage AI-to-AI conversations with human oversight</p>
             </div>
-            <EnhancedConversationView 
+            <ConversationView 
               agents={agents} 
               onNavigateToAgents={() => setActiveTab('agents')} 
             />
@@ -154,7 +170,7 @@ function App() {
       case 'tools':
         return (
           <div className="space-y-6">
-            <EnhancedToolsManager agents={agents} />
+            <ToolsManager agents={agents} />
           </div>
         );
 
@@ -165,12 +181,12 @@ function App() {
               <h2 className="text-display-md gradient-text">Collaborative Canvas</h2>
               <p className="text-body text-muted-foreground">Create and collaborate with AI agents on visual content</p>
             </div>
-            <EnhancedCanvas />
+            <Canvas />
           </div>
         );
 
       default:
-        return <EnhancedDashboard agents={agents} conversations={conversations} />;
+        return <Dashboard agents={agents} conversations={conversations} />;
     }
   };
 
@@ -186,13 +202,13 @@ function App() {
         </div>
 
         {/* Main Header - Right of Logo */}
-        <EnhancedHeader
+        <Header
           agents={agents}
           activeTab={activeTab}
           onTabChange={setActiveTab}
         />
 
-        <EnhancedSidebar
+        <Sidebar
           activeTab={activeTab}
           onTabChange={setActiveTab}
           agents={agents}

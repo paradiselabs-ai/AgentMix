@@ -21,7 +21,7 @@ import {
   List
 } from 'lucide-react'
 import AgentForm from './AgentForm.jsx'
-import EnhancedAgentCard from './EnhancedAgentCard.jsx'
+import AgentCard from './AgentCard.jsx'
 
 const AgentList = ({ agents, loading, onAgentUpdated, onAgentSelect }) => {
   const [editingAgent, setEditingAgent] = useState(null)
@@ -274,7 +274,7 @@ const AgentList = ({ agents, loading, onAgentUpdated, onAgentSelect }) => {
             : 'grid-cols-1'
         }`}>
           {filteredAgents.map((agent) => (
-            <EnhancedAgentCard
+            <AgentCard
               key={agent.id}
               agent={agent}
               onEdit={setEditingAgent}

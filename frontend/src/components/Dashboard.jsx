@@ -1,330 +1,572 @@
 import React, { useState, useEffect } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
-import { Activity, Users, MessageSquare, Zap, TrendingUp, Clock, CheckCircle, AlertCircle } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell, AreaChart, Area } from 'recharts';
+import { 
+  Activity, 
+  Users, 
+  MessageSquare, 
+  Zap, 
+  TrendingUp, 
+  Clock, 
+  CheckCircle, 
+  AlertCircle,
+  Bot,
+  Palette,
+  Wrench,
+  Star,
+  ArrowUpRight,
+  Play,
+  Pause,
+  Settings
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
-const Dashboard = ({ agents }) => {
+const EnhancedDashboard = ({ agents = [], conversations = [] }) => {
   const [stats, setStats] = useState({
     totalAgents: 0,
     activeAgents: 0,
     totalConversations: 0,
     totalMessages: 0,
     toolExecutions: 0,
-    projectsActive: 0
+    canvasProjects: 0
   });
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const [activityData, setActivityData] = useState([]);
   const [agentPerformance, setAgentPerformance] = useState([]);
   const [conversationTrends, setConversationTrends] = useState([]);
+  const [realtimeMetrics, setRealtimeMetrics] = useState([]);
 
   useEffect(() => {
-    generateDashboardData();
-  }, [agents]);
+    fetchDashboardData();
+    const interval = setInterval(fetchDashboardData, 30000); // Update every 30 seconds
+    return () => clearInterval(interval);
+  }, [agents, conversations]);
 
-  const generateDashboardData = () => {
-    // Generate demo statistics
+  const fetchDashboardData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      // Fetch real dashboard stats with error handling
+      try {
+        const statsResponse = await fetch('/api/dashboard/stats');
+        if (statsResponse.ok) {
+          const statsData = await statsResponse.json();
+          if (statsData.success) {
+            setStats(statsData.stats);
+          }
+        }
+      } catch (err) {
+        console.warn('Stats endpoint unavailable, using fallback data:', err);
+      }
+
+      // Fetch real activity data with error handling
+      try {
+        const activityResponse = await fetch('/api/dashboard/activity');
+        if (activityResponse.ok) {
+          const activityData = await activityResponse.json();
+          if (activityData.success) {
+            // Process activity data for charts
+            const chartData = processActivityForCharts(activityData.activity);
+            setActivityData(chartData);
+          }
+        }
+      } catch (err) {
+        console.warn('Activity endpoint unavailable, using fallback data:', err);
+      }
+
+      // Fetch agent analytics for performance data with error handling
+      try {
+        const analyticsResponse = await fetch('/api/agents/analytics');
+        if (analyticsResponse.ok) {
+          const analyticsData = await analyticsResponse.json();
+          if (analyticsData.success) {
+            const performanceData = processAgentAnalytics(analyticsData.analytics);
+            setAgentPerformance(performanceData);
+          }
+        }
+      } catch (err) {
+        console.warn('Analytics endpoint unavailable, using fallback data:', err);
+      }
+
+      // Generate conversation trends from real data
+      const trendsData = generateConversationTrends();
+      setConversationTrends(trendsData);
+
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+      setError('Some dashboard data may be unavailable');
+      // Fallback to basic data if API fails
+      generateFallbackData();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const processActivityForCharts = (activity) => {
+    // Process last 7 days of activity data for charts
+    const last7Days = [];
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      const dayActivity = activity.filter(item =>
+        new Date(item.timestamp).toDateString() === date.toDateString()
+      );
+
+      last7Days.push({
+        date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        messages: dayActivity.filter(item => item.type === 'message_sent').length,
+        conversations: dayActivity.filter(item => item.type === 'conversation_created').length,
+        toolUses: dayActivity.filter(item => item.type === 'tool_execution').length,
+        canvasActivity: dayActivity.filter(item => item.type === 'canvas_activity').length
+      });
+    }
+    return last7Days;
+  };
+
+  const processAgentAnalytics = (analytics) => {
+    return analytics.slice(0, 8).map(agent => ({
+      name: agent.name,
+      messages: agent.performance_metrics?.total_messages || 0,
+      accuracy: Math.round(agent.performance_metrics?.success_rate * 100) || 95,
+      responseTime: agent.performance_metrics?.response_time_avg || 1.2,
+      efficiency: agent.performance_metrics?.efficiency || 85
+    }));
+  };
+
+  const generateConversationTrends = () => {
+    // Generate 24-hour trend data (will be replaced with real data when available)
+    const trends = [];
+    for (let i = 0; i < 24; i += 2) {
+      trends.push({
+        time: `${i.toString().padStart(2, '0')}:00`,
+        conversations: 0,
+        activeUsers: 0
+      });
+    }
+    return trends;
+  };
+
+  const generateFallbackData = () => {
+    // Fallback data if APIs fail
     const totalAgents = agents.length;
     const activeAgents = agents.filter(a => a.status === 'active').length;
-    
+
     setStats({
       totalAgents,
       activeAgents,
-      totalConversations: 15,
-      totalMessages: 247,
-      toolExecutions: 89,
-      projectsActive: 3
+      totalConversations: conversations.length || 0,
+      totalMessages: 0,
+      toolExecutions: 0,
+      canvasProjects: 0
     });
 
-    // Generate activity data for the last 7 days
+    // Generate basic activity data
     const activityData = [];
     for (let i = 6; i >= 0; i--) {
       const date = new Date();
       date.setDate(date.getDate() - i);
       activityData.push({
         date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-        messages: Math.floor(Math.random() * 50) + 10,
-        conversations: Math.floor(Math.random() * 8) + 2,
-        toolUses: Math.floor(Math.random() * 15) + 5
+        messages: 0,
+        conversations: 0,
+        toolUses: 0,
+        canvasActivity: 0
       });
     }
     setActivityData(activityData);
 
-    // Generate agent performance data
-    const performance = agents.map(agent => ({
+    // Generate basic agent performance
+    const performance = agents.slice(0, 5).map(agent => ({
       name: agent.name,
-      messages: Math.floor(Math.random() * 100) + 20,
-      accuracy: Math.floor(Math.random() * 20) + 80,
-      responseTime: Math.floor(Math.random() * 500) + 200
+      messages: 0,
+      accuracy: 95,
+      responseTime: 1.2,
+      efficiency: 85
     }));
     setAgentPerformance(performance);
-
-    // Generate conversation trends
-    const trends = [
-      { time: '00:00', conversations: 2 },
-      { time: '04:00', conversations: 1 },
-      { time: '08:00', conversations: 8 },
-      { time: '12:00', conversations: 12 },
-      { time: '16:00', conversations: 15 },
-      { time: '20:00', conversations: 9 },
-      { time: '24:00', conversations: 4 }
-    ];
-    setConversationTrends(trends);
   };
 
-  const StatCard = ({ title, value, icon: Icon, change, color = 'blue-topaz' }) => {
+  const StatCard = ({ title, value, icon: Icon, change, color = 'brand-purple', trend = 'up', onClick }) => {
     const colorClasses = {
-      'blue-topaz': 'text-blue-topaz',
-      'turquoise': 'status-active',
-      'purple': 'text-purple',
-      'hotpink': 'status-processing',
+      'brand-purple': 'text-brand-purple bg-brand-purple/10 border-brand-purple/20',
+      'brand-teal': 'text-brand-teal bg-brand-teal/10 border-brand-teal/20',
+      'brand-pink': 'text-brand-pink bg-brand-pink/10 border-brand-pink/20',
+      'brand-orange': 'text-brand-orange bg-brand-orange/10 border-brand-orange/20',
+      'green': 'text-green-600 bg-green-100 border-green-200',
+      'blue': 'text-blue-600 bg-blue-100 border-blue-200'
     };
 
     return (
-      <div className="glass-card">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium text-text-muted mb-1">{title}</p>
-            <p className="text-3xl font-bold text-text-primary">{value}</p>
-            {change && (
-              <div className="flex items-center mt-2">
-                <TrendingUp className="h-4 w-4 text-turquoise mr-1" />
-                <span className={`text-sm font-medium ${colorClasses[color]}`}>{change}</span>
+      <Card className="glass-card card-hover cursor-pointer group" onClick={onClick}>
+        <CardContent className="p-6">
+          <div className="flex items-center justify-between">
+            <div className="space-y-2">
+              <p className="text-sm font-medium text-muted-foreground">{title}</p>
+              <div className="flex items-baseline gap-2">
+                <p className="text-3xl font-bold text-foreground">{value}</p>
+                {change && (
+                  <div className={`flex items-center gap-1 ${trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
+                    <TrendingUp className={`h-3 w-3 ${trend === 'down' ? 'rotate-180' : ''}`} />
+                    <span className="text-sm font-medium">{change}</span>
+                  </div>
+                )}
               </div>
-            )}
+            </div>
+            <div className={`p-3 rounded-xl border transition-all duration-200 group-hover:scale-110 ${colorClasses[color]}`}>
+              <Icon className="h-6 w-6" />
+            </div>
           </div>
-          <div className={`p-3 rounded-lg glass ${colorClasses[color]}`}>
-            <Icon className="h-6 w-6" />
-          </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     );
   };
 
-  const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#06B6D4'];
+  const QuickActionCard = ({ title, description, icon: Icon, color, onClick, badge }) => (
+    <Card className="glass-card card-hover cursor-pointer group border-white/30" onClick={onClick}>
+      <CardContent className="p-6">
+        <div className="flex items-center justify-between mb-4">
+          <div className={`p-3 rounded-xl bg-gradient-to-br ${color} text-white shadow-lg group-hover:scale-110 transition-transform duration-200`}>
+            <Icon className="h-6 w-6" />
+          </div>
+          {badge && (
+            <Badge className="bg-white/80 text-foreground border-white/30">
+              {badge}
+            </Badge>
+          )}
+        </div>
+        <h3 className="font-semibold text-foreground mb-1">{title}</h3>
+        <p className="text-sm text-muted-foreground">{description}</p>
+        <ArrowUpRight className="h-4 w-4 text-muted-foreground mt-2 group-hover:text-brand-purple transition-colors" />
+      </CardContent>
+    </Card>
+  );
+
+  const COLORS = ['#7C3AED', '#0891B2', '#EC4899', '#F59E0B', '#8B5CF6', '#06B6D4'];
 
   const agentStatusData = [
     { name: 'Active', value: stats.activeAgents, color: '#10B981' },
-    { name: 'Inactive', value: stats.totalAgents - stats.activeAgents, color: '#EF4444' }
+    { name: 'Idle', value: Math.max(0, stats.totalAgents - stats.activeAgents - (stats.processingAgents || 0)), color: '#6B7280' },
+    { name: 'Processing', value: stats.processingAgents || 0, color: '#EC4899' }
+  ];
+
+  const quickActions = [
+    // Remove duplicate quick actions - sidebar already has these
   ];
 
   return (
-         <div className="breathing-space">
-        {/* Header */}
-        <div className="text-center compact-elegant">
-          <h1 className="text-4xl font-bold gradient-text mb-2">AgentMix Dashboard</h1>
-          <p className="text-text-secondary">Monitor your AI collaboration platform performance</p>
-        </div>
-
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 compact-elegant">
-          <StatCard
-            title="Total Agents"
-            value={stats.totalAgents}
-            icon={Users}
-            change="+12%"
-            color="blue-topaz"
-          />
-          <StatCard
-            title="Active Agents"
-            value={stats.activeAgents}
-            icon={Activity}
-            change="+8%"
-            color="turquoise"
-          />
-          <StatCard
-            title="Conversations"
-            value={stats.totalConversations}
-            icon={MessageSquare}
-            change="+23%"
-            color="purple"
-          />
-          <StatCard
-            title="Messages"
-            value={stats.totalMessages}
-            icon={CheckCircle}
-            change="+15%"
-            color="hotpink"
-          />
-          <StatCard
-            title="Tool Uses"
-            value={stats.toolExecutions}
-            icon={Zap}
-            change="+31%"
-            color="turquoise"
-          />
-          <StatCard
-            title="Active Projects"
-            value={stats.projectsActive}
-            icon={Clock}
-            change="+5%"
-            color="purple"
-          />
-        </div>
-
-      {/* Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Activity Chart */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow duration-300">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">7-Day Activity</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={activityData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis dataKey="date" stroke="#6b7280" />
-              <YAxis stroke="#6b7280" />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: '#fff', 
-                  border: '1px solid #e5e7eb',
-                  borderRadius: '8px',
-                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                }} 
-              />
-              <Bar dataKey="messages" fill="#3B82F6" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="conversations" fill="#10B981" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="toolUses" fill="#F59E0B" radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Conversation Trends */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow duration-300">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Conversation Trends</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={conversationTrends}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis dataKey="time" stroke="#6b7280" />
-              <YAxis stroke="#6b7280" />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: '#fff', 
-                  border: '1px solid #e5e7eb',
-                  borderRadius: '8px',
-                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                }} 
-              />
-              <Line 
-                type="monotone" 
-                dataKey="conversations" 
-                stroke="#8B5CF6" 
-                strokeWidth={3}
-                dot={{ fill: '#8B5CF6', strokeWidth: 2, r: 6 }}
-                activeDot={{ r: 8, stroke: '#8B5CF6', strokeWidth: 2 }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Agent Performance */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow duration-300">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Agent Performance</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={agentPerformance} layout="horizontal">
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis type="number" stroke="#6b7280" />
-              <YAxis dataKey="name" type="category" stroke="#6b7280" width={80} />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: '#fff', 
-                  border: '1px solid #e5e7eb',
-                  borderRadius: '8px',
-                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                }} 
-              />
-              <Bar dataKey="messages" fill="#06B6D4" radius={[0, 4, 4, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Agent Status Distribution */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow duration-300">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Agent Status</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={agentStatusData}
-                cx="50%"
-                cy="50%"
-                innerRadius={60}
-                outerRadius={120}
-                paddingAngle={5}
-                dataKey="value"
-              >
-                {agentStatusData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: '#fff', 
-                  border: '1px solid #e5e7eb',
-                  borderRadius: '8px',
-                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                }} 
-              />
-            </PieChart>
-          </ResponsiveContainer>
-          <div className="flex justify-center space-x-4 mt-4">
-            {agentStatusData.map((entry, index) => (
-              <div key={index} className="flex items-center">
-                <div 
-                  className="w-3 h-3 rounded-full mr-2" 
-                  style={{ backgroundColor: entry.color }}
-                />
-                <span className="text-sm text-gray-600">{entry.name}: {entry.value}</span>
-              </div>
-            ))}
+    <div className="space-y-8">
+      {/* Loading State */}
+      {loading ? (
+        <div className="flex items-center justify-center py-20">
+          <div className="text-center space-y-4">
+            <div className="w-16 h-16 border-4 border-brand-purple/30 border-t-brand-purple rounded-full animate-spin mx-auto"></div>
+            <p className="text-muted-foreground">Loading dashboard...</p>
           </div>
         </div>
-      </div>
+      ) : error ? (
+        <Card className="glass-card border-red-200/50 bg-red-50/10 dark:bg-red-900/10">
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
+            <h3 className="text-lg font-semibold text-foreground mb-2">Dashboard Error</h3>
+            <p className="text-muted-foreground text-center mb-4">{error}</p>
+            <Button 
+              onClick={fetchDashboardData}
+              variant="outline"
+              className="glass-card border-red-200/50"
+            >
+              Retry
+            </Button>
+          </CardContent>
+        </Card>
+      ) : (
+        <>
+          {/* Hero Section */}
+          <div className="text-center space-y-4 py-8">
+            <h1 className="text-display-lg gradient-text animate-slide-in-up">
+              Welcome to AgentMix
+            </h1>
+            <p className="text-body-lg text-muted-foreground max-w-2xl mx-auto animate-slide-in-up" style={{animationDelay: '0.1s'}}>
+              Monitor your AI collaboration platform performance and manage your intelligent agents
+            </p>
+          </div>
 
-      {/* Recent Activity */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow duration-300">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
-        <div className="space-y-4">
-          {[
-            { icon: MessageSquare, text: 'New conversation started between Test Agent and Claude Assistant', time: '2 minutes ago', color: 'text-blue-600' },
-            { icon: Zap, text: 'Calculator tool executed successfully by Test Agent', time: '5 minutes ago', color: 'text-green-600' },
-            { icon: Users, text: 'New agent "Research Assistant" added to the platform', time: '10 minutes ago', color: 'text-purple-600' },
-            { icon: CheckCircle, text: 'Project "Market Research Analysis" task completed', time: '15 minutes ago', color: 'text-orange-600' },
-            { icon: Activity, text: 'Canvas collaboration session started', time: '20 minutes ago', color: 'text-indigo-600' }
-          ].map((activity, index) => (
-            <div key={index} className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200">
-              <div className={`p-2 rounded-lg bg-gray-100 ${activity.color}`}>
-                <activity.icon className="h-4 w-4" />
+          {/* Empty State - Show when no agents or data */}
+          {stats.totalAgents === 0 && stats.totalConversations === 0 ? (
+            <Card className="glass-card border-white/30">
+              <CardContent className="flex flex-col items-center justify-center py-20">
+                <div className="w-24 h-24 bg-gradient-to-br from-brand-purple to-brand-teal rounded-3xl flex items-center justify-center mb-8 animate-float-gentle">
+                  <Bot className="h-12 w-12 text-white" />
+                </div>
+                <h2 className="text-display-md text-foreground mb-3">Welcome to Your AI Collaboration Hub</h2>
+                <p className="text-body text-muted-foreground text-center mb-8 max-w-2xl">
+                  AgentMix enables multiple AI agents to collaborate in real-time conversations with human oversight. 
+                  Start by creating your first AI agent to begin building intelligent collaborative workflows.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Button className="bg-brand-purple hover:bg-brand-purple/90 text-white px-8 py-3">
+                    <Users className="h-5 w-5 mr-2" />
+                    Create Your First Agent
+                  </Button>
+                  <Button variant="outline" className="px-8 py-3 border-white/30 hover:bg-white/10">
+                    <Play className="h-5 w-5 mr-2" />
+                    Watch Demo Video
+                  </Button>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 w-full max-w-4xl">
+                  <div className="text-center">
+                    <div className="w-12 h-12 bg-brand-purple/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+                      <MessageSquare className="h-6 w-6 text-brand-purple" />
+                    </div>
+                    <h3 className="font-semibold text-foreground mb-1">Real-time Conversations</h3>
+                    <p className="text-sm text-muted-foreground">AI agents communicate and collaborate instantly</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="w-12 h-12 bg-brand-teal/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+                      <Settings className="h-6 w-6 text-brand-teal" />
+                    </div>
+                    <h3 className="font-semibold text-foreground mb-1">Human-in-the-Loop</h3>
+                    <p className="text-sm text-muted-foreground">Pause, resume, and intervene in AI conversations</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="w-12 h-12 bg-brand-pink/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+                      <Wrench className="h-6 w-6 text-brand-pink" />
+                    </div>
+                    <h3 className="font-semibold text-foreground mb-1">Tool Integration</h3>
+                    <p className="text-sm text-muted-foreground">Extend agent capabilities with custom tools</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ) : (
+            <>
+              {/* Stats Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
+                <StatCard
+                  title="Total Agents"
+                  value={stats.totalAgents}
+                  icon={Users}
+                  color="brand-purple"
+                />
+                <StatCard
+                  title="Active Agents"
+                  value={stats.activeAgents}
+                  icon={Activity}
+                  color="green"
+                />
+                <StatCard
+                  title="Conversations"
+                  value={stats.totalConversations}
+                  icon={MessageSquare}
+                  color="brand-teal"
+                />
+                <StatCard
+                  title="Messages"
+                  value={stats.totalMessages}
+                  icon={CheckCircle}
+                  color="blue"
+                />
+                <StatCard
+                  title="Tool Uses"
+                  value={stats.toolExecutions}
+                  icon={Zap}
+                  color="brand-orange"
+                />
+                <StatCard
+                  title="Canvas Projects"
+                  value={stats.canvasProjects}
+                  icon={Palette}
+                  color="brand-pink"
+                />
               </div>
-              <div className="flex-1">
-                <p className="text-sm text-gray-900">{activity.text}</p>
-                <p className="text-xs text-gray-500">{activity.time}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
 
-      {/* Quick Actions */}
-      <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl p-6 text-white">
-        <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <button className="bg-white bg-opacity-20 hover:bg-opacity-30 rounded-lg p-4 text-center transition-all duration-200 hover:scale-105">
-            <Users className="h-6 w-6 mx-auto mb-2" />
-            <span className="text-sm font-medium">Add Agent</span>
-          </button>
-          <button className="bg-white bg-opacity-20 hover:bg-opacity-30 rounded-lg p-4 text-center transition-all duration-200 hover:scale-105">
-            <MessageSquare className="h-6 w-6 mx-auto mb-2" />
-            <span className="text-sm font-medium">New Conversation</span>
-          </button>
-          <button className="bg-white bg-opacity-20 hover:bg-opacity-30 rounded-lg p-4 text-center transition-all duration-200 hover:scale-105">
-            <Zap className="h-6 w-6 mx-auto mb-2" />
-            <span className="text-sm font-medium">Manage Tools</span>
-          </button>
-          <button className="bg-white bg-opacity-20 hover:bg-opacity-30 rounded-lg p-4 text-center transition-all duration-200 hover:scale-105">
-            <Clock className="h-6 w-6 mx-auto mb-2" />
-            <span className="text-sm font-medium">New Project</span>
-          </button>
-        </div>
-      </div>
+              {/* Charts Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Activity Chart */}
+                <Card className="glass-card border-white/30">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Activity className="h-5 w-5 text-brand-purple" />
+                      7-Day Activity Overview
+                    </CardTitle>
+                    <CardDescription>Messages, conversations, and tool usage trends</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ResponsiveContainer width="100%" height={300}>
+                      <AreaChart data={activityData}>
+                        <defs>
+                          <linearGradient id="colorMessages" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#7C3AED" stopOpacity={0.8}/>
+                            <stop offset="95%" stopColor="#7C3AED" stopOpacity={0.1}/>
+                          </linearGradient>
+                          <linearGradient id="colorConversations" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#0891B2" stopOpacity={0.8}/>
+                            <stop offset="95%" stopColor="#0891B2" stopOpacity={0.1}/>
+                          </linearGradient>
+                        </defs>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                        <XAxis dataKey="date" stroke="#6b7280" />
+                        <YAxis stroke="#6b7280" />
+                        <Tooltip 
+                          contentStyle={{ 
+                            backgroundColor: 'rgba(255, 255, 255, 0.9)', 
+                            border: 'none',
+                            borderRadius: '12px',
+                            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                            backdropFilter: 'blur(20px)'
+                          }} 
+                        />
+                        <Area 
+                          type="monotone" 
+                          dataKey="messages" 
+                          stroke="#7C3AED" 
+                          fillOpacity={1} 
+                          fill="url(#colorMessages)" 
+                          strokeWidth={2}
+                        />
+                        <Area 
+                          type="monotone" 
+                          dataKey="conversations" 
+                          stroke="#0891B2" 
+                          fillOpacity={1} 
+                          fill="url(#colorConversations)" 
+                          strokeWidth={2}
+                        />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </CardContent>
+                </Card>
+
+                {/* Agent Performance */}
+                <Card className="glass-card border-white/30">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Bot className="h-5 w-5 text-brand-teal" />
+                      Agent Performance
+                    </CardTitle>
+                    <CardDescription>Message count and efficiency metrics</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ResponsiveContainer width="100%" height={300}>
+                      <BarChart data={agentPerformance} layout="horizontal">
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                        <XAxis type="number" stroke="#6b7280" />
+                        <YAxis dataKey="name" type="category" stroke="#6b7280" width={100} />
+                        <Tooltip 
+                          contentStyle={{ 
+                            backgroundColor: 'rgba(255, 255, 255, 0.9)', 
+                            border: 'none',
+                            borderRadius: '12px',
+                            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                            backdropFilter: 'blur(20px)'
+                          }} 
+                        />
+                        <Bar dataKey="messages" fill="#0891B2" radius={[0, 4, 4, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </CardContent>
+                </Card>
+
+                {/* Conversation Trends */}
+                <Card className="glass-card border-white/30">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <MessageSquare className="h-5 w-5 text-brand-pink" />
+                      Conversation Trends
+                    </CardTitle>
+                    <CardDescription>24-hour conversation activity pattern</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ResponsiveContainer width="100%" height={300}>
+                      <LineChart data={conversationTrends}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                        <XAxis dataKey="time" stroke="#6b7280" />
+                        <YAxis stroke="#6b7280" />
+                        <Tooltip 
+                          contentStyle={{ 
+                            backgroundColor: 'rgba(255, 255, 255, 0.9)', 
+                            border: 'none',
+                            borderRadius: '12px',
+                            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                            backdropFilter: 'blur(20px)'
+                          }} 
+                        />
+                        <Line 
+                          type="monotone" 
+                          dataKey="conversations" 
+                          stroke="#EC4899" 
+                          strokeWidth={3}
+                          dot={{ fill: '#EC4899', strokeWidth: 2, r: 6 }}
+                          activeDot={{ r: 8, stroke: '#EC4899', strokeWidth: 2 }}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </CardContent>
+                </Card>
+
+                {/* Agent Status Distribution */}
+                <Card className="glass-card border-white/30">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Activity className="h-5 w-5 text-brand-orange" />
+                      Agent Status Distribution
+                    </CardTitle>
+                    <CardDescription>Current status of all agents</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ResponsiveContainer width="100%" height={300}>
+                      <PieChart>
+                        <Pie
+                          data={agentStatusData}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={60}
+                          outerRadius={120}
+                          paddingAngle={5}
+                          dataKey="value"
+                        >
+                          {agentStatusData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                          ))}
+                        </Pie>
+                        <Tooltip 
+                          contentStyle={{ 
+                            backgroundColor: 'rgba(255, 255, 255, 0.9)', 
+                            border: 'none',
+                            borderRadius: '12px',
+                            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                            backdropFilter: 'blur(20px)'
+                          }} 
+                        />
+                      </PieChart>
+                    </ResponsiveContainer>
+                    <div className="flex justify-center space-x-4 mt-4">
+                      {agentStatusData.map((entry, index) => (
+                        <div key={index} className="flex items-center gap-2">
+                          <div 
+                            className="w-3 h-3 rounded-full" 
+                            style={{ backgroundColor: entry.color }}
+                          />
+                          <span className="text-sm text-muted-foreground">
+                            {entry.name}: {entry.value}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </>
+          )}
+        </>
+      )}
+
     </div>
   );
 };
 
-export default Dashboard;
-
+export default EnhancedDashboard;

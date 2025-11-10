@@ -35,7 +35,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
-const EnhancedCanvas = () => {
+const Canvas = () => {
   const canvasRef = useRef(null)
   const [isDrawing, setIsDrawing] = useState(false)
   const [currentTool, setCurrentTool] = useState('pen')
@@ -426,4 +426,4 @@ const EnhancedCanvas = () => {
   )
 }
 
-export default EnhancedCanvas
+export default Canvas
