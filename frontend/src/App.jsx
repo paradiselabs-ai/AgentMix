@@ -197,7 +197,7 @@ function App() {
         <div className="fixed top-0 left-0 z-50 w-64 h-16 flex items-center px-6 bg-card border-b border-r border-border">
           <div className="flex items-center gap-1.5">
             <img src="/favicon2.png" alt="AgentMix" className="h-6 w-6" />
-            <span className="text-xl font-bold" style={{ color: '#8717E1' }}>
+            <span className="text-xl font-bold" style={{ color: '#B366FF' }}>
               AgentMix
             </span>
           </div>
