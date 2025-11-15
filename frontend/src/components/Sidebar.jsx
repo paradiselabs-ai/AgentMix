@@ -25,39 +25,35 @@ const Sidebar = ({ activeTab, onTabChange, agents = [], conversations = [] }) =>
     {
       id: 'dashboard',
       label: 'Dashboard',
-      emoji: '📊',
-      badge: null
+      icon: '📊'
     },
     {
       id: 'agents',
       label: 'AI Agents',
-      emoji: '🤖',
+      icon: '🤖',
       badge: agents.filter(a => a.status === 'active').length
     },
     {
       id: 'conversations',
       label: 'Conversations',
-      emoji: '💬',
+      icon: '💬',
       badge: conversations.filter(c => c.status === 'active').length
     },
     {
       id: 'canvas',
       label: 'Canvas',
-      emoji: '🎨',
-      badge: null
+      icon: '🎨'
     },
     {
       id: 'tools',
       label: 'Tools',
-      emoji: '🛠️',
-      badge: null
+      icon: '🛠️'
     }
   ]
 
   const quickActions = [
-    { label: 'New Agent', emoji: '🤖', action: () => onTabChange('agents') },
-    { label: 'Start Chat', emoji: '💬', action: () => onTabChange('conversations') },
-    { label: 'Open Canvas', emoji: '🎨', action: () => onTabChange('canvas') }
+    { label: 'New Agent', action: () => onTabChange('agents') },
+    { label: 'Start Chat', action: () => onTabChange('conversations') }
   ]
 
   const recentItems = [
@@ -76,10 +72,9 @@ const Sidebar = ({ activeTab, onTabChange, agents = [], conversations = [] }) =>
               placeholder="Search..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-3 py-2 text-xs rounded-lg transition-all duration-200 h-8"
+              className="w-full pl-10 pr-3 py-2 text-xs rounded-lg transition-all duration-200 h-8 border border-slate-200 hover:border-slate-300 focus-visible:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-400/20 focus-visible:ring-offset-0 focus-visible:shadow-md shadow-sm"
               style={{
                 background: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid var(--border)',
                 color: 'var(--text-primary)',
                 outline: 'none'
               }}
@@ -107,7 +102,6 @@ const Sidebar = ({ activeTab, onTabChange, agents = [], conversations = [] }) =>
                 onMouseEnter={(e) => !isActive && (e.currentTarget.style.background = 'var(--hover-bg)')}
                 onMouseLeave={(e) => !isActive && (e.currentTarget.style.background = 'transparent')}
               >
-                <span className="text-lg mr-2">{item.emoji}</span>
                 <span className="flex-1 text-left font-medium" style={{ color: isActive ? 'var(--brand)' : 'var(--text-secondary)' }}>
                   {item.label}
                 </span>
@@ -148,7 +142,6 @@ const Sidebar = ({ activeTab, onTabChange, agents = [], conversations = [] }) =>
                   onMouseEnter={(e) => e.currentTarget.style.background = 'var(--hover-bg)'}
                   onMouseLeave={(e) => e.currentTarget.style.background = 'var(--btn-secondary-bg)'}
                 >
-                  <span className="text-base mr-1.5">{action.emoji}</span>
                   <span style={{ color: 'var(--text-primary)' }}>{action.label}</span>
                 </button>
               ))}
@@ -186,17 +179,9 @@ const Sidebar = ({ activeTab, onTabChange, agents = [], conversations = [] }) =>
 
         {/* Footer */}
         <div className="p-3" style={{ borderTop: '1px solid var(--border)' }}>
-          {!isCollapsed ? (
+          {!isCollapsed && (
             <div className="text-center">
-              <div className="text-[10px] mb-1.5" style={{ color: 'var(--text-muted)' }}>AgentMix v1.0</div>
-              <div className="flex items-center justify-center gap-1.5">
-                <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: 'var(--success)', boxShadow: '0 0 8px rgba(16, 185, 129, 0.5)' }}></div>
-                <span className="text-[10px]" style={{ color: 'var(--text-secondary)' }}>System Online</span>
-              </div>
-            </div>
-          ) : (
-            <div className="flex justify-center">
-              <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: 'var(--success)', boxShadow: '0 0 8px rgba(16, 185, 129, 0.5)' }}></div>
+              <div className="text-[10px]" style={{ color: 'var(--text-muted)' }}>AgentMix v1.0</div>
             </div>
           )}
         </div>
