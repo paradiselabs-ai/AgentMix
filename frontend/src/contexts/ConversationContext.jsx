@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react'
+import React, { createContext, useState, useEffect, useCallback } from 'react'
 import io from 'socket.io-client'
 
 // Conversation Context
@@ -164,15 +164,6 @@ export const ConversationProvider = ({ children }) => {
       {children}
     </ConversationContext.Provider>
   )
-}
-
-// Custom hook to use conversation context
-export const useConversation = () => {
-  const context = useContext(ConversationContext)
-  if (!context) {
-    throw new Error('useConversation must be used within a ConversationProvider')
-  }
-  return context
 }
 
 export default ConversationContext

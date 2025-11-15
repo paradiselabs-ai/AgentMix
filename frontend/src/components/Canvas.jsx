@@ -228,10 +228,10 @@ const Canvas = () => {
   )
 
   return (
-    <div className="flex h-[calc(100vh-12rem)] gap-4">
+    <div className="flex h-[calc(100vh-12rem)] gap-3">
       {/* Left Toolbar */}
       <Card className="glass-card border-white/30 w-16 flex flex-col items-center py-4">
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           {tools.map(tool => (
             <ToolButton
               key={tool.id}
@@ -242,9 +242,9 @@ const Canvas = () => {
           ))}
         </div>
         
-        <div className="my-4 w-8 h-px bg-border" />
+        <div className="my-3 w-8 h-px bg-border" />
         
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           <Button
             variant="outline"
             size="sm"
@@ -275,12 +275,12 @@ const Canvas = () => {
       {/* Main Canvas Area */}
       <div className="flex-1 flex flex-col">
         {/* Top Toolbar */}
-        <Card className="glass-card border-white/30 mb-4">
-          <CardContent className="p-4">
+        <Card className="glass-card border-white/30 mb-3">
+          <CardContent className="p-3">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-foreground">Brush Size:</span>
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs font-medium text-foreground">Brush Size:</span>
                   <div className="w-32">
                     <Slider
                       value={[brushSize]}
@@ -291,12 +291,12 @@ const Canvas = () => {
                       className="w-full"
                     />
                   </div>
-                  <span className="text-sm text-muted-foreground w-8">{brushSize}px</span>
+                  <span className="text-xs text-muted-foreground w-8">{brushSize}px</span>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-foreground">Colors:</span>
-                  <div className="flex gap-1">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs font-medium text-foreground">Colors:</span>
+                  <div className="flex gap-0.5">
                     {colors.map(color => (
                       <ColorButton
                         key={color}
@@ -309,7 +309,7 @@ const Canvas = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 
                 <Button
                   variant="outline"
@@ -317,7 +317,7 @@ const Canvas = () => {
                   onClick={() => setShowGrid(!showGrid)}
                   className={`glass-card border-white/30 ${showGrid ? 'bg-white/50' : ''}`}
                 >
-                  <Grid className="h-4 w-4 mr-1" />
+                  <Grid className="h-4 w-4 mr-0.5" />
                   Grid
                 </Button>
 
@@ -327,7 +327,7 @@ const Canvas = () => {
                   onClick={saveCanvas}
                   className="glass-card border-white/30"
                 >
-                  <Download className="h-4 w-4 mr-1" />
+                  <Download className="h-4 w-4 mr-0.5" />
                   Export
                 </Button>
               </div>
@@ -349,8 +349,8 @@ const Canvas = () => {
             />
             
             {/* Zoom indicator */}
-            <div className="absolute bottom-4 left-4 glass-card border-white/30 px-3 py-1 rounded-lg">
-              <span className="text-sm font-medium text-foreground">{zoom}%</span>
+            <div className="absolute bottom-3 left-3 glass-card border-white/30 px-3 py-1 rounded-lg">
+              <span className="text-xs font-medium text-foreground">{zoom}%</span>
             </div>
 
           </CardContent>
@@ -360,16 +360,16 @@ const Canvas = () => {
       {/* Right Panel - Layers */}
       <Card className="glass-card border-white/30 w-64">
         <CardHeader>
-          <CardTitle className="text-lg flex items-center gap-2">
-            <Layers className="h-5 w-5" />
+          <CardTitle className="text-base flex items-center gap-1.5">
+            <Layers className="h-4 w-4" />
             Layers
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-3">
+        <CardContent className="space-y-2">
           {layers.map(layer => (
             <div
               key={layer.id}
-              className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-colors ${
+              className={`flex items-center gap-1.5 p-2 rounded-lg cursor-pointer transition-colors ${
                 activeLayer === layer.id 
                   ? 'bg-brand-purple/10 border border-brand-purple/20' 
                   : 'hover:bg-white/50'
@@ -394,7 +394,7 @@ const Canvas = () => {
                 )}
               </Button>
               
-              <span className="flex-1 text-sm font-medium text-foreground">
+              <span className="flex-1 text-xs font-medium text-foreground">
                 {layer.name}
               </span>
               
@@ -418,7 +418,7 @@ const Canvas = () => {
               setLayers([...layers, newLayer])
             }}
           >
-            <Plus className="h-4 w-4 mr-1" />
+            <Plus className="h-4 w-4 mr-0.5" />
             Add Layer
           </Button>
         </CardContent>

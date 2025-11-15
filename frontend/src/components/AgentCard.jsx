@@ -89,9 +89,9 @@ const AgentCard = ({
       {/* Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-brand-purple/5 via-transparent to-brand-teal/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       
-      <CardContent className="p-6 relative z-10">
+      <CardContent className="p-4 relative z-10">
         {/* Header */}
-        <div className="flex items-start justify-between mb-4">
+        <div className="flex items-start justify-between mb-3">
           <div className="flex items-center space-x-3">
             {/* Agent Avatar */}
             <div className="relative">
@@ -111,7 +111,7 @@ const AgentCard = ({
             {/* Agent Info */}
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-1">
-                <h3 className="font-semibold text-foreground text-lg">{agent.name}</h3>
+                <h3 className="font-semibold text-foreground text-base">{agent.name}</h3>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -123,10 +123,10 @@ const AgentCard = ({
               </div>
               <div className="flex items-center gap-2">
                 <div className={`w-2 h-2 rounded-full ${providerConfig.color}`} />
-                <span className="text-sm text-muted-foreground font-medium">
+                <span className="text-xs text-muted-foreground font-medium">
                   {providerConfig.name}
                 </span>
-                <Badge className={`text-xs ${statusConfig.bgColor} ${statusConfig.textColor} border`}>
+                <Badge className={`text-[10px] px-2 py-0.5 ${statusConfig.bgColor} ${statusConfig.textColor} border`}>
                   {statusConfig.label}
                 </Badge>
               </div>
@@ -147,18 +147,18 @@ const AgentCard = ({
         </div>
 
         {/* Agent Details */}
-        <div className="space-y-3 mb-4">
+        <div className="space-y-3 mb-3">
           {/* Model Info */}
-          <div className="flex items-center justify-between text-sm">
+          <div className="flex items-center justify-between text-xs">
             <span className="text-muted-foreground">Model:</span>
-            <Badge variant="outline" className="bg-white/50 border-white/30">
+            <Badge variant="outline" className="bg-white/50 border-white/30 text-[10px] px-2 py-0.5">
               {agent.model || 'Not configured'}
             </Badge>
           </div>
 
           {/* Description */}
           {agent.description && (
-            <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+            <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
               {agent.description}
             </p>
           )}
@@ -166,16 +166,16 @@ const AgentCard = ({
           {/* Performance Metrics */}
           <div className="grid grid-cols-3 gap-3 pt-2 border-t border-white/20">
             <div className="text-center">
-              <div className="text-lg font-bold text-foreground">{agent.messageCount || 0}</div>
-              <div className="text-xs text-muted-foreground">Messages</div>
+              <div className="text-base font-bold text-foreground">{agent.messageCount || 0}</div>
+              <div className="text-[10px] text-muted-foreground">Messages</div>
             </div>
             <div className="text-center">
-              <div className="text-lg font-bold text-brand-teal">{agent.accuracy || '95'}%</div>
-              <div className="text-xs text-muted-foreground">Accuracy</div>
+              <div className="text-base font-bold text-brand-teal">{agent.accuracy || '95'}%</div>
+              <div className="text-[10px] text-muted-foreground">Accuracy</div>
             </div>
             <div className="text-center">
-              <div className="text-lg font-bold text-brand-orange">{agent.responseTime || '1.2'}s</div>
-              <div className="text-xs text-muted-foreground">Response</div>
+              <div className="text-base font-bold text-brand-orange">{agent.responseTime || '1.2'}s</div>
+              <div className="text-[10px] text-muted-foreground">Response</div>
             </div>
           </div>
         </div>

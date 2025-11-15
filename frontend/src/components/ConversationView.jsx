@@ -31,7 +31,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { useConversation } from '../contexts/ConversationContext'
+import { useConversation } from '../contexts/useConversationHook'
 
 const ConversationView = ({ agents = [], onNavigateToAgents }) => {
   const { socket } = useConversation()
@@ -285,7 +285,7 @@ const ConversationView = ({ agents = [], onNavigateToAgents }) => {
     const senderName = isHuman ? 'You' : (agent?.name || 'Unknown Agent')
 
     return (
-      <div className={`flex ${isHuman ? 'justify-end' : 'justify-start'} mb-4 animate-slide-in-up`}>
+      <div className={`flex ${isHuman ? 'justify-end' : 'justify-start'} mb-3 animate-slide-in-up`}>
         <div className={`max-w-[70%] ${isHuman ? 'order-2' : 'order-1'}`}>
           <div className="flex items-center gap-2 mb-1">
             {!isHuman && (
@@ -308,7 +308,7 @@ const ConversationView = ({ agents = [], onNavigateToAgents }) => {
               ? 'bg-brand-purple/20 border border-brand-purple/30' 
               : 'bg-gray-800/90 border border-gray-700/50'
           }`}>
-            <p className={`text-sm leading-relaxed ${
+            <p className={`text-xs leading-relaxed ${
               isHuman ? 'text-white' : 'text-gray-100'
             }`}>{message.content}</p>
           </div>
@@ -325,7 +325,7 @@ const ConversationView = ({ agents = [], onNavigateToAgents }) => {
       onClick={() => setSelectedConversation(conversation)}
     >
       <CardContent className="p-4">
-        <div className="flex items-start justify-between mb-2">
+        <div className="flex items-start justify-between mb-1.5">
           <h3 className="font-semibold text-foreground truncate">{conversation.name}</h3>
           <Badge className={`ml-2 ${
             conversation.status === 'active' 
@@ -335,19 +335,19 @@ const ConversationView = ({ agents = [], onNavigateToAgents }) => {
             {conversation.status}
           </Badge>
         </div>
-        <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+        <p className="text-xs text-muted-foreground mb-2 line-clamp-2">
           {conversation.description || 'No description'}
         </p>
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-0.5">
             <Users className="h-3 w-3 text-muted-foreground" />
-            <span className="text-xs text-muted-foreground">
+            <span className="text-[10px] text-muted-foreground">
               {conversation.participants?.length || 0} agents
             </span>
           </div>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-0.5">
             <MessageSquare className="h-3 w-3 text-muted-foreground" />
-            <span className="text-xs text-muted-foreground">
+            <span className="text-[10px] text-muted-foreground">
               {conversation.message_count || 0} messages
             </span>
           </div>
@@ -361,11 +361,11 @@ const ConversationView = ({ agents = [], onNavigateToAgents }) => {
   )
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-12rem)]">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-[calc(100vh-12rem)]">
       {/* Conversations Sidebar */}
-      <div className="lg:col-span-1 space-y-4">
+      <div className="lg:col-span-1 space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-display-sm text-foreground">Conversations</h2>
+          <h2 className="text-base font-bold text-foreground">Conversations</h2>
           <Button
             onClick={() => setIsCreating(true)}
             className="bg-brand-purple hover:bg-brand-purple/90 text-white"
@@ -391,7 +391,7 @@ const ConversationView = ({ agents = [], onNavigateToAgents }) => {
         {isCreating && (
           <Card className="glass-card border-white/30">
             <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
+              <CardTitle className="text-base flex items-center gap-2">
                 <Plus className="h-5 w-5" />
                 New Conversation
               </CardTitle>
@@ -399,9 +399,9 @@ const ConversationView = ({ agents = [], onNavigateToAgents }) => {
                 Select at least 2 AI agents to start a collaborative conversation
               </p>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-4">
               <div>
-                <label className="text-sm font-medium text-foreground mb-2 block">
+                <label className="text-xs font-medium text-foreground mb-2 block">
                   Conversation Name *
                 </label>
                 <Input
@@ -413,7 +413,7 @@ const ConversationView = ({ agents = [], onNavigateToAgents }) => {
               </div>
               
               <div>
-                <label className="text-sm font-medium text-foreground mb-3 block">
+                <label className="text-xs font-medium text-foreground mb-2 block">
                   Select Agents ({selectedAgents.length} selected, minimum 2 required)
                 </label>
                 
@@ -455,7 +455,7 @@ const ConversationView = ({ agents = [], onNavigateToAgents }) => {
                     </CardContent>
                   </Card>
                 ) : (
-                  <div className="space-y-3 max-h-64 overflow-y-auto">
+                    <div className="space-y-2 max-h-64 overflow-y-auto">
                     {agents.filter(a => a.status === 'active').map(agent => (
                       <Card 
                         key={agent.id}
@@ -472,8 +472,8 @@ const ConversationView = ({ agents = [], onNavigateToAgents }) => {
                           }
                         }}
                       >
-                        <CardContent className="p-4">
-                          <div className="flex items-start gap-3">
+                        <CardContent className="p-3">
+                          <div className="flex items-start gap-2">
                             <div className={`w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors mt-0.5 ${
                               selectedAgents.includes(agent.id)
                                 ? 'bg-brand-purple border-brand-purple'
@@ -485,10 +485,10 @@ const ConversationView = ({ agents = [], onNavigateToAgents }) => {
                             </div>
                             
                             <div className="flex-1 min-w-0">
-                              <div className="mb-2">
+                              <div className="mb-1.5">
                                 <h4 className="font-medium text-foreground mb-1.5 break-words">{agent.name}</h4>
-                                <div className="flex flex-wrap gap-1.5">
-                                  <Badge className="bg-green-100 text-green-800 border-green-200 text-xs whitespace-nowrap">
+                                <div className="flex flex-wrap gap-1">
+                                  <Badge className="bg-green-100 text-green-800 border-green-200 text-[10px] whitespace-nowrap">
                                     {agent.provider}
                                   </Badge>
                                   <Badge className="bg-blue-100 text-blue-800 border-blue-200 text-xs truncate max-w-[200px]" title={agent.model}>
@@ -496,7 +496,7 @@ const ConversationView = ({ agents = [], onNavigateToAgents }) => {
                                   </Badge>
                                 </div>
                               </div>
-                              <p className="text-xs text-muted-foreground">
+                              <p className="text-[10px] text-muted-foreground">
                                 Active agent ready for conversation
                               </p>
                             </div>
@@ -508,14 +508,14 @@ const ConversationView = ({ agents = [], onNavigateToAgents }) => {
                 )}
                 
                 {selectedAgents.length > 0 && selectedAgents.length < 2 && (
-                  <div className="flex items-center gap-2 text-sm text-yellow-600 bg-yellow-50 dark:bg-yellow-900/20 p-3 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                  <div className="flex items-center gap-2 text-xs text-yellow-600 bg-yellow-50 dark:bg-yellow-900/20 p-3 rounded-lg border border-yellow-200 dark:border-yellow-800">
                     <AlertCircle className="h-4 w-4" />
                     <span>Please select at least 2 agents for a conversation</span>
                   </div>
                 )}
               </div>
 
-              <div className="flex gap-2 pt-2">
+                <div className="flex gap-2 pt-1.5">
                 <Button
                   onClick={createConversation}
                   disabled={!conversationName.trim() || selectedAgents.length < 2 || creatingConversation}
@@ -551,13 +551,13 @@ const ConversationView = ({ agents = [], onNavigateToAgents }) => {
         )}
 
         {/* Conversations List */}
-        <div className="space-y-3 overflow-y-auto">
+        <div className="space-y-2 overflow-y-auto">
           {filteredConversations.length === 0 ? (
             <Card className="glass-card border-white/30">
               <CardContent className="flex flex-col items-center justify-center py-8">
-                <MessageSquare className="h-12 w-12 text-muted-foreground mb-4" />
+                <MessageSquare className="h-12 w-12 text-muted-foreground mb-3" />
                 <h3 className="font-semibold text-foreground mb-2">No Conversations</h3>
-                <p className="text-sm text-muted-foreground text-center">
+                <p className="text-xs text-muted-foreground text-center">
                   Create your first AI-to-AI conversation
                 </p>
               </CardContent>
@@ -575,9 +575,9 @@ const ConversationView = ({ agents = [], onNavigateToAgents }) => {
         {selectedConversation ? (
           <>
             {/* Chat Header - FIXED POSITION */}
-            <Card className="glass-card border-white/30 mb-4 sticky top-0 z-10 shadow-lg">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between mb-3">
+            <Card className="glass-card border-white/30 mb-3 sticky top-0 z-10 shadow-lg">
+              <CardContent className="p-3">
+                <div className="flex items-center justify-between mb-2">
                   <div>
                     <h3 className="font-semibold text-foreground">{selectedConversation.name}</h3>
                     <p className="text-sm text-muted-foreground">
@@ -596,7 +596,7 @@ const ConversationView = ({ agents = [], onNavigateToAgents }) => {
                 </div>
                 
                 {/* HITL Controls */}
-                <div className="flex items-center gap-2 pt-3 border-t border-white/10">
+                <div className="flex items-center gap-2 pt-2 border-t border-white/10">
                   {!isActive ? (
                     <Button
                       onClick={startConversation}
@@ -689,15 +689,15 @@ const ConversationView = ({ agents = [], onNavigateToAgents }) => {
                 <div 
                   ref={messagesContainerRef}
                   onScroll={handleScroll}
-                  className="flex-1 overflow-y-auto space-y-4 mb-4"
+                  className="flex-1 overflow-y-auto space-y-3 mb-3"
                 >
                   {messages.length === 0 ? (
                     <div className="flex flex-col items-center justify-center h-full text-center">
-                      <div className="w-16 h-16 bg-gradient-to-br from-brand-purple to-brand-teal rounded-2xl flex items-center justify-center mb-4 animate-float-gentle">
+                      <div className="w-16 h-16 bg-gradient-to-br from-brand-purple to-brand-teal rounded-2xl flex items-center justify-center mb-3 animate-float-gentle">
                         <MessageSquare className="h-8 w-8 text-white" />
                       </div>
                       <h3 className="font-semibold text-foreground mb-2">Ready to Start</h3>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-xs text-muted-foreground">
                         {isActive 
                           ? 'AI agents are ready to collaborate. Send a message to begin!'
                           : 'Click "Start" to begin the AI conversation'
@@ -753,7 +753,7 @@ const ConversationView = ({ agents = [], onNavigateToAgents }) => {
         ) : (
           <Card className="glass-card border-white/30 flex-1 flex items-center justify-center">
             <CardContent className="text-center">
-              <div className="w-20 h-20 bg-gradient-to-br from-brand-purple to-brand-teal rounded-2xl flex items-center justify-center mb-6 animate-float-gentle mx-auto">
+              <div className="w-20 h-20 bg-gradient-to-br from-brand-purple to-brand-teal rounded-2xl flex items-center justify-center mb-4 animate-float-gentle mx-auto">
                 <MessageSquare className="h-10 w-10 text-white" />
               </div>
               <h3 className="text-display-sm text-foreground mb-2">Select a Conversation</h3>

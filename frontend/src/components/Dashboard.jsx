@@ -204,11 +204,11 @@ const Dashboard = ({ agents = [], conversations = [] }) => {
 
     return (
       <Card className="glass-card card-hover cursor-pointer group" onClick={onClick}>
-        <CardContent className="p-6">
+        <CardContent className="p-4">
           <div className="flex items-center justify-between">
-            <div className="space-y-2">
-              <p className="text-sm font-medium text-muted-foreground">{title}</p>
-              <div className="flex items-baseline gap-2">
+            <div className="space-y-1">
+              <p className="text-xs font-medium text-muted-foreground">{title}</p>
+              <div className="flex items-baseline gap-1">
                 <p className="text-3xl font-bold text-foreground">{value}</p>
                 {change && (
                   <div className={`flex items-center gap-1 ${trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
@@ -218,7 +218,7 @@ const Dashboard = ({ agents = [], conversations = [] }) => {
                 )}
               </div>
             </div>
-            <div className={`p-3 rounded-xl border transition-all duration-200 group-hover:scale-110 ${colorClasses[color]}`}>
+            <div className={`p-2 rounded-xl border transition-all duration-200 group-hover:scale-110 ${colorClasses[color]}`}>
               <Icon className="h-6 w-6" />
             </div>
           </div>
@@ -230,9 +230,9 @@ const Dashboard = ({ agents = [], conversations = [] }) => {
   // eslint-disable-next-line no-unused-vars
   const QuickActionCard = ({ title, description, icon: Icon, color, onClick, badge }) => (
     <Card className="glass-card card-hover cursor-pointer group border-white/30" onClick={onClick}>
-      <CardContent className="p-6">
-        <div className="flex items-center justify-between mb-4">
-          <div className={`p-3 rounded-xl bg-gradient-to-br ${color} text-white shadow-lg group-hover:scale-110 transition-transform duration-200`}>
+      <CardContent className="p-4">
+        <div className="flex items-center justify-between mb-3">
+          <div className={`p-2 rounded-xl bg-gradient-to-br ${color} text-white shadow-lg group-hover:scale-110 transition-transform duration-200`}>
             <Icon className="h-6 w-6" />
           </div>
           {badge && (
@@ -241,7 +241,7 @@ const Dashboard = ({ agents = [], conversations = [] }) => {
             </Badge>
           )}
         </div>
-        <h3 className="font-semibold text-foreground mb-1">{title}</h3>
+        <h3 className="font-semibold text-foreground text-sm mb-0.5">{title}</h3>
         <p className="text-sm text-muted-foreground">{description}</p>
         <ArrowUpRight className="h-4 w-4 text-muted-foreground mt-2 group-hover:text-brand-purple transition-colors" />
       </CardContent>
@@ -260,8 +260,8 @@ const Dashboard = ({ agents = [], conversations = [] }) => {
     <div className="space-y-8">
       {/* Loading State */}
       {loading ? (
-        <div className="flex items-center justify-center py-20">
-          <div className="text-center space-y-4">
+        <div className="flex items-center justify-center py-12">
+          <div className="text-center space-y-3">
             <div className="w-16 h-16 border-4 border-brand-purple/30 border-t-brand-purple rounded-full animate-spin mx-auto"></div>
             <p className="text-muted-foreground">Loading dashboard...</p>
           </div>
@@ -269,9 +269,9 @@ const Dashboard = ({ agents = [], conversations = [] }) => {
       ) : error ? (
         <Card className="glass-card border-red-200/50 bg-red-50/10 dark:bg-red-900/10">
           <CardContent className="flex flex-col items-center justify-center py-12">
-            <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
-            <h3 className="text-lg font-semibold text-foreground mb-2">Dashboard Error</h3>
-            <p className="text-muted-foreground text-center mb-4">{error}</p>
+            <AlertCircle className="h-12 w-12 text-red-500 mb-3" />
+            <h3 className="text-base font-semibold text-foreground mb-2">Dashboard Error</h3>
+            <p className="text-muted-foreground text-center mb-3">{error}</p>
             <Button 
               onClick={fetchDashboardData}
               variant="outline"
@@ -284,7 +284,7 @@ const Dashboard = ({ agents = [], conversations = [] }) => {
       ) : (
         <>
           {/* Hero Section */}
-          <div className="text-center space-y-4 py-8">
+          <div className="text-center space-y-3 py-6">
             <h1 className="text-display-lg gradient-text animate-slide-in-up">
               Welcome to AgentMix
             </h1>
@@ -297,7 +297,7 @@ const Dashboard = ({ agents = [], conversations = [] }) => {
           {stats.totalAgents === 0 && stats.totalConversations === 0 ? (
             <Card className="glass-card border-white/30">
               <CardContent className="flex flex-col items-center justify-center py-20">
-                <div className="w-24 h-24 bg-gradient-to-br from-brand-purple to-brand-teal rounded-3xl flex items-center justify-center mb-8 animate-float-gentle">
+                <div className="w-24 h-24 bg-gradient-to-br from-brand-purple to-brand-teal rounded-3xl flex items-center justify-center mb-6 animate-float-gentle">
                   <Bot className="h-12 w-12 text-white" />
                 </div>
                 <h2 className="text-display-md text-foreground mb-3">Welcome to Your AI Collaboration Hub</h2>
@@ -306,7 +306,7 @@ const Dashboard = ({ agents = [], conversations = [] }) => {
                   Start by creating your first AI agent to begin building intelligent collaborative workflows.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Button className="bg-brand-purple hover:bg-brand-purple/90 text-white px-8 py-3">
+                  <Button className="bg-brand-purple hover:bg-brand-purple/90 text-white px-6 py-2">
                     <Users className="h-5 w-5 mr-2" />
                     Create Your First Agent
                   </Button>
@@ -315,23 +315,23 @@ const Dashboard = ({ agents = [], conversations = [] }) => {
                     Watch Demo Video
                   </Button>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 w-full max-w-4xl">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8 w-full max-w-4xl">
                   <div className="text-center">
-                    <div className="w-12 h-12 bg-brand-purple/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <div className="w-10 h-10 bg-brand-purple/10 rounded-lg flex items-center justify-center mx-auto mb-2">
                       <MessageSquare className="h-6 w-6 text-brand-purple" />
                     </div>
                     <h3 className="font-semibold text-foreground mb-1">Real-time Conversations</h3>
                     <p className="text-sm text-muted-foreground">AI agents communicate and collaborate instantly</p>
                   </div>
                   <div className="text-center">
-                    <div className="w-12 h-12 bg-brand-teal/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <div className="w-10 h-10 bg-brand-teal/10 rounded-lg flex items-center justify-center mx-auto mb-2">
                       <Settings className="h-6 w-6 text-brand-teal" />
                     </div>
                     <h3 className="font-semibold text-foreground mb-1">Human-in-the-Loop</h3>
                     <p className="text-sm text-muted-foreground">Pause, resume, and intervene in AI conversations</p>
                   </div>
                   <div className="text-center">
-                    <div className="w-12 h-12 bg-brand-pink/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+                      <div className="w-10 h-10 bg-brand-pink/10 rounded-lg flex items-center justify-center mx-auto mb-2">
                       <Wrench className="h-6 w-6 text-brand-pink" />
                     </div>
                     <h3 className="font-semibold text-foreground mb-1">Tool Integration</h3>
@@ -343,7 +343,7 @@ const Dashboard = ({ agents = [], conversations = [] }) => {
           ) : (
             <>
               {/* Stats Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
                 <StatCard
                   title="Total Agents"
                   value={stats.totalAgents}
@@ -383,7 +383,7 @@ const Dashboard = ({ agents = [], conversations = [] }) => {
               </div>
 
               {/* Charts Grid */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {/* Activity Chart */}
                 <Card className="glass-card border-white/30">
                   <CardHeader>
@@ -542,7 +542,7 @@ const Dashboard = ({ agents = [], conversations = [] }) => {
                         />
                       </PieChart>
                     </ResponsiveContainer>
-                    <div className="flex justify-center space-x-4 mt-4">
+                    <div className="flex justify-center space-x-3 mt-3">
                       {agentStatusData.map((entry, index) => (
                         <div key={index} className="flex items-center gap-2">
                           <div 

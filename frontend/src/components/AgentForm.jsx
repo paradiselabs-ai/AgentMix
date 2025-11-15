@@ -187,10 +187,10 @@ const AgentForm = ({ onSuccess, onCancel, agent = null }) => {
   const modelsToShow = availableModels.length > 0 ? availableModels : []
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <form onSubmit={handleSubmit} className="space-y-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {/* Basic Information */}
-        <div className="space-y-4">
+        <div className="space-y-3">
           <div>
             <Label htmlFor="name">Agent Name</Label>
             <Input
@@ -228,7 +228,7 @@ const AgentForm = ({ onSuccess, onCancel, agent = null }) => {
           {selectedProvider && selectedProvider.requires_key && (
             <div>
               <Label htmlFor="api_key">API Key</Label>
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 <Input
                   id="api_key"
                   type="password"
@@ -236,11 +236,11 @@ const AgentForm = ({ onSuccess, onCancel, agent = null }) => {
                   onChange={(e) => handleApiKeyChange(e.target.value)}
                   onBlur={handleApiKeyBlur}
                   placeholder="Enter API key"
-                  className="text-foreground"
+                  className="text-foreground h-8 text-xs"
                   required
                 />
                 {keyValidation.status && (
-                  <div className={`flex items-center gap-2 text-sm ${
+                  <div className={`flex items-center gap-2 text-xs ${
                     keyValidation.status === 'success' ? 'text-green-600' :
                     keyValidation.status === 'warning' ? 'text-yellow-600' :
                     keyValidation.status === 'error' ? 'text-red-600' :
@@ -303,11 +303,11 @@ const AgentForm = ({ onSuccess, onCancel, agent = null }) => {
         </div>
 
         {/* Configuration */}
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Configuration</h3>
+        <div className="space-y-3">
+          <h3 className="text-base font-semibold">Configuration</h3>
           {selectedProvider?.config_fields.map((field) => (
-            <div key={field.name}>
-              <Label htmlFor={field.name}>
+            <div key={field.name} className="space-y-1.5">
+              <Label htmlFor={field.name} className="text-xs font-medium">
                 {field.name.charAt(0).toUpperCase() + field.name.slice(1).replace('_', ' ')}
                 {field.required && <span className="text-destructive ml-1">*</span>}
               </Label>
@@ -317,7 +317,7 @@ const AgentForm = ({ onSuccess, onCancel, agent = null }) => {
                   value={formData.config[field.name] || field.default || ''}
                   onChange={(e) => handleConfigChange(field.name, e.target.value)}
                   placeholder={`Enter ${field.name}`}
-                  className="text-foreground"
+                  className="text-foreground h-8 text-xs"
                   required={field.required}
                 />
               )}
@@ -341,7 +341,7 @@ const AgentForm = ({ onSuccess, onCancel, agent = null }) => {
                   value={formData.config[field.name] ?? field.default ?? ''}
                   onChange={(e) => handleConfigChange(field.name, field.type === 'int' ? parseInt(e.target.value) : parseFloat(e.target.value))}
                   placeholder={`Enter ${field.name}`}
-                  className="text-foreground"
+                  className="text-foreground h-8 text-xs"
                 />
               )}
             </div>
@@ -350,7 +350,7 @@ const AgentForm = ({ onSuccess, onCancel, agent = null }) => {
       </div>
 
       {/* Actions */}
-      <div className="flex justify-end space-x-2">
+      <div className="flex justify-end gap-2 pt-3 border-t border-gray-200">
         <Button type="button" variant="outline" onClick={onCancel}>
           <X className="h-4 w-4 mr-2" />
           Cancel

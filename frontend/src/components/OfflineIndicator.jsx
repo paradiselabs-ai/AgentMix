@@ -45,15 +45,15 @@ const OfflineIndicator = () => {
 
   return (
     <div className={isOnline ? 'online-indicator' : 'offline-indicator'}>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1.5 text-xs">
         {isOnline ? (
           <>
-            <CheckCircle className="h-4 w-4" />
+            <CheckCircle className="h-3.5 w-3.5" />
             <span>Back online</span>
           </>
         ) : (
           <>
-            <WifiOff className="h-4 w-4" />
+            <WifiOff className="h-3.5 w-3.5" />
             <span>You're offline</span>
           </>
         )}

@@ -257,17 +257,17 @@ const CollaborativeCanvas = () => {
 
   return (
     <div className="max-w-7xl mx-auto p-6">
-      <div className="mb-6">
+      <div className="mb-4">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Collaborative Canvas</h1>
         <p className="text-gray-600">Create and collaborate with AI agents on visual content</p>
       </div>
 
       {/* Toolbar */}
-      <div className="bg-white rounded-lg border border-gray-200 p-4 mb-6">
-        <div className="flex flex-wrap items-center gap-4">
+      <div className="bg-white rounded-lg border border-gray-200 p-3 mb-4">
+        <div className="flex flex-wrap items-center gap-3">
           {/* Tools */}
-          <div className="flex items-center space-x-2">
-            <span className="text-sm font-medium text-gray-700">Tools:</span>
+          <div className="flex items-center space-x-1.5">
+            <span className="text-xs font-medium text-gray-700">Tools:</span>
             {tools.map(t => (
               <button
                 key={t.id}
@@ -285,9 +285,9 @@ const CollaborativeCanvas = () => {
           </div>
 
           {/* Colors */}
-          <div className="flex items-center space-x-2">
-            <span className="text-sm font-medium text-gray-700">Color:</span>
-            <div className="flex space-x-1">
+          <div className="flex items-center space-x-1.5">
+            <span className="text-xs font-medium text-gray-700">Color:</span>
+            <div className="flex space-x-0.5">
               {colors.map(c => (
                 <button
                   key={c}
@@ -308,8 +308,8 @@ const CollaborativeCanvas = () => {
           </div>
 
           {/* Line Width */}
-          <div className="flex items-center space-x-2">
-            <span className="text-sm font-medium text-gray-700">Size:</span>
+          <div className="flex items-center space-x-1.5">
+            <span className="text-xs font-medium text-gray-700">Size:</span>
             <input
               type="range"
               min="1"
@@ -318,11 +318,11 @@ const CollaborativeCanvas = () => {
               onChange={(e) => setLineWidth(parseInt(e.target.value))}
               className="w-20"
             />
-            <span className="text-sm text-gray-600">{lineWidth}px</span>
+            <span className="text-xs text-gray-600">{lineWidth}px</span>
           </div>
 
           {/* Actions */}
-          <div className="flex items-center space-x-2 ml-auto">
+          <div className="flex items-center space-x-1.5 ml-auto">
             <button
               onClick={undo}
               disabled={historyIndex <= 0}
@@ -357,10 +357,10 @@ const CollaborativeCanvas = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
         {/* Canvas */}
         <div className="lg:col-span-3">
-          <div className="bg-white rounded-lg border border-gray-200 p-4">
+          <div className="bg-white rounded-lg border border-gray-200 p-3">
             <canvas
               ref={canvasRef}
               onMouseDown={startDrawing}
@@ -375,12 +375,12 @@ const CollaborativeCanvas = () => {
         </div>
 
         {/* Collaboration Panel */}
-        <div className="space-y-6">
+        <div className="space-y-4">
           {/* Agent Selection */}
-          <div className="bg-white rounded-lg border border-gray-200 p-4">
-            <h3 className="font-semibold text-gray-900 mb-3">Collaborate with Agents</h3>
+          <div className="bg-white rounded-lg border border-gray-200 p-3">
+            <h3 className="font-semibold text-gray-900 mb-2">Collaborate with Agents</h3>
             
-            <div className="space-y-2 mb-4">
+            <div className="space-y-1.5 mb-3">
               {agents.map(agent => (
                 <label key={agent.id} className="flex items-center">
                   <input
@@ -395,22 +395,22 @@ const CollaborativeCanvas = () => {
                     }}
                     className="mr-2"
                   />
-                  <span className="text-sm text-gray-700">{agent.name}</span>
+                  <span className="text-xs text-gray-700">{agent.name}</span>
                   <span className="ml-auto text-xs text-gray-500">({agent.provider})</span>
                 </label>
               ))}
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <button
                 onClick={shareWithAgents}
-                className="w-full bg-blue-600 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700"
+                className="w-full bg-blue-600 text-white px-3 py-1.5 rounded-md text-xs font-medium hover:bg-blue-700"
               >
                 Share Canvas
               </button>
               <button
                 onClick={requestAgentInput}
-                className="w-full bg-green-600 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-green-700"
+                className="w-full bg-green-600 text-white px-3 py-1.5 rounded-md text-xs font-medium hover:bg-green-700"
               >
                 Request AI Input
               </button>
@@ -418,9 +418,9 @@ const CollaborativeCanvas = () => {
           </div>
 
           {/* Canvas Info */}
-          <div className="bg-white rounded-lg border border-gray-200 p-4">
-            <h3 className="font-semibold text-gray-900 mb-3">Canvas Info</h3>
-            <div className="space-y-2 text-sm text-gray-600">
+          <div className="bg-white rounded-lg border border-gray-200 p-3">
+            <h3 className="font-semibold text-gray-900 mb-2">Canvas Info</h3>
+            <div className="space-y-1.5 text-xs text-gray-600">
               <div>Size: 800 × 600 px</div>
               <div>History: {canvasHistory.length} states</div>
               <div>Current tool: {tools.find(t => t.id === tool)?.name}</div>
@@ -429,9 +429,9 @@ const CollaborativeCanvas = () => {
           </div>
 
           {/* Instructions */}
-          <div className="bg-blue-50 rounded-lg border border-blue-200 p-4">
-            <h3 className="font-semibold text-blue-900 mb-2">How to Use</h3>
-            <ul className="text-sm text-blue-800 space-y-1">
+          <div className="bg-blue-50 rounded-lg border border-blue-200 p-3">
+            <h3 className="font-semibold text-blue-900 mb-1.5">How to Use</h3>
+            <ul className="text-xs text-blue-800 space-y-0.5">
               <li>• Select tools from the toolbar</li>
               <li>• Choose colors and brush size</li>
               <li>• Select agents to collaborate with</li>

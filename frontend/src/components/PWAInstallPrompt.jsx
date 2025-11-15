@@ -78,41 +78,41 @@ const PWAInstallPrompt = () => {
   return (
     <div className="pwa-install-prompt">
       <Card className="glass-card border-white/30">
-        <CardContent className="p-4">
-          <div className="flex items-start gap-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-brand-purple to-brand-teal rounded-xl flex items-center justify-center flex-shrink-0">
-              <Download className="h-6 w-6 text-white" />
+        <CardContent className="p-3">
+          <div className="flex items-start gap-2.5">
+            <div className="w-10 h-10 bg-gradient-to-br from-brand-purple to-brand-teal rounded-lg flex items-center justify-center flex-shrink-0">
+              <Download className="h-5 w-5 text-white" />
             </div>
             
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-foreground mb-1">
+              <h3 className="font-semibold text-foreground text-sm mb-0.5">
                 Install AgentMix
               </h3>
-              <p className="text-sm text-muted-foreground mb-3">
+              <p className="text-xs text-muted-foreground mb-2">
                 Get the full experience with offline access and faster loading
               </p>
               
-              <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
+              <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground mb-2">
                 <Smartphone className="h-3 w-3" />
-                <span>Works on mobile</span>
-                <Monitor className="h-3 w-3 ml-2" />
-                <span>Works on desktop</span>
+                <span>Mobile</span>
+                <Monitor className="h-3 w-3 ml-1.5" />
+                <span>Desktop</span>
               </div>
               
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <Button
                   onClick={handleInstallClick}
                   size="sm"
-                  className="bg-brand-purple hover:bg-brand-purple/90 text-white"
+                  className="bg-brand-purple hover:bg-brand-purple/90 text-white h-8 text-xs px-3"
                 >
-                  <Download className="h-3 w-3 mr-1" />
+                  <Download className="h-3 w-3 mr-0.5" />
                   Install
                 </Button>
                 <Button
                   onClick={handleDismiss}
                   variant="outline"
                   size="sm"
-                  className="glass-card border-white/30"
+                  className="glass-card border-white/30 h-8 text-xs px-3"
                 >
                   Not now
                 </Button>
@@ -123,9 +123,9 @@ const PWAInstallPrompt = () => {
               onClick={handleDismiss}
               variant="ghost"
               size="sm"
-              className="h-8 w-8 p-0 flex-shrink-0"
+              className="h-7 w-7 p-0 flex-shrink-0"
             >
-              <X className="h-4 w-4" />
+              <X className="h-3.5 w-3.5" />
             </Button>
           </div>
         </CardContent>

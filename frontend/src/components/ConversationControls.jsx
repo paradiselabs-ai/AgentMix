@@ -12,7 +12,7 @@ import {
   Send,
   User
 } from 'lucide-react'
-import { useConversation } from '../contexts/ConversationContext.jsx'
+import { useConversation } from '../contexts/useConversationHook'
 
 const ConversationControls = ({ conversation, onStatusChange }) => {
   const [isStarting, setIsStarting] = useState(false)
@@ -145,23 +145,23 @@ const ConversationControls = ({ conversation, onStatusChange }) => {
   }
 
   return (
-    <div className="flex items-center space-x-3">
+    <div className="flex items-center space-x-2">
       {getStatusBadge()}
       
-      <div className="flex items-center space-x-2">
-        <Users className="h-4 w-4 text-muted-foreground" />
-        <span className="text-sm text-muted-foreground">
+      <div className="flex items-center space-x-1">
+        <Users className="h-3.5 w-3.5 text-muted-foreground" />
+        <span className="text-xs text-muted-foreground">
           {conversation.participants?.length || 0} agents
         </span>
       </div>
 
-      <div className="flex space-x-2">
+      <div className="flex space-x-1">
         {!isConversationActive(conversation.id) && !waitingForHuman ? (
           <Button
             size="sm"
             onClick={handleStartConversation}
             disabled={isStarting || !conversation.participants?.length || conversation.participants.length < 2}
-            className="flex items-center space-x-1"
+            className="flex items-center space-x-1 h-8 text-xs"
           >
             {isStarting ? (
               <Loader2 className="h-3 w-3 animate-spin" />
@@ -177,7 +177,7 @@ const ConversationControls = ({ conversation, onStatusChange }) => {
               variant="outline"
               onClick={handleStopConversation}
               disabled={isStopping}
-              className="flex items-center space-x-1"
+              className="flex items-center space-x-1 h-8 text-xs"
             >
               {isStopping ? (
                 <Loader2 className="h-3 w-3 animate-spin" />
@@ -190,7 +190,7 @@ const ConversationControls = ({ conversation, onStatusChange }) => {
               size="sm"
               variant="secondary"
               onClick={handlePauseForInput}
-              className="flex items-center space-x-1"
+              className="flex items-center space-x-1 h-8 text-xs"
             >
               <User className="h-3 w-3" />
               <span>Join Conversation</span>
@@ -201,24 +201,24 @@ const ConversationControls = ({ conversation, onStatusChange }) => {
 
       {/* Human Input Section */}
       {waitingForHuman && (
-        <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-          <div className="flex items-center space-x-2 mb-3">
-            <User className="h-4 w-4 text-yellow-600" />
-            <span className="text-sm font-medium text-yellow-800">Your turn to respond</span>
+        <div className="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <div className="flex items-center space-x-1.5 mb-2">
+            <User className="h-3.5 w-3.5 text-yellow-600" />
+            <span className="text-xs font-medium text-yellow-800">Your turn to respond</span>
           </div>
-          <div className="flex space-x-2">
+          <div className="flex space-x-1.5">
             <Input
               value={humanMessage}
               onChange={(e) => setHumanMessage(e.target.value)}
               placeholder="Type your message to join the conversation..."
               onKeyPress={(e) => e.key === 'Enter' && handleSendHumanMessage()}
-              className="flex-1"
+              className="flex-1 h-8 text-xs"
             />
             <Button
               size="sm"
               onClick={handleSendHumanMessage}
               disabled={isSendingMessage || !humanMessage.trim()}
-              className="flex items-center space-x-1"
+              className="flex items-center space-x-1 h-8 text-xs"
             >
               {isSendingMessage ? (
                 <Loader2 className="h-3 w-3 animate-spin" />

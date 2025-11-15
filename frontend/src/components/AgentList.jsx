@@ -139,12 +139,12 @@ const AgentList = ({ agents, loading, onAgentUpdated }) => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {editingAgent && (
-        <Card className="glass-card border-white/30 mb-6">
-          <CardHeader>
-            <CardTitle className="text-display-sm gradient-text">Edit AI Agent</CardTitle>
-            <CardDescription>
+        <Card className="glass-card border-white/30 mb-4">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base gradient-text">Edit AI Agent</CardTitle>
+            <CardDescription className="text-xs">
               Update the configuration for "{editingAgent.name}"
             </CardDescription>
           </CardHeader>
@@ -159,7 +159,7 @@ const AgentList = ({ agents, loading, onAgentUpdated }) => {
       )}
 
       {/* Search and Filter Bar */}
-      <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
+      <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
         <div className="flex-1 flex items-center gap-4">
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -167,14 +167,14 @@ const AgentList = ({ agents, loading, onAgentUpdated }) => {
               placeholder="Search agents..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 glass-card border-white/30 focus:border-brand-purple/50"
+              className="pl-10 glass-card border-white/30 focus:border-brand-purple/50 h-8 text-xs"
             />
           </div>
           
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="px-3 py-2 rounded-lg glass-card border-white/30 text-sm focus:outline-none focus:ring-2 focus:ring-brand-purple/50"
+            className="px-3 py-2 rounded-lg glass-card border-white/30 text-xs focus:outline-none focus:ring-2 focus:ring-brand-purple/50 h-8"
           >
             <option value="all">All Status</option>
             <option value="active">Active</option>
@@ -207,15 +207,15 @@ const AgentList = ({ agents, loading, onAgentUpdated }) => {
 
       {/* Results Summary */}
       <div className="flex items-center justify-between">
-        <p className="text-sm text-muted-foreground">
+        <p className="text-xs text-muted-foreground">
           Showing {filteredAgents.length} of {agents.length} agents
           {searchQuery && ` matching "${searchQuery}"`}
         </p>
         <div className="flex items-center gap-2">
-          <Badge className="bg-green-100 text-green-800 border-green-200">
+          <Badge className="bg-green-100 text-green-800 border-green-200 text-[10px] px-2 py-0.5">
             {agents.filter(a => a.status === 'active').length} Active
           </Badge>
-          <Badge className="bg-gray-100 text-gray-800 border-gray-200">
+          <Badge className="bg-gray-100 text-gray-800 border-gray-200 text-[10px] px-2 py-0.5">
             {agents.filter(a => a.status === 'inactive').length} Inactive
           </Badge>
         </div>
@@ -226,14 +226,14 @@ const AgentList = ({ agents, loading, onAgentUpdated }) => {
         <Card className="glass-card border-white/30">
           <CardContent className="flex flex-col items-center justify-center py-12">
             <Search className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold mb-2">No agents found</h3>
-            <p className="text-muted-foreground text-center">
+            <h3 className="text-base font-semibold mb-2">No agents found</h3>
+            <p className="text-xs text-muted-foreground text-center">
               Try adjusting your search or filter criteria
             </p>
           </CardContent>
         </Card>
       ) : (
-        <div className={`grid gap-6 ${
+        <div className={`grid gap-4 ${
           viewMode === 'grid' 
             ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' 
             : 'grid-cols-1'

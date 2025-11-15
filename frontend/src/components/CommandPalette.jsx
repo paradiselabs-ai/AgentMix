@@ -278,19 +278,19 @@ const CommandPalette = ({ isOpen, onClose, onNavigate }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="glass-card border-white/30 max-w-2xl p-0 gap-0">
+      <DialogContent className="glass-card border-white/30 max-w-2xl p-0 gap-0 max-h-[80vh] overflow-hidden">
         {/* Search Input */}
-        <div className="flex items-center gap-3 p-4 border-b border-white/20">
-          <Search className="h-5 w-5 text-muted-foreground" />
+        <div className="flex items-center gap-3 px-4 py-3 border-b border-white/20">
+          <Search className="h-4 w-4 text-muted-foreground" />
           <Input
             ref={inputRef}
             placeholder="Type a command or search..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="border-none bg-transparent focus:ring-0 focus:outline-none text-lg placeholder:text-muted-foreground"
+            className="border-none bg-transparent focus:ring-0 focus:outline-none text-sm placeholder:text-muted-foreground"
           />
           <div className="flex items-center gap-1">
-            <kbd className="px-2 py-1 text-xs bg-muted rounded border">ESC</kbd>
+            <kbd className="px-2 py-0.5 text-[10px] bg-muted rounded border">ESC</kbd>
           </div>
         </div>
 
@@ -310,8 +310,8 @@ const CommandPalette = ({ isOpen, onClose, onNavigate }) => {
               const categoryColor = getCategoryColor(category)
               
               return (
-                <div key={category} className="p-2">
-                  <div className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                <div key={category} className="px-3 py-2">
+                  <div className="flex items-center gap-2 px-3 py-2 text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">
                     <CategoryIcon className={`h-3 w-3 ${categoryColor}`} />
                     {category}
                   </div>
@@ -324,7 +324,7 @@ const CommandPalette = ({ isOpen, onClose, onNavigate }) => {
                     return (
                       <div
                         key={command.id}
-                        className={`flex items-center gap-3 px-3 py-3 mx-1 rounded-lg cursor-pointer transition-all duration-150 ${
+                        className={`flex items-center gap-2 px-3 py-2 mx-1 rounded-lg cursor-pointer transition-all duration-150 ${
                           isSelected 
                             ? 'bg-brand-purple/10 border border-brand-purple/20' 
                             : 'hover:bg-white/50'
@@ -341,23 +341,23 @@ const CommandPalette = ({ isOpen, onClose, onNavigate }) => {
                         
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
-                            <span className="font-medium text-foreground truncate">
+                            <span className="font-medium text-xs text-foreground truncate">
                               {command.title}
                             </span>
                             {command.shortcut && (
-                              <Badge variant="outline" className="text-xs bg-white/50 border-white/30">
+                              <Badge variant="outline" className="text-[10px] px-2 py-0.5 bg-white/50 border-white/30">
                                 {command.shortcut}
                               </Badge>
                             )}
                           </div>
-                          <p className="text-sm text-muted-foreground truncate">
+                          <p className="text-xs text-muted-foreground truncate">
                             {command.description}
                           </p>
                         </div>
                         
                         {isSelected && (
                           <div className="flex items-center gap-1">
-                            <kbd className="px-2 py-1 text-xs bg-muted rounded border">↵</kbd>
+                            <kbd className="px-2 py-0.5 text-[10px] bg-muted rounded border">↵</kbd>
                           </div>
                         )}
                       </div>
@@ -371,22 +371,22 @@ const CommandPalette = ({ isOpen, onClose, onNavigate }) => {
 
         {/* Footer */}
         <div className="flex items-center justify-between px-4 py-3 border-t border-white/20 bg-white/30">
-          <div className="flex items-center gap-4 text-xs text-muted-foreground">
+          <div className="flex items-center gap-4 text-[10px] text-muted-foreground">
             <div className="flex items-center gap-1">
-              <kbd className="px-1.5 py-0.5 bg-muted rounded border">↑↓</kbd>
+              <kbd className="px-1.5 py-0.5 text-[10px] bg-muted rounded border">↑↓</kbd>
               <span>Navigate</span>
             </div>
             <div className="flex items-center gap-1">
-              <kbd className="px-1.5 py-0.5 bg-muted rounded border">↵</kbd>
+              <kbd className="px-1.5 py-0.5 text-[10px] bg-muted rounded border">↵</kbd>
               <span>Select</span>
             </div>
             <div className="flex items-center gap-1">
-              <kbd className="px-1.5 py-0.5 bg-muted rounded border">ESC</kbd>
+              <kbd className="px-1.5 py-0.5 text-[10px] bg-muted rounded border">ESC</kbd>
               <span>Close</span>
             </div>
           </div>
           
-          <div className="text-xs text-muted-foreground">
+          <div className="text-[10px] text-muted-foreground">
             {filteredCommands.length} command{filteredCommands.length !== 1 ? 's' : ''}
           </div>
         </div>

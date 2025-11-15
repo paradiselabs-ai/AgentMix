@@ -69,14 +69,14 @@ const Sidebar = ({ activeTab, onTabChange, agents = [], conversations = [] }) =>
       <div className="flex flex-col h-full">
 
         {/* Search - More Spacious */}
-        <div className="px-4 py-4">
+        <div className="px-3 py-3">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4" style={{ color: 'var(--text-muted)' }} />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5" style={{ color: 'var(--text-muted)' }} />
             <input
               placeholder="Search..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-3 py-2.5 text-sm rounded-lg transition-all duration-200"
+              className="w-full pl-10 pr-3 py-2 text-xs rounded-lg transition-all duration-200 h-8"
               style={{
                 background: 'rgba(255, 255, 255, 0.05)',
                 border: '1px solid var(--border)',
@@ -88,7 +88,7 @@ const Sidebar = ({ activeTab, onTabChange, agents = [], conversations = [] }) =>
         </div>
 
         {/* Navigation Items */}
-        <nav className="flex-1 px-4 py-2 space-y-2">
+        <nav className="flex-1 px-3 py-1.5 space-y-1">
           {navigationItems.map((item) => {
             const isActive = activeTab === item.id
 
@@ -96,7 +96,7 @@ const Sidebar = ({ activeTab, onTabChange, agents = [], conversations = [] }) =>
               <button
                 key={item.id}
                 onClick={() => onTabChange(item.id)}
-                className="w-full flex items-center justify-start px-4 py-3 transition-all duration-200"
+                className="w-full flex items-center justify-start px-3 py-2.5 transition-all duration-200 text-xs"
                 style={{
                   background: isActive ? 'var(--active-bg)' : 'transparent',
                   color: isActive ? 'var(--brand)' : 'var(--text-secondary)',
@@ -107,14 +107,14 @@ const Sidebar = ({ activeTab, onTabChange, agents = [], conversations = [] }) =>
                 onMouseEnter={(e) => !isActive && (e.currentTarget.style.background = 'var(--hover-bg)')}
                 onMouseLeave={(e) => !isActive && (e.currentTarget.style.background = 'transparent')}
               >
-                <span className="text-xl mr-3">{item.emoji}</span>
-                <span className="flex-1 text-left text-sm font-medium" style={{ color: isActive ? 'var(--brand)' : 'var(--text-secondary)' }}>
+                <span className="text-lg mr-2">{item.emoji}</span>
+                <span className="flex-1 text-left font-medium" style={{ color: isActive ? 'var(--brand)' : 'var(--text-secondary)' }}>
                   {item.label}
                 </span>
                 {item.badge && (
                   <Badge
                     variant={isActive ? "secondary" : "outline"}
-                    className={`ml-2 text-xs ${
+                    className={`ml-2 text-[10px] px-2 py-0.5 ${
                       isActive ? 'bg-white/20 text-white border-white/30' : ''
                     }`}
                   >
@@ -128,16 +128,16 @@ const Sidebar = ({ activeTab, onTabChange, agents = [], conversations = [] }) =>
 
         {/* Quick Actions */}
         {!isCollapsed && (
-          <div className="p-4" style={{ borderTop: '1px solid var(--border)' }}>
-            <h3 className="text-xs font-semibold uppercase tracking-wide mb-3" style={{ color: 'var(--text-muted)' }}>
+          <div className="p-3" style={{ borderTop: '1px solid var(--border)' }}>
+            <h3 className="text-[10px] font-semibold uppercase tracking-wide mb-2" style={{ color: 'var(--text-muted)' }}>
               Quick Actions
             </h3>
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               {quickActions.map((action, index) => (
                 <button
                   key={index}
                   onClick={action.action}
-                  className="w-full flex items-center px-3 py-2 text-sm transition-all duration-200"
+                  className="w-full flex items-center px-2.5 py-1.5 text-xs transition-all duration-200"
                   style={{
                     background: 'var(--btn-secondary-bg)',
                     border: '1px solid var(--border)',
@@ -148,7 +148,7 @@ const Sidebar = ({ activeTab, onTabChange, agents = [], conversations = [] }) =>
                   onMouseEnter={(e) => e.currentTarget.style.background = 'var(--hover-bg)'}
                   onMouseLeave={(e) => e.currentTarget.style.background = 'var(--btn-secondary-bg)'}
                 >
-                  <span className="text-base mr-2">{action.emoji}</span>
+                  <span className="text-base mr-1.5">{action.emoji}</span>
                   <span style={{ color: 'var(--text-primary)' }}>{action.label}</span>
                 </button>
               ))}
@@ -158,25 +158,25 @@ const Sidebar = ({ activeTab, onTabChange, agents = [], conversations = [] }) =>
 
         {/* Recent Activity */}
         {!isCollapsed && recentItems.length > 0 && (
-          <div className="p-4 border-t border-white/10">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+          <div className="p-3 border-t border-white/10">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">
                 Recent
               </h3>
               <Star className="h-3 w-3 text-muted-foreground" />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               {recentItems.map((item, index) => (
                 <div
                   key={index}
-                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/30 transition-colors cursor-pointer"
+                  className="flex items-center gap-2 p-1.5 rounded-lg hover:bg-white/30 transition-colors cursor-pointer"
                 >
                   <div className={`w-2 h-2 rounded-full ${
                     item.status === 'active' ? 'bg-green-500 animate-pulse' : 'bg-gray-400'
                   }`} />
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm font-medium truncate">{item.label}</div>
-                    <div className="text-xs text-muted-foreground">{item.time}</div>
+                    <div className="text-xs font-medium truncate">{item.label}</div>
+                    <div className="text-[10px] text-muted-foreground">{item.time}</div>
                   </div>
                 </div>
               ))}
@@ -185,13 +185,13 @@ const Sidebar = ({ activeTab, onTabChange, agents = [], conversations = [] }) =>
         )}
 
         {/* Footer */}
-        <div className="p-4" style={{ borderTop: '1px solid var(--border)' }}>
+        <div className="p-3" style={{ borderTop: '1px solid var(--border)' }}>
           {!isCollapsed ? (
             <div className="text-center">
-              <div className="text-xs mb-2" style={{ color: 'var(--text-muted)' }}>AgentMix v1.0</div>
-              <div className="flex items-center justify-center gap-2">
+              <div className="text-[10px] mb-1.5" style={{ color: 'var(--text-muted)' }}>AgentMix v1.0</div>
+              <div className="flex items-center justify-center gap-1.5">
                 <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: 'var(--success)', boxShadow: '0 0 8px rgba(16, 185, 129, 0.5)' }}></div>
-                <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>System Online</span>
+                <span className="text-[10px]" style={{ color: 'var(--text-secondary)' }}>System Online</span>
               </div>
             </div>
           ) : (

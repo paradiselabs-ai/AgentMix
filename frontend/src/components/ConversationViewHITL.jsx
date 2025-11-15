@@ -23,7 +23,7 @@ import {
   Bell
 } from 'lucide-react'
 import ConversationControls from './ConversationControls.jsx'
-import { useConversation } from '../contexts/ConversationContext.jsx'
+import { useConversation } from '../contexts/useConversationHook'
 
 const ConversationViewHITL = ({ agents }) => {
   const {
@@ -295,7 +295,7 @@ const ConversationViewHITL = ({ agents }) => {
                 <p className="font-medium text-orange-800">
                   {humanInputRequest.requesting_agent} needs your input
                 </p>
-                <p className="text-sm text-orange-700">
+                <p className="text-xs text-orange-700">
                   {humanInputRequest.request_message}
                 </p>
               </div>
@@ -312,7 +312,7 @@ const ConversationViewHITL = ({ agents }) => {
             <CardTitle>Create New Conversation</CardTitle>
             <CardDescription>Set up a new AI collaboration session in AgentMix</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-3">
             <div>
               <Label htmlFor="conv-name">Conversation Name</Label>
               <Input
@@ -333,7 +333,7 @@ const ConversationViewHITL = ({ agents }) => {
             </div>
             <div>
               <Label>Participants</Label>
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 {agents.filter(agent => agent.status === 'active').map((agent) => (
                   <div key={agent.id} className="flex items-center space-x-2">
                     <input
@@ -374,7 +374,7 @@ const ConversationViewHITL = ({ agents }) => {
         </Card>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Conversations List */}
         <div className="lg:col-span-1">
           <Card>
@@ -394,7 +394,7 @@ const ConversationViewHITL = ({ agents }) => {
                   <Card>
                     <CardContent className="flex flex-col items-center justify-center py-8">
                       <MessageSquare className="h-8 w-8 text-muted-foreground mb-2" />
-                      <p className="text-sm text-muted-foreground text-center">
+                      <p className="text-xs text-muted-foreground text-center">
                         No conversations yet. Create one to get started.
                       </p>
                     </CardContent>
@@ -410,8 +410,8 @@ const ConversationViewHITL = ({ agents }) => {
                       }`}
                       onClick={() => setSelectedConversation(conversation)}
                     >
-                      <CardContent className="p-4">
-                        <div className="flex items-start justify-between mb-2">
+                      <CardContent className="p-3">
+                        <div className="flex items-start justify-between mb-1.5">
                           <h4 className="font-medium truncate">{conversation.name}</h4>
                           <div className="flex items-center gap-2">
                             <Badge variant="outline" className="ml-2">
@@ -427,14 +427,14 @@ const ConversationViewHITL = ({ agents }) => {
                           </div>
                         </div>
                         {conversation.description && (
-                          <p className="text-sm text-muted-foreground mb-2 truncate">
+                          <p className="text-xs text-muted-foreground mb-1.5 truncate">
                             {conversation.description}
                           </p>
                         )}
-                        <div className="flex items-center space-x-2 text-xs text-muted-foreground">
+                        <div className="flex items-center space-x-1 text-xs text-muted-foreground">
                           <Users className="h-3 w-3" />
-                          <span>{conversation.participants.length} participants</span>
-                          <Clock className="h-3 w-3 ml-2" />
+                          <span className="text-[10px]">{conversation.participants.length} participants</span>
+                          <Clock className="h-3 w-3 ml-1" />
                           <span>{new Date(conversation.created_at).toLocaleDateString()}</span>
                         </div>
                       </CardContent>
@@ -483,7 +483,7 @@ const ConversationViewHITL = ({ agents }) => {
                 </div>
               </CardHeader>
               <CardContent className="flex-1 flex flex-col">
-                <div className="mb-4">
+                <div className="mb-3">
                   <ConversationControls 
                     conversation={selectedConversation}
                     onStatusChange={(status) => {
@@ -493,7 +493,7 @@ const ConversationViewHITL = ({ agents }) => {
                 </div>
                 
                 {/* Messages */}
-                <div className="flex-1 overflow-y-auto space-y-3 mb-4 max-h-96 border rounded-lg p-4">
+                <div className="flex-1 overflow-y-auto space-y-2 mb-3 max-h-96 border rounded-lg p-4">
                   {messagesLoading ? (
                     <div className="flex items-center justify-center py-8">
                       <Loader2 className="h-6 w-6 animate-spin" />
@@ -502,28 +502,28 @@ const ConversationViewHITL = ({ agents }) => {
                     <div className="flex items-center justify-center py-8">
                       <div className="text-center">
                         <MessageSquare className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-xs text-muted-foreground">
                           No messages in this conversation yet
                         </p>
                       </div>
                     </div>
                   ) : (
                     messages.map((message) => (
-                      <div key={message.id} className={`p-3 rounded-lg border ${getMessageStyle(message.message_type || message.sender_type)} animate-fade-in-up`}>
-                        <div className="flex items-start space-x-3">
+                      <div key={message.id} className={`p-2.5 rounded-lg border ${getMessageStyle(message.message_type || message.sender_type)} animate-fade-in-up`}>
+                        <div className="flex items-start space-x-2">
                           <div className="flex-shrink-0">
                             {getMessageIcon(message.message_type || message.sender_type)}
                           </div>
                           <div className="flex-1">
-                            <div className="flex items-center space-x-2 mb-1">
-                              <span className="font-medium text-sm">
+                            <div className="flex items-center space-x-1 mb-1">
+                              <span className="font-medium text-xs">
                                 {message.sender_name || message.sender_id || 'Unknown'}
                               </span>
                               <span className="text-xs text-muted-foreground">
                                 {new Date(message.timestamp).toLocaleTimeString()}
                               </span>
                             </div>
-                            <p className="text-sm">{message.content}</p>
+                            <p className="text-xs">{message.content}</p>
                           </div>
                         </div>
                       </div>
@@ -533,13 +533,13 @@ const ConversationViewHITL = ({ agents }) => {
                 </div>
 
                 {/* Human Input Interface */}
-                <div className="border-t pt-4">
+                <div className="border-t pt-2">
                   <div className="flex items-center space-x-2 mb-2">
                     <User className="h-4 w-4" />
-                    <span className="text-sm font-medium">Your Input</span>
+                    <span className="text-xs font-medium">Your Input</span>
                     {isTyping && <span className="text-xs text-muted-foreground">Typing...</span>}
                   </div>
-                  <div className="flex space-x-2">
+                  <div className="flex space-x-1.5">
                     <Textarea
                       placeholder="Type your message to join the conversation..."
                       value={humanMessage}
@@ -550,7 +550,7 @@ const ConversationViewHITL = ({ agents }) => {
                           handleSendHumanMessage()
                         }
                       }}
-                      className="flex-1 min-h-[60px] focus-ring"
+                      className="flex-1 min-h-[50px] focus-ring"
                       disabled={sendingMessage}
                     />
                     <Button 
@@ -574,8 +574,8 @@ const ConversationViewHITL = ({ agents }) => {
           ) : (
             <Card className="h-full">
               <CardContent className="flex flex-col items-center justify-center h-full py-12">
-                <MessageSquare className="h-12 w-12 text-muted-foreground mb-4" />
-                <h3 className="text-lg font-medium mb-2">Select a Conversation</h3>
+                <MessageSquare className="h-12 w-12 text-muted-foreground mb-3" />
+                <h3 className="text-base font-medium mb-2">Select a Conversation</h3>
                 <p className="text-sm text-muted-foreground text-center">
                   Choose a conversation from the list to view messages and participate
                 </p>

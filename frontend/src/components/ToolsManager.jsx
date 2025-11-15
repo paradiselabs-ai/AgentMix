@@ -177,15 +177,15 @@ const ToolsManager = ({ agents = [] }) => {
 
     return (
       <Card className="glass-card card-hover border-white/30 group">
-        <CardContent className="p-6">
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex items-center gap-3">
+        <CardContent className="p-4">
+          <div className="flex items-start justify-between mb-3">
+            <div className="flex items-center gap-2">
               <div className="w-12 h-12 bg-gradient-to-br from-brand-purple to-brand-teal rounded-xl flex items-center justify-center animate-float-gentle">
                 <IconComponent className="h-6 w-6 text-white" />
               </div>
               <div>
                 <h3 className="font-semibold text-foreground">{tool.name}</h3>
-                <p className="text-sm text-muted-foreground capitalize">{tool.category}</p>
+                <p className="text-xs text-muted-foreground capitalize">{tool.category}</p>
               </div>
             </div>
             
@@ -202,21 +202,21 @@ const ToolsManager = ({ agents = [] }) => {
             </div>
           </div>
 
-          <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+          <p className="text-xs text-muted-foreground mb-3 line-clamp-2">
             {tool.description}
           </p>
 
-          <div className="grid grid-cols-3 gap-4 mb-4 text-center">
+          <div className="grid grid-cols-3 gap-3 mb-3 text-center">
             <div>
-              <div className="text-lg font-bold text-foreground">{tool.usageCount}</div>
-              <div className="text-xs text-muted-foreground">Uses</div>
+              <div className="text-base font-bold text-foreground">{tool.usageCount}</div>
+              <div className="text-[10px] text-muted-foreground">Uses</div>
             </div>
             <div>
-              <div className="text-lg font-bold text-brand-teal">{tool.assignedAgents}</div>
+              <div className="text-base font-bold text-brand-teal">{tool.assignedAgents}</div>
               <div className="text-xs text-muted-foreground">Agents</div>
             </div>
             <div>
-              <div className="text-lg font-bold text-brand-orange">
+              <div className="text-base font-bold text-brand-orange">
                 {tool.lastUsed === 'Never' ? '—' : tool.lastUsed.split(' ')[0]}
               </div>
               <div className="text-xs text-muted-foreground">Last Used</div>
@@ -224,7 +224,7 @@ const ToolsManager = ({ agents = [] }) => {
           </div>
 
           {tool.parameters && (
-            <div className="mb-4">
+            <div className="mb-3">
               <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
                 Parameters
               </h4>
@@ -287,7 +287,7 @@ const ToolsManager = ({ agents = [] }) => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -309,8 +309,8 @@ const ToolsManager = ({ agents = [] }) => {
               </DialogDescription>
             </DialogHeader>
             
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-sm font-medium text-foreground mb-2 block">
                     Tool Name
@@ -403,7 +403,7 @@ const ToolsManager = ({ agents = [] }) => {
 
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-        <div className="flex-1 flex items-center gap-4">
+        <div className="flex-1 flex items-center gap-3">
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
@@ -444,12 +444,12 @@ const ToolsManager = ({ agents = [] }) => {
       {/* Tools Grid */}
       {filteredTools.length === 0 ? (
         <Card className="glass-card border-white/30">
-          <CardContent className="flex flex-col items-center justify-center py-16">
-            <div className="w-20 h-20 bg-gradient-to-br from-brand-purple to-brand-teal rounded-2xl flex items-center justify-center mb-6 animate-float-gentle">
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            <div className="w-20 h-20 bg-gradient-to-br from-brand-purple to-brand-teal rounded-2xl flex items-center justify-center mb-4 animate-float-gentle">
               <Wrench className="h-10 w-10 text-white" />
             </div>
             <h3 className="text-display-sm text-foreground mb-2">No Tools Found</h3>
-            <p className="text-body text-muted-foreground text-center mb-6 max-w-md">
+            <p className="text-body text-muted-foreground text-center mb-4 max-w-md">
               {searchQuery ? 'Try adjusting your search criteria' : 'Create your first custom tool to get started'}
             </p>
             {!searchQuery && (
@@ -464,7 +464,7 @@ const ToolsManager = ({ agents = [] }) => {
           </CardContent>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredTools.map(tool => (
             <ToolCard key={tool.id} tool={tool} />
           ))}
@@ -480,7 +480,7 @@ const ToolsManager = ({ agents = [] }) => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="text-center">
               <div className="text-3xl font-bold text-foreground mb-1">
                 {tools.reduce((sum, tool) => sum + tool.usageCount, 0)}

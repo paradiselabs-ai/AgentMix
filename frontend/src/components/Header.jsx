@@ -41,10 +41,10 @@ const Header = ({ agents = [] }) => {
     <header className="fixed top-0 left-64 right-0 z-50 bg-card border-b border-border">
       <div className="flex items-center justify-between h-14 px-6">
         {/* Left: Stats */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
           {stats.map((stat, index) => (
-            <div key={index} className="flex items-center gap-2 px-3 py-1.5 rounded text-sm" style={{ background: 'rgba(255, 255, 255, 0.05)' }}>
-              <stat.icon className="h-4 w-4" style={{ color: index === 0 ? 'var(--success)' : index === 1 ? 'var(--brand)' : 'var(--orange)' }} />
+            <div key={index} className="flex items-center gap-1.5 px-2.5 py-1 rounded text-xs" style={{ background: 'rgba(255, 255, 255, 0.05)' }}>
+              <stat.icon className="h-3.5 w-3.5" style={{ color: index === 0 ? 'var(--success)' : index === 1 ? 'var(--brand)' : 'var(--orange)' }} />
               <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>{stat.value}</span>
               <span style={{ color: 'var(--text-muted)' }}>{stat.label}</span>
             </div>
@@ -52,7 +52,7 @@ const Header = ({ agents = [] }) => {
         </div>
 
         {/* Right: Actions */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
 
             {/* Notifications */}
             <DropdownMenu>
@@ -72,27 +72,27 @@ const Header = ({ agents = [] }) => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-80 glass-card border-white/20">
-                <DropdownMenuLabel className="flex items-center justify-between">
+                <DropdownMenuLabel className="flex items-center justify-between text-xs">
                   <span>Notifications</span>
-                  <Badge variant="secondary" className="text-xs">
+                  <Badge variant="secondary" className="text-[10px] px-2 py-0.5">
                     {notifications.length} new
                   </Badge>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {notifications.map((notification) => (
-                  <DropdownMenuItem key={notification.id} className="flex flex-col items-start gap-1 p-3">
-                    <div className="flex items-center gap-2 w-full">
+                  <DropdownMenuItem key={notification.id} className="flex flex-col items-start gap-0.5 p-2 text-xs">
+                    <div className="flex items-center gap-1.5 w-full">
                       <div className={`w-2 h-2 rounded-full ${
                         notification.type === 'success' ? 'bg-green-500' :
                         notification.type === 'warning' ? 'bg-orange-500' : 'bg-blue-500'
                       } animate-pulse`} />
-                      <span className="text-sm flex-1">{notification.message}</span>
+                      <span className="text-[10px] flex-1">{notification.message}</span>
                     </div>
-                    <span className="text-xs text-muted-foreground ml-4">{notification.time}</span>
+                    <span className="text-[9px] text-muted-foreground ml-3">{notification.time}</span>
                   </DropdownMenuItem>
                 ))}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-center text-sm text-brand-purple font-medium">
+                <DropdownMenuItem className="text-center text-[10px] text-brand-purple font-medium">
                   View all notifications
                 </DropdownMenuItem>
               </DropdownMenuContent>
